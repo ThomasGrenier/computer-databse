@@ -13,6 +13,14 @@ public class ComputerModel {
 	private Date discontinued;
 	
 	private long idCompany;
+	
+	public ComputerModel(long id, String name, Date introduced, Date discontinued, long idCompany) {
+		this.id = id;
+		this.name = name;
+		this.introduced = introduced;
+		this.discontinued = discontinued;
+		this.idCompany = idCompany;
+	}
 
 	public long getId() {
 		return id;
@@ -44,6 +52,14 @@ public class ComputerModel {
 
 	public void setDiscontinued(Date discontinued) {
 		this.discontinued = discontinued;
+	}
+
+	public long getIdCompany() {
+		return idCompany;
+	}
+
+	public void setIdCompany(long idCompany) {
+		this.idCompany = idCompany;
 	}
 	
 	
