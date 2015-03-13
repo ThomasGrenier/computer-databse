@@ -1,6 +1,6 @@
 package model;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class ComputerModel {
 
@@ -8,13 +8,13 @@ public class ComputerModel {
 	
 	private String name;
 	
-	private Date introduced;
+	private Timestamp introduced;
 	
-	private Date discontinued;
+	private Timestamp discontinued;
 	
 	private long idCompany;
 	
-	public ComputerModel(long id, String name, Date introduced, Date discontinued, long idCompany) {
+	public ComputerModel(long id, String name, Timestamp introduced, Timestamp discontinued, long idCompany) {
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
@@ -38,19 +38,19 @@ public class ComputerModel {
 		this.name = name;
 	}
 
-	public Date getIntroduced() {
+	public Timestamp getIntroduced() {
 		return introduced;
 	}
 
-	public void setIntroduced(Date introduced) {
+	public void setIntroduced(Timestamp introduced) {
 		this.introduced = introduced;
 	}
 
-	public Date getDiscontinued() {
+	public Timestamp getDiscontinued() {
 		return discontinued;
 	}
 
-	public void setDiscontinued(Date discontinued) {
+	public void setDiscontinued(Timestamp discontinued) {
 		this.discontinued = discontinued;
 	}
 
@@ -62,5 +62,13 @@ public class ComputerModel {
 		this.idCompany = idCompany;
 	}
 	
-	
+	public String toString() {
+		StringBuilder result = new StringBuilder();
+		result.append(id)
+		.append(" | " + name)
+		.append(" | " + introduced)
+		.append(" | " + discontinued)
+		.append(" | " + idCompany + "\n");
+		return result.toString();
+	}
 }

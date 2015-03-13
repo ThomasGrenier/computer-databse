@@ -26,4 +26,11 @@ public class CompanyModel {
 	public void setName(String name) {
 		this.name = name;
 	}
+	
+	public String toString() {
+		StringBuilder result = new StringBuilder()
+		.append(id)
+		.append(" | " + name + "\n");
+		return result.toString();
+	}
 }
