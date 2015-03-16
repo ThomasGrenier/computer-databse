@@ -1,4 +1,4 @@
-package persistence;
+package com.excilys.persistence;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -32,7 +32,6 @@ public enum ConnectionManager implements AutoCloseable{
 		} catch (IOException e) {
 	          e.printStackTrace();
 	    } catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return connect;

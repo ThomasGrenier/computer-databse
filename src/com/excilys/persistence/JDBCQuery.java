@@ -1,4 +1,4 @@
-package persistence;
+package com.excilys.persistence;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -7,9 +7,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.LinkedList;
 import java.util.List;
 
-import model.CompanyModel;
-import model.ComputerModel;
-
+import com.excilys.model.CompanyModel;
+import com.excilys.model.ComputerModel;
 import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.MysqlDataTruncation;
 import com.mysql.jdbc.Statement;
@@ -53,7 +52,7 @@ public class JDBCQuery {
 	public List<CompanyModel> listCompanies() {
 		    List<CompanyModel> companyList = new LinkedList<CompanyModel>();
 		    try {
-		        // create new connection and statement
+		        // create new statement
 		        Statement st = (Statement) connection.createStatement();
 
 		        String query = "SELECT * FROM company";
@@ -77,7 +76,7 @@ public class JDBCQuery {
 	public ComputerModel showComputer(long id) {
 	    ComputerModel computerModel = null;
 	    try {
-	        // create new connection and statement
+	        // create new statement
 	        Statement st = (Statement) connection.createStatement();
 
 	        String query = "SELECT * FROM computer WHERE id =" + id;
@@ -102,7 +101,7 @@ public class JDBCQuery {
 	public long createComputer(String name) {
 	    long max = 0;
 	    try {
-	        // create new connection and statement
+	        // create new statement
 	        Statement st = (Statement) connection.createStatement();
 
 	        String query = "SELECT MAX(id) FROM computer";
@@ -127,7 +126,7 @@ public class JDBCQuery {
 	public int updateComputer(long id, String name, String introduced, String discontinued, long idComp) {
 	    int result = 0;
 	    try {
-	        // create new connection and statement
+	        // create new statement
 	        Statement st = (Statement) connection.createStatement();
 
 	        String question = "SELECT * FROM computer WHERE id =" + id;
@@ -166,7 +165,7 @@ public class JDBCQuery {
 	public int deleteComputer(long id) {
 	    int result = 0;
 	    try {
-	        // create new connection and statement
+	        // create new statement
 	        Statement st = (Statement) connection.createStatement();
 	        String query = "DELETE FROM computer WHERE id = " + id;
 	        result = st.executeUpdate(query);
