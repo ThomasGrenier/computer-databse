@@ -11,6 +11,7 @@ import model.CompanyModel;
 import model.ComputerModel;
 
 import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.MysqlDataTruncation;
 import com.mysql.jdbc.Statement;
 
 public class JDBCQuery {
@@ -129,21 +130,35 @@ public class JDBCQuery {
 	        // create new connection and statement
 	        Statement st = (Statement) connection.createStatement();
 
+	        String question = "SELECT * FROM computer WHERE id =" + id;
+	        ResultSet rs = st.executeQuery(question);
+
+	        rs.next();
+	        
+	        String actualName = rs.getString(2);
+	        LocalDateTime actualIntroduced = ((rs.getTimestamp(3) == null) ? null : rs.getTimestamp(3).toLocalDateTime());
+	        LocalDateTime actualDiscontinued = ((rs.getTimestamp(4) == null) ? null : rs.getTimestamp(4).toLocalDateTime());
+	        long actualCompany = rs.getLong(5);
+	        
+	        rs.close();
+	        
 	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-	        LocalDateTime formatterIntroduced = LocalDateTime.parse(introduced, formatter);
-	        LocalDateTime formatterDiscontinued = LocalDateTime.parse(discontinued, formatter);
+	        /*LocalDateTime formatterIntroduced = LocalDateTime.parse(introduced, formatter);
+	        LocalDateTime formatterDiscontinued = LocalDateTime.parse(discontinued, formatter);*/
 	        String query = "UPDATE computer " +
-	        				"SET name = '" + name +
-	        				"', introduced = '" + formatterIntroduced + 
-	        				"', discontinued = '" + formatterDiscontinued +
-	        				"', company_id = '" + idComp + "' " +
+	        				"SET name = '" + (((name == null) || (name.equals(""))) ? actualName : name) +
+	        				"', introduced = '" + (((introduced == null) || (introduced.equals(""))) ? actualIntroduced : LocalDateTime.parse(introduced, formatter)) + 
+	        				"', discontinued = '" + (((discontinued == null) || (discontinued.equals(""))) ? actualDiscontinued : LocalDateTime.parse(discontinued, formatter)) +
+	        				"', company_id = '" + ((idComp == -1) ? actualCompany : idComp) + "' " +
 	        				"WHERE id = " + id + ";";
 	        result = st.executeUpdate(query);
 	            /*System.out.printf("%-5d | %-70s | %-25s | %-25s | %-1s \n", //
 	                    rs.getLong(1), rs.getString(2), rs.getTimestamp(3), rs.getTimestamp(4), rs.getLong(5));*/
 	        st.close();
+	    } catch (MysqlDataTruncation e) {
+	    	System.out.println("error : invalid date");
 	    } catch (SQLException e) {
-	    	e.printStackTrace();
+	    	System.out.println("internal error, SQLException");
 	    }
 	    return result;
 	}
@@ -161,30 +176,4 @@ public class JDBCQuery {
 	    }
 	    return result;
 	}
-	
-	//public static void main(String[] args) {
-		/*JDBCQuery jdbc = new JDBCQuery();
-		try {*/
-			
-			/*List<ComputerModel> c = new LinkedList<ComputerModel>();
-			c = jdbc.listComputers();*/
-			
-			
-			/*List<CompanyModel> c = new LinkedList<CompanyModel>();
-			c = jdbc.listCompanies();*/
-			
-			/*jdbc.createComputer("machin");
-			ComputerModel c = jdbc.showComputer(576);*/
-			
-			/*LocalDateTime t = LocalDateTime.now();
-			jdbc.updateComputer(575, "go", Timestamp.valueOf(t), Timestamp.valueOf(t), 12);
-			ComputerModel c = jdbc.showComputer(575);*/
-			
-			//jdbc.deleteComputer(577);
-			
-			//System.out.println(c.toString());
-		/*} catch (SQLException e) {
-			e.printStackTrace();
-		}*/
-	//}
 }

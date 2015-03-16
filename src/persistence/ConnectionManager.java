@@ -1,43 +1,50 @@
 package persistence;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import com.mysql.jdbc.Connection;
 
-public class ConnectionManager {
+public enum ConnectionManager implements AutoCloseable{
+	INSTANCE;
 
-	private static final String URL = "jdbc:mysql://localhost/computer-database-db?zeroDateTimeBehavior=convertToNull";
-	private static final String USER = "root";
-	private static final String PWD = "root";
+	private static final String FILE_NAME = "ressources/MysqlProperties.properties";
+	private final Properties configProp = new Properties();
+	private final Connection connection;
+
+	ConnectionManager() {
+		connection = createConnection();
+	}
 	
-	private Connection connection;
-
-	public ConnectionManager() {
-	    String url = URL;
-	    connection = null;
+	private Connection createConnection() {
+		Connection connect = null;
 		try {
-			connection = (Connection) DriverManager.getConnection(url, USER, PWD);
-		} catch (SQLException e) {
+			InputStream ips = new FileInputStream(FILE_NAME);           
+			configProp.load(ips);
+			String url = configProp.getProperty("URL");
+			String user = configProp.getProperty("USR");
+			String password = configProp.getProperty("PWD");
+			connect = (Connection) DriverManager.getConnection(url, user, password);
+		} catch (IOException e) {
+	          e.printStackTrace();
+	    } catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return connect;
 	}
-	
-	public Connection getConnection() {
+
+	public final Connection getConnection() {
 		return connection;
 	}
 	
-	public void setConnection(Connection co) {
-		connection = co;
+	@Override
+	public void close() throws Exception {
+		connection.close();
 	}
-	
-	public void closeConnection() {
-		try {
-			connection.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+
 }
