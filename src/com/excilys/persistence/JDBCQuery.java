@@ -32,11 +32,11 @@ public class JDBCQuery {
 	        ComputerModel computerModel = null;
 	        while (rs.next()) {
 	        	
-	        	computerModel = new ComputerModel(rs.getLong(1), rs.getString(2),
+	        	/*computerModel = new ComputerModel(rs.getLong(1), rs.getString(2),
             			((rs.getTimestamp(3) == null) ? null : rs.getTimestamp(3).toLocalDateTime())
             			, ((rs.getTimestamp(4) == null) ? null : rs.getTimestamp(4).toLocalDateTime())
             			, rs.getLong(5));
-	        	computerList.add(computerModel);
+	        	computerList.add(computerModel);*/
 	            /*System.out.printf("%-5d | %-70s | %-25s | %-25s | %-1s \n", //
 	                    rs.getLong(1), rs.getString(2), rs.getTimestamp(3), rs.getTimestamp(4), rs.getLong(5));*/
 	        }
@@ -84,10 +84,10 @@ public class JDBCQuery {
 
 	        rs.next();
 
-        	computerModel = new ComputerModel(rs.getLong(1), rs.getString(2),
+        	/*computerModel = new ComputerModel(rs.getLong(1), rs.getString(2),
         			((rs.getTimestamp(3) == null) ? null : rs.getTimestamp(3).toLocalDateTime())
         			, ((rs.getTimestamp(4) == null) ? null : rs.getTimestamp(4).toLocalDateTime())
-        			, rs.getLong(5));
+        			, rs.getLong(5));*/
 	            /*System.out.printf("%-5d | %-70s | %-25s | %-25s | %-1s \n", //
 	                    rs.getLong(1), rs.getString(2), rs.getTimestamp(3), rs.getTimestamp(4), rs.getLong(5));*/
 	        rs.close();

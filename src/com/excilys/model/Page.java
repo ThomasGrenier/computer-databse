@@ -34,4 +34,8 @@ public class Page<T> {
 	public int getTotalPages() {
 		return totalPage;
 	}
+	
+	public void setTotalPages(int totalPage) {
+		this.totalPage = totalPage;
+	}
 }
