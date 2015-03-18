@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 import com.excilys.model.CompanyModel;
 import com.excilys.model.ComputerModel;
+import com.excilys.model.Page;
 import com.excilys.service.CompanyService;
 import com.excilys.service.CompanyServiceImpl;
 import com.excilys.service.ComputerService;
@@ -65,6 +66,45 @@ public class CLIController {
 				str = sc.nextLine();
 				CompanyModel comp = companyService.getById(Long.parseLong(str));
 				System.out.println(comp.toString());
+				break;
+			case "getPage":
+				System.out.println("quelle page ? ");
+				str = sc.nextLine();
+				int currentPage = Integer.parseInt(str);
+				System.out.println("Combien de résultat par page ? ");
+				str = sc.nextLine();
+				int nbResult = Integer.parseInt(str);
+				Page<ComputerModel> p = computerService.getPage(currentPage, nbResult);
+				System.out.println(p.toString());
+				System.out.println(" - next pour avancer d'une page");
+				System.out.println(" - previous pour reculer d'une page");
+				System.out.println(" - stop pour sortir");
+				str = sc.nextLine();
+				while (!str.equals("stop")) {
+					switch (str) {
+					case "next":
+						if (currentPage < p.getTotalPages()) {
+							currentPage += 1;
+						}
+						p = computerService.getPage(currentPage, nbResult);
+						System.out.println(p.toString());
+						break;
+					case "previous":
+						if (currentPage > 1) {
+							currentPage -= 1;
+						}
+						p = computerService.getPage(currentPage, nbResult);
+						System.out.println(p.toString());
+						break;
+					default:
+						System.out.println(" - next pour avancer d'une page");
+						System.out.println(" - previous pour reculer d'une page");
+						System.out.println(" - stop pour sortir");
+						break;
+					}
+					str = sc.nextLine();
+				}
+				System.out.println("sortie des pages");
 				break;
 			case "delete":
 				System.out.println("quel est l'id de l'ordinateur à supprimer : ");

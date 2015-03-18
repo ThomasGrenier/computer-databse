@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.excilys.model.ComputerModel;
+import com.excilys.model.Page;
 
 public interface ComputerService {
 
@@ -16,4 +17,8 @@ public interface ComputerService {
 	void delete(long id);
 	
 	void update(long id, String name, LocalDateTime introduced, LocalDateTime discontinued, long idCompany);
+
+	List<ComputerModel> getComputersByPage(int offset, int limit);
+	
+	Page<ComputerModel> getPage(int currentPage, int limit);
 }

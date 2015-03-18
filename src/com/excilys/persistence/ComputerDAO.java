@@ -15,4 +15,8 @@ public interface ComputerDAO {
 	void update(ComputerModel computer);
 	
 	void delete(long id);
+	
+	List<ComputerModel> getComputersByPage(int offset, int limit);
+	
+	int totalRow();
 }

@@ -145,5 +145,54 @@ public class ComputerDAOImpl implements ComputerDAO {
 	    }
 	    DAOFactory.INSTANCE.CloseConnection(connection);
 	}
+	
+	public List<ComputerModel> getComputersByPage(int offset, int limit) {
+		List<ComputerModel> computerList = new LinkedList<ComputerModel>();
+    	Connection connection = DAOFactory.INSTANCE.getConnection();
+	    try {
+	        // create new connection and statement
+	        String query = "SELECT * FROM computer as compu left outer join company as compa on compa.id=compu.company_id limit ? offset ?";
+
+	        int i = 1;
+	        PreparedStatement st = (PreparedStatement) connection.prepareStatement(query);
+	        st.setInt(i++, limit);
+	        st.setInt(i++, offset);
+	        ResultSet rs = st.executeQuery();
+	        
+	        computerList = (new ComputerMapper()).mapAll(rs);
+	        
+	        rs.close();
+	        st.close();
+	    } catch (SQLException e) {
+	    	e.printStackTrace();
+	    }
+	    DAOFactory.INSTANCE.CloseConnection(connection);
+		return computerList;
+	}
+
+	@Override
+	public int totalRow() {
+    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	int nb = 0;
+	    try {
+	        // create new connection and statement
+	        String query = "SELECT count(*) FROM computer";
+
+	        Statement st = (Statement) connection.createStatement();
+	        
+	        ResultSet rs = st.executeQuery(query);
+	        
+	        rs.next();
+	        
+	        nb = rs.getInt(1);
+	        
+	        rs.close();
+	        st.close();
+	    } catch (SQLException e) {
+	    	e.printStackTrace();
+	    }
+	    DAOFactory.INSTANCE.CloseConnection(connection);
+	    return nb;
+	}
 
 }

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.excilys.model.CompanyModel;
 import com.excilys.model.ComputerModel;
+import com.excilys.model.Page;
 import com.excilys.persistence.ComputerDAOImpl;
 import com.excilys.persistence.DAOFactory;
 
@@ -42,6 +43,23 @@ public class ComputerServiceImpl implements ComputerService {
 		CompanyModel companyModel = new CompanyModel(idCompany, "");
 		ComputerModel computerModel = new ComputerModel(id, name, introduced, discontinued, companyModel);
 		computerDao.update(computerModel);
+	}
+
+	@Override
+	public List<ComputerModel> getComputersByPage(int offset, int limit) {
+		return computerDao.getComputersByPage(offset, limit);
+	}
+
+	@Override
+	public Page<ComputerModel> getPage(int currentPage, int limit) {
+		Page<ComputerModel> page = new Page<ComputerModel>(currentPage, limit);
+		int total = computerDao.totalRow() / limit;
+		if ((computerDao.totalRow() % limit) > 0) {
+			total += 1;
+		}
+		page.setTotalPages(total);
+		page.setList(getComputersByPage(page.getCurrentPage() * page.getNbResult() - limit, limit));
+		return page;
 	}
 
 }

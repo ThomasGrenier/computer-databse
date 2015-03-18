@@ -4,23 +4,23 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Page<T> {
-	private static final int NB_RESULT = 10;
 	private List<T> list;
+	private int nbResult;
 	private int totalPage;
 	private int currentPage;
 	
-	public Page(int currentPage, List<T> list) {
+	public Page(int currentPage, int nbResult) {
 		this.currentPage = currentPage;
-		this.list = list;
-		this.totalPage = (int) Math.floor(list.size() / NB_RESULT);
+		this.nbResult = nbResult;
+		this.list = new LinkedList<T>();
 	}
 	
-	public List<T> getResults() {
-		List<T> tmp = new LinkedList<T>();
-		for (int i = (currentPage * NB_RESULT - 10); i < currentPage * NB_RESULT; i++) {
-			tmp.add(list.get(i));
-		}
-		return tmp;
+	public List<T> getList() {
+		return list;
+	}
+	
+	public void setList(List<T> list) {
+		this.list = list;
 	}
 	
 	public int getCurrentPage() {
@@ -29,11 +29,6 @@ public class Page<T> {
 	
 	public void setCurrentPage(int currentPage) {
 		this.currentPage = currentPage;
-		List<T> tmp = new LinkedList<T>();
-		for (int i = (currentPage * NB_RESULT - 10); i < currentPage * NB_RESULT; i++) {
-			tmp.add(list.get(i));
-		}
-		list = tmp;
 	}
 	
 	public int getTotalPages() {
@@ -42,5 +37,22 @@ public class Page<T> {
 	
 	public void setTotalPages(int totalPage) {
 		this.totalPage = totalPage;
+	}
+	
+	public int getNbResult() {
+		return nbResult;
+	}
+	
+	public void setNbResult(int nbResult) {
+		this.nbResult = nbResult;
+	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < list.size(); i++) {
+			sb.append(list.get(i).toString());
+		}
+		sb.append("\n page : " + currentPage + " / " + totalPage + "\n");
+		return sb.toString();
 	}
 }
