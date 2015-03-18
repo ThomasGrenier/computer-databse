@@ -1,4 +1,4 @@
-package com.excilys.service;
+package com.excilys.ui;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,18 +9,19 @@ import java.util.Scanner;
 
 import com.excilys.model.CompanyModel;
 import com.excilys.model.ComputerModel;
-import com.excilys.persistence.CompanyDAOImpl;
-import com.excilys.persistence.ComputerDAOImpl;
-import com.excilys.persistence.ConnectionManager;
-import com.excilys.persistence.DAOFactory;
-import com.excilys.persistence.JDBCQuery;
+import com.excilys.service.CompanyService;
+import com.excilys.service.CompanyServiceImpl;
+import com.excilys.service.ComputerService;
+import com.excilys.service.ComputerServiceImpl;
 
-public class Controller {
+public class CLIController {
 
 	public static void main(String[] args) {
 		//JDBCQuery jdbcQuery = new JDBCQuery(ConnectionManager.INSTANCE.getConnection());
-		ComputerDAOImpl computerDaoImpl = (ComputerDAOImpl) DAOFactory.INSTANCE.getComputerDAO();
-		CompanyDAOImpl companyDaoImpl = (CompanyDAOImpl) DAOFactory.INSTANCE.getCompanyDAO();
+		/*ComputerDAOImpl computerDaoImpl = (ComputerDAOImpl) DAOFactory.INSTANCE.getComputerDAO();
+		CompanyDAOImpl companyDaoImpl = (CompanyDAOImpl) DAOFactory.INSTANCE.getCompanyDAO();*/
+		ComputerService computerService = new ComputerServiceImpl();
+		CompanyService companyService = new CompanyServiceImpl();
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Bienvenue, tapez help pour la liste des commandes");
 		String str = sc.nextLine();
@@ -41,14 +42,14 @@ public class Controller {
 				break;
 			case "computerList":
 				List<ComputerModel> computerList = new LinkedList<ComputerModel>();
-				computerList = computerDaoImpl.listAll();
+				computerList = computerService.listAll();
 				for (int i = 0; i < computerList.size(); i++) {
 					System.out.println(computerList.get(i).toString());
 				}
 				break;
 			case "companyList":
 				List<CompanyModel> companyList = new LinkedList<CompanyModel>();
-				companyList = companyDaoImpl.listAll();
+				companyList = companyService.listAll();
 				for (int i = 0; i < companyList.size(); i++) {
 					System.out.println(companyList.get(i).toString());
 				}
@@ -56,25 +57,25 @@ public class Controller {
 			case "getById":
 				System.out.println("quel est l'id de l'ordinateur : ");
 				str = sc.nextLine();
-				ComputerModel c = computerDaoImpl.getById(Long.parseLong(str));
+				ComputerModel c = computerService.getById(Long.parseLong(str));
 				System.out.println(c.toString());
 				break;
 			case "getComp":
 				System.out.println("quel est l'id de la compagnie ? : ");
 				str = sc.nextLine();
-				CompanyModel comp = companyDaoImpl.getById(Long.parseLong(str));
+				CompanyModel comp = companyService.getById(Long.parseLong(str));
 				System.out.println(comp.toString());
 				break;
 			case "delete":
 				System.out.println("quel est l'id de l'ordinateur à supprimer : ");
 				str = sc.nextLine();
-				computerDaoImpl.delete(Long.parseLong(str));
+				computerService.delete(Long.parseLong(str));
 				System.out.println("ordinateur " + Long.parseLong(str) + " supprimé");
 				break;
 			case "create":
 				System.out.println("quel est le nom de votre ordinateur : ");
 				str = sc.nextLine();
-				long id = computerDaoImpl.create(str);
+				long id = computerService.create(str);
 				System.out.println("ordinateur enregistré, id = " + id);
 				break;
 			case "update":
@@ -82,7 +83,7 @@ public class Controller {
 				str = sc.nextLine();
 
 				System.out.println("vous avez choisi l'odinateur : ");
-				ComputerModel computer = computerDaoImpl.getById(Long.parseLong(str));
+				ComputerModel computer = computerService.getById(Long.parseLong(str));
 				System.out.println(computer.toString());
 
 				System.out.println("nouveau nom : ");
@@ -92,26 +93,36 @@ public class Controller {
 				String introduced = null;
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 				System.out.println("date d'introduction (format = yyyy-MM-dd HH:mm:ss) : ");
+				LocalDateTime intro = null;
 				while (!isOk) {
 					introduced = sc.nextLine();
-					try {
-						LocalDateTime.parse(introduced, formatter);
+					if (!introduced.equals("")) {
+						try {
+							intro = LocalDateTime.parse(introduced, formatter);
+							isOk = true;
+						} catch (DateTimeParseException e) {
+							System.out.println("mauvais format ! (format = yyyy-MM-dd HH:mm:ss) : ");
+						}
+					} else {
 						isOk = true;
-					} catch (DateTimeParseException e) {
-						System.out.println("mauvais format ! (format = yyyy-MM-dd HH:mm:ss) : ");
 					}
 				}
 
 				isOk = false;
 				String discontinued = null;
 				System.out.println("date de suppression (format = yyyy-MM-dd HH:mm:ss) : ");
+				LocalDateTime discon = null;
 				while (!isOk) {
 					discontinued = sc.nextLine();
-					try {
-						LocalDateTime.parse(discontinued, formatter);
+					if (!discontinued.equals("")) {
+						try {
+							discon = LocalDateTime.parse(discontinued, formatter);
+							isOk = true;
+						} catch (DateTimeParseException e) {
+							System.out.println("mauvais format ! (format = yyyy-MM-dd HH:mm:ss) : ");
+						}
+					} else {
 						isOk = true;
-					} catch (DateTimeParseException e) {
-						System.out.println("mauvais format ! (format = yyyy-MM-dd HH:mm:ss) : ");
 					}
 				}
 
@@ -123,7 +134,7 @@ public class Controller {
 				} else {
 					idCompany = Long.parseLong(idComp);
 				}
-				//jdbcQuery.updateComputer(Long.parseLong(str), name, introduced, discontinued, idCompany);
+				computerService.update(Long.parseLong(str), name, intro, discon, idCompany);
 				System.out.println("ordinateur mi à jour");
 				break;
 			default:
