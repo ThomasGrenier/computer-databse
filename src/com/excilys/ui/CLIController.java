@@ -30,14 +30,14 @@ public class CLIController {
 			case "help":
 				StringBuilder result = new StringBuilder()
 				.append("liste des commandes : \n\n")
-				.append("\t-computerList : affiche la liste des ordinateurs\n")
-				.append("\t-companyList : affiche la liste des compagnies\n")
-				.append("\t-getById : affiche l'ordinateur correspondant à l'id\n")
-				.append("\t-getComp : affiche la compagnie correspondante à l'id\n")
-				.append("\t-delete : supprime l'ordinateur correspondant à l'id\n")
-				.append("\t-create : cré un nouvel ordinateur\n")
-				.append("\t-update : permet de mettre à jour les champs d'un ordinateur\n")
-				.append("\t-exit : arrêt du programme\n");
+				.append("\t- computerList : affiche la liste des ordinateurs\n")
+				.append("\t- companyList : affiche la liste des compagnies\n")
+				.append("\t- getById : affiche l'ordinateur correspondant à l'id\n")
+				.append("\t- getComp : affiche la compagnie correspondante à l'id\n")
+				.append("\t- delete : supprime l'ordinateur correspondant à l'id\n")
+				.append("\t- create : cré un nouvel ordinateur\n")
+				.append("\t- update : permet de mettre à jour les champs d'un ordinateur\n")
+				.append("\t- exit : arrêt du programme\n");
 				System.out.println(result.toString());
 				break;
 			case "computerList":

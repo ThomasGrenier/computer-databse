@@ -29,6 +29,11 @@ public class Page<T> {
 	
 	public void setCurrentPage(int currentPage) {
 		this.currentPage = currentPage;
+		List<T> tmp = new LinkedList<T>();
+		for (int i = (currentPage * NB_RESULT - 10); i < currentPage * NB_RESULT; i++) {
+			tmp.add(list.get(i));
+		}
+		list = tmp;
 	}
 	
 	public int getTotalPages() {
