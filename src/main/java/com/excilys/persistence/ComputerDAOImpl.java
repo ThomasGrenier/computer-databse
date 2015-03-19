@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.excily.exception.DAOException;
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.ComputerModel;
 import com.mysql.jdbc.Connection;
@@ -32,7 +33,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        rs.close();
 	        st.close();
 	    } catch (SQLException e) {
-	    	e.printStackTrace();
+	    	throw new DAOException(e);
 	    }
 	    DAOFactory.INSTANCE.CloseConnection(connection);
         return computerList;
@@ -57,7 +58,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        rs.close();
 	        st.close();
 	    } catch (SQLException e) {
-	    	e.printStackTrace();
+	    	throw new DAOException(e);
 	    }
 	    DAOFactory.INSTANCE.CloseConnection(connection);
 	    return computerModel;
@@ -83,7 +84,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	                    rs.getLong(1), rs.getString(2), rs.getTimestamp(3), rs.getTimestamp(4), rs.getLong(5));*/
 	        sp.close();
 	    } catch (SQLException e) {
-	    	e.printStackTrace();
+	    	throw new DAOException(e);
 	    }
 	    DAOFactory.INSTANCE.CloseConnection(connection);
 	    return id;
@@ -122,9 +123,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 	                    rs.getLong(1), rs.getString(2), rs.getTimestamp(3), rs.getTimestamp(4), rs.getLong(5));*/
 	        st.close();
 	    } catch (MysqlDataTruncation e) {
-	    	System.out.println("error : invalid date");
+	    	throw new IllegalArgumentException("invalid date");
 	    } catch (SQLException e) {
-	    	System.out.println("internal error, SQLException");
+	    	throw new DAOException(e);
 	    }
 	    DAOFactory.INSTANCE.CloseConnection(connection);
 	}
@@ -141,7 +142,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        st.executeUpdate();
 	        st.close();
 	    } catch (SQLException e) {
-	    	e.printStackTrace();
+	    	throw new DAOException(e);
 	    }
 	    DAOFactory.INSTANCE.CloseConnection(connection);
 	}
@@ -164,7 +165,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        rs.close();
 	        st.close();
 	    } catch (SQLException e) {
-	    	e.printStackTrace();
+	    	throw new DAOException(e);
 	    }
 	    DAOFactory.INSTANCE.CloseConnection(connection);
 		return computerList;
@@ -189,7 +190,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        rs.close();
 	        st.close();
 	    } catch (SQLException e) {
-	    	e.printStackTrace();
+	    	throw new DAOException(e);
 	    }
 	    DAOFactory.INSTANCE.CloseConnection(connection);
 	    return nb;

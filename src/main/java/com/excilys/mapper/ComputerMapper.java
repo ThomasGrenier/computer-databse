@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.excily.exception.MapperException;
 import com.excilys.model.CompanyModel;
 import com.excilys.model.ComputerModel;
 
@@ -28,7 +29,7 @@ public class ComputerMapper implements GenericMapper<ComputerModel> {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new MapperException(e);
 		}
 		return computerList;
 	}
@@ -46,7 +47,7 @@ public class ComputerMapper implements GenericMapper<ComputerModel> {
 					, companyModel);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new MapperException(e);
 		}
 		return computerModel;
 	}

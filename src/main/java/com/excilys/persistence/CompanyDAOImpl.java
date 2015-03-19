@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.excily.exception.DAOException;
 import com.excilys.mapper.CompanyMapper;
 import com.excilys.model.CompanyModel;
 import com.mysql.jdbc.Connection;
@@ -29,7 +30,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	        rs.close();
 	        st.close();
 	    } catch (SQLException e) {
-	    	e.printStackTrace();
+	    	throw new DAOException(e);
 	    }
 	    DAOFactory.INSTANCE.CloseConnection(connection);
 	    return companyList;
@@ -55,7 +56,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	        rs.close();
 	        st.close();
 	    } catch (SQLException e) {
-	    	e.printStackTrace();
+	    	throw new DAOException(e);
 	    }
 	    DAOFactory.INSTANCE.CloseConnection(connection);
 	    return companyModel;
@@ -80,7 +81,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	        rs.close();
 	        st.close();
 	    } catch (SQLException e) {
-	    	e.printStackTrace();
+	    	throw new DAOException(e);
 	    }
 	    DAOFactory.INSTANCE.CloseConnection(connection);
 		return companyList;
@@ -105,7 +106,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	        rs.close();
 	        st.close();
 	    } catch (SQLException e) {
-	    	e.printStackTrace();
+	    	throw new DAOException(e);
 	    }
 	    DAOFactory.INSTANCE.CloseConnection(connection);
 	    return nb;

@@ -2,10 +2,10 @@ package com.excilys.ui;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 import com.excilys.model.CompanyModel;
 import com.excilys.model.ComputerModel;
@@ -14,18 +14,16 @@ import com.excilys.service.CompanyService;
 import com.excilys.service.CompanyServiceImpl;
 import com.excilys.service.ComputerService;
 import com.excilys.service.ComputerServiceImpl;
+import com.excilys.utils.Regex;
 
 public class CLIController {
 
 	public static void main(String[] args) {
-		//JDBCQuery jdbcQuery = new JDBCQuery(ConnectionManager.INSTANCE.getConnection());
-		/*ComputerDAOImpl computerDaoImpl = (ComputerDAOImpl) DAOFactory.INSTANCE.getComputerDAO();
-		CompanyDAOImpl companyDaoImpl = (CompanyDAOImpl) DAOFactory.INSTANCE.getCompanyDAO();*/
 		ComputerService computerService = new ComputerServiceImpl();
 		CompanyService companyService = new CompanyServiceImpl();
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Bienvenue, tapez help pour la liste des commandes");
-		String str = sc.nextLine();
+		String str = sc.nextLine().trim();
 		while (!str.equals("exit")) {
 			switch(str) {
 			case "help":
@@ -59,29 +57,45 @@ public class CLIController {
 				break;
 			case "getById":
 				System.out.println("quel est l'id de l'ordinateur : ");
-				str = sc.nextLine();
-				ComputerModel c = computerService.getById(Long.parseLong(str));
-				System.out.println(c.toString());
+				str = sc.nextLine().trim();
+				if (Pattern.matches(Regex.DIGIT.getRegex(), str)) {
+					ComputerModel c = computerService.getById(Long.parseLong(str));
+					System.out.println(c.toString());
+				} else {
+					System.err.println("id invalid");
+				}
 				break;
 			case "getComp":
 				System.out.println("quel est l'id de la compagnie ? : ");
-				str = sc.nextLine();
-				CompanyModel comp = companyService.getById(Long.parseLong(str));
-				System.out.println(comp.toString());
+				str = sc.nextLine().trim();
+				if (Pattern.matches(Regex.DIGIT.getRegex(), str)) {
+					CompanyModel comp = companyService.getById(Long.parseLong(str));
+					System.out.println(comp.toString());
+				} else {
+					System.err.println("is not a number");
+				}
 				break;
 			case "getComputerPage":
 				System.out.println("quelle page ? ");
-				str = sc.nextLine();
+				str = sc.nextLine().trim();
+				while (!Pattern.matches(Regex.DIGIT.getRegex(), str)) {
+					System.err.println("is not a number");
+					str = sc.nextLine().trim();
+				}
 				int currentPage = Integer.parseInt(str);
 				System.out.println("Combien de résultat par page ? ");
-				str = sc.nextLine();
+				str = sc.nextLine().trim();
+				while (!Pattern.matches(Regex.DIGIT.getRegex(), str)) {
+					System.err.println("is not a number");
+					str = sc.nextLine().trim();
+				}
 				int nbResult = Integer.parseInt(str);
 				Page<ComputerModel> p = computerService.getPage(currentPage, nbResult);
 				System.out.println(p.toString());
 				System.out.println(" - next pour avancer d'une page");
 				System.out.println(" - previous pour reculer d'une page");
 				System.out.println(" - stop pour sortir");
-				str = sc.nextLine();
+				str = sc.nextLine().trim();
 				while (!str.equals("stop")) {
 					switch (str) {
 					case "next":
@@ -104,23 +118,31 @@ public class CLIController {
 						System.out.println(" - stop pour sortir");
 						break;
 					}
-					str = sc.nextLine();
+					str = sc.nextLine().trim();
 				}
 				System.out.println("sortie des pages");
 				break;
 			case "getCompanyPage":
 				System.out.println("quelle page ? ");
-				str = sc.nextLine();
+				str = sc.nextLine().trim();
+				while (!Pattern.matches(Regex.DIGIT.getRegex(), str)) {
+					System.err.println("is not a number");
+					str = sc.nextLine().trim();
+				}
 				int currentPageComp = Integer.parseInt(str);
 				System.out.println("Combien de résultat par page ? ");
-				str = sc.nextLine();
+				str = sc.nextLine().trim();
+				while (!Pattern.matches(Regex.DIGIT.getRegex(), str)) {
+					System.err.println("is not a number");
+					str = sc.nextLine().trim();
+				}
 				int nbResultComp = Integer.parseInt(str);
 				Page<CompanyModel> pa = companyService.getPage(currentPageComp, nbResultComp);
 				System.out.println(pa.toString());
 				System.out.println(" - next pour avancer d'une page");
 				System.out.println(" - previous pour reculer d'une page");
 				System.out.println(" - stop pour sortir");
-				str = sc.nextLine();
+				str = sc.nextLine().trim();
 				while (!str.equals("stop")) {
 					switch (str) {
 					case "next":
@@ -143,46 +165,57 @@ public class CLIController {
 						System.out.println(" - stop pour sortir");
 						break;
 					}
-					str = sc.nextLine();
+					str = sc.nextLine().trim();
 				}
 				System.out.println("sortie des pages");
 				break;
 			case "delete":
 				System.out.println("quel est l'id de l'ordinateur à supprimer : ");
-				str = sc.nextLine();
-				computerService.delete(Long.parseLong(str));
-				System.out.println("ordinateur " + Long.parseLong(str) + " supprimé");
+				str = sc.nextLine().trim();
+				if (Pattern.matches(Regex.DIGIT.getRegex(), str)) {
+					computerService.delete(Long.parseLong(str));
+					System.out.println("ordinateur " + Long.parseLong(str) + " supprimé");
+				} else {
+					System.err.println("id invalid");
+				}
 				break;
 			case "create":
 				System.out.println("quel est le nom de votre ordinateur : ");
-				str = sc.nextLine();
+				str = sc.nextLine().trim();
 				long id = computerService.create(str);
 				System.out.println("ordinateur enregistré, id = " + id);
 				break;
 			case "update":
 				System.out.println("quel est l'id de l'ordinateur à mettre à jour ?");
-				str = sc.nextLine();
+				str = sc.nextLine().trim();
 
 				System.out.println("vous avez choisi l'odinateur : ");
-				ComputerModel computer = computerService.getById(Long.parseLong(str));
-				System.out.println(computer.toString());
+				if (Pattern.matches(Regex.DIGIT.getRegex(), str)) {
+					ComputerModel computer = computerService.getById(Long.parseLong(str));
+					System.out.println(computer.toString());
+				} else {
+					System.err.println("id invalid");
+					break;
+				}
 
 				System.out.println("nouveau nom : ");
-				String name = sc.nextLine();
+				String name = sc.nextLine().trim();
 
 				boolean isOk = false;
 				String introduced = null;
 				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 				System.out.println("date d'introduction (format = yyyy-MM-dd HH:mm:ss) : ");
+				
 				LocalDateTime intro = null;
 				while (!isOk) {
-					introduced = sc.nextLine();
+					introduced = sc.nextLine().trim();
+
 					if (!introduced.equals("")) {
-						try {
+						if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), introduced.trim())) {
 							intro = LocalDateTime.parse(introduced, formatter);
 							isOk = true;
-						} catch (DateTimeParseException e) {
-							System.out.println("mauvais format ! (format = yyyy-MM-dd HH:mm:ss) : ");
+						} else {
+							System.err.println("mauvais format ! (format = yyyy-MM-dd HH:mm:ss) : ");
 						}
 					} else {
 						isOk = true;
@@ -194,12 +227,12 @@ public class CLIController {
 				System.out.println("date de suppression (format = yyyy-MM-dd HH:mm:ss) : ");
 				LocalDateTime discon = null;
 				while (!isOk) {
-					discontinued = sc.nextLine();
+					discontinued = sc.nextLine().trim();
 					if (!discontinued.equals("")) {
-						try {
+						if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), discontinued.trim())) {
 							discon = LocalDateTime.parse(discontinued, formatter);
 							isOk = true;
-						} catch (DateTimeParseException e) {
+						} else {
 							System.out.println("mauvais format ! (format = yyyy-MM-dd HH:mm:ss) : ");
 						}
 					} else {
@@ -208,12 +241,18 @@ public class CLIController {
 				}
 
 				System.out.println("id de la compagnie : ");
-				String idComp = sc.nextLine();
+				String idComp = sc.nextLine().trim();
 				long idCompany;
 				if ((idComp == null) || (idComp.equals(""))) {
 					idCompany = -1;
 				} else {
-					idCompany = Long.parseLong(idComp);
+
+					if (Pattern.matches(Regex.DIGIT.getRegex(), idComp)) {
+						idCompany = Long.parseLong(idComp);
+					} else {
+						idCompany = -1;
+						System.err.println("invalid company id");
+					}
 				}
 				computerService.update(Long.parseLong(str), name, intro, discon, idCompany);
 				System.out.println("ordinateur mi à jour");
@@ -222,7 +261,7 @@ public class CLIController {
 				System.out.println("help pour la liste des commandes");
 				break;
 			}
-			str = sc.nextLine();
+			str = sc.nextLine().trim();
 		}
 		System.out.println("arrêt de l'application");
 		sc.close();

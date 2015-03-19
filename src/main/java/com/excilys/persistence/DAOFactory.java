@@ -7,6 +7,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import com.excily.exception.ConnectionException;
 import com.mysql.jdbc.Connection;
 
 public enum DAOFactory {
@@ -34,9 +35,9 @@ public enum DAOFactory {
 			String password = configProp.getProperty("PWD");
 			connect = (Connection) DriverManager.getConnection(url, user, password);
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new IllegalStateException("fichier introuvable");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			throw new ConnectionException(e);
 		}
 		return connect;
 	}
@@ -45,7 +46,7 @@ public enum DAOFactory {
 		try {
 			connection.close();
 		} catch (SQLException e) {
-			System.out.println(e.getMessage());
+			throw new ConnectionException(e);
 		}
 	}
 
