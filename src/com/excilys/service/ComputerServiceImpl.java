@@ -52,11 +52,14 @@ public class ComputerServiceImpl implements ComputerService {
 
 	@Override
 	public Page<ComputerModel> getPage(int currentPage, int limit) {
-		Page<ComputerModel> page = new Page<ComputerModel>(currentPage, limit);
 		int total = computerDao.totalRow() / limit;
 		if ((computerDao.totalRow() % limit) > 0) {
 			total += 1;
 		}
+		if (currentPage > total) {
+			currentPage = total;
+		}
+		Page<ComputerModel> page = new Page<ComputerModel>(currentPage, limit);
 		page.setTotalPages(total);
 		page.setList(getComputersByPage(page.getCurrentPage() * page.getNbResult() - limit, limit));
 		return page;

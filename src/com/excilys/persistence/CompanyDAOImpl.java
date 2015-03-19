@@ -2,6 +2,7 @@ package com.excilys.persistence;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.excilys.mapper.CompanyMapper;
@@ -60,4 +61,53 @@ public class CompanyDAOImpl implements CompanyDAO {
 	    return companyModel;
 	}
 
+	
+	public List<CompanyModel> getCompaniesByPage(int offset, int limit) {
+		List<CompanyModel> companyList = new LinkedList<CompanyModel>();
+    	Connection connection = DAOFactory.INSTANCE.getConnection();
+	    try {
+	        // create new connection and statement
+	        String query = "SELECT * FROM company limit ? offset ?";
+
+	        int i = 1;
+	        PreparedStatement st = (PreparedStatement) connection.prepareStatement(query);
+	        st.setInt(i++, limit);
+	        st.setInt(i++, offset);
+	        ResultSet rs = st.executeQuery();
+	        
+	        companyList = (new CompanyMapper()).mapAll(rs);
+	        
+	        rs.close();
+	        st.close();
+	    } catch (SQLException e) {
+	    	e.printStackTrace();
+	    }
+	    DAOFactory.INSTANCE.CloseConnection(connection);
+		return companyList;
+	}
+
+	@Override
+	public int totalRow() {
+    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	int nb = 0;
+	    try {
+	        // create new connection and statement
+	        String query = "SELECT count(*) FROM company";
+
+	        Statement st = (Statement) connection.createStatement();
+	        
+	        ResultSet rs = st.executeQuery(query);
+	        
+	        rs.next();
+	        
+	        nb = rs.getInt(1);
+	        
+	        rs.close();
+	        st.close();
+	    } catch (SQLException e) {
+	    	e.printStackTrace();
+	    }
+	    DAOFactory.INSTANCE.CloseConnection(connection);
+	    return nb;
+	}
 }

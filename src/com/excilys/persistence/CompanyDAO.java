@@ -9,4 +9,8 @@ public interface CompanyDAO {
 	List<CompanyModel> listAll();
 	
 	CompanyModel getById(long id);
+
+	List<CompanyModel> getCompaniesByPage(int offset, int limit);
+	
+	int totalRow();
 }

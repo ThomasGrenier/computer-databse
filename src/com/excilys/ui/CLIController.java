@@ -35,6 +35,8 @@ public class CLIController {
 				.append("\t- companyList : affiche la liste des compagnies\n")
 				.append("\t- getById : affiche l'ordinateur correspondant à l'id\n")
 				.append("\t- getComp : affiche la compagnie correspondante à l'id\n")
+				.append("\t- getComputerPage : affiche une page de computer\n")
+				.append("\t- getCompanyPage : affiche une page de compagnie\n")
 				.append("\t- delete : supprime l'ordinateur correspondant à l'id\n")
 				.append("\t- create : cré un nouvel ordinateur\n")
 				.append("\t- update : permet de mettre à jour les champs d'un ordinateur\n")
@@ -67,7 +69,7 @@ public class CLIController {
 				CompanyModel comp = companyService.getById(Long.parseLong(str));
 				System.out.println(comp.toString());
 				break;
-			case "getPage":
+			case "getComputerPage":
 				System.out.println("quelle page ? ");
 				str = sc.nextLine();
 				int currentPage = Integer.parseInt(str);
@@ -95,6 +97,45 @@ public class CLIController {
 						}
 						p = computerService.getPage(currentPage, nbResult);
 						System.out.println(p.toString());
+						break;
+					default:
+						System.out.println(" - next pour avancer d'une page");
+						System.out.println(" - previous pour reculer d'une page");
+						System.out.println(" - stop pour sortir");
+						break;
+					}
+					str = sc.nextLine();
+				}
+				System.out.println("sortie des pages");
+				break;
+			case "getCompanyPage":
+				System.out.println("quelle page ? ");
+				str = sc.nextLine();
+				int currentPageComp = Integer.parseInt(str);
+				System.out.println("Combien de résultat par page ? ");
+				str = sc.nextLine();
+				int nbResultComp = Integer.parseInt(str);
+				Page<CompanyModel> pa = companyService.getPage(currentPageComp, nbResultComp);
+				System.out.println(pa.toString());
+				System.out.println(" - next pour avancer d'une page");
+				System.out.println(" - previous pour reculer d'une page");
+				System.out.println(" - stop pour sortir");
+				str = sc.nextLine();
+				while (!str.equals("stop")) {
+					switch (str) {
+					case "next":
+						if (currentPageComp < pa.getTotalPages()) {
+							currentPageComp += 1;
+						}
+						pa = companyService.getPage(currentPageComp, nbResultComp);
+						System.out.println(pa.toString());
+						break;
+					case "previous":
+						if (currentPageComp > 1) {
+							currentPageComp -= 1;
+						}
+						pa = companyService.getPage(currentPageComp, nbResultComp);
+						System.out.println(pa.toString());
 						break;
 					default:
 						System.out.println(" - next pour avancer d'une page");
