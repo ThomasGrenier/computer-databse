@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.excily.exception.DAOException;
+import com.excilys.exception.DAOException;
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.ComputerModel;
 import com.mysql.jdbc.Connection;

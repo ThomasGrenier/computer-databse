@@ -1,4 +1,4 @@
-package com.excily.exception;
+package com.excilys.exception;
 
 @SuppressWarnings("serial")
 public class MapperException extends RuntimeException {
