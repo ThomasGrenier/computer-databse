@@ -1,0 +1,98 @@
+package com.excilys.persistence;
+
+import java.io.File;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+
+import org.assertj.core.api.Assertions;
+import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
+import org.junit.After;
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import com.excilys.exception.MapperException;
+import com.excilys.model.CompanyModel;
+import com.excilys.util.DBUtil;
+
+public class CompanyDAOTest {
+
+	@BeforeClass
+	public static void setUpDB() {
+		System.setProperty("env", "TEST");
+		try {
+			DBUtil.executeSqlFile("ressources/bdTest.sql", DBUtil.getConnection());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+
+	@After
+	public void tearDown() throws Exception {
+		DBUtil.databaseTester.onTearDown();
+	}
+
+	@Test
+	public void listAllShouldReturnAListOfCompanies() throws Exception {
+		DBUtil.cleanlyInsert(new FlatXmlDataSetBuilder().build(new File(
+				"src/test/data/listAll.xml")));
+		final int expectedSize = 5;
+
+		final List<CompanyModel> companies = DAOFactory.INSTANCE.getCompanyDAO().listAll();
+		final CompanyModel expectedCompany1 = new CompanyModel(1L, "Comp1");
+		final CompanyModel expectedCompany2 = new CompanyModel(2L, "Comp2");
+
+		Assertions.assertThat(companies).isNotNull();
+		Assertions.assertThat(companies.size()).isEqualTo(expectedSize);
+		Assertions.assertThat(companies).contains(expectedCompany1, expectedCompany2);
+	}
+
+	@Test
+	public void listAllShouldReturnEmptyListWhenTheBDIsEmpty() throws Exception {
+		DBUtil.cleanlyInsert(new FlatXmlDataSetBuilder().build(new File(
+				"src/test/data/emptyBD.xml")));
+
+		final List<CompanyModel> companies = DAOFactory.INSTANCE.getCompanyDAO().listAll();
+
+		Assertions.assertThat(companies).isNotNull();
+		Assertions.assertThat(companies).isEmpty();
+	}
+
+	@Test 
+	public void getByIdShouldReturnTheCompanyModelOfTheId() throws Exception {
+		DBUtil.cleanlyInsert(new FlatXmlDataSetBuilder().build(new File(
+				"src/test/data/listAll.xml")));
+		final long id = 2L;
+		final long expectedId = 2L;
+		final String expectedName = "Comp2";
+
+		final CompanyModel model = DAOFactory.INSTANCE.getCompanyDAO().getById(id);
+
+		Assertions.assertThat(model).isNotNull();
+		Assertions.assertThat(model.getId()).isEqualTo(expectedId);
+		Assertions.assertThat(model.getName()).isEqualTo(expectedName);
+	}
+
+	@Test
+	public void getByIdShouldReturnNullIfTheIdIsNotValid() throws Exception {
+		DBUtil.cleanlyInsert(new FlatXmlDataSetBuilder().build(new File(
+				"src/test/data/emptyBD.xml")));
+
+		final long id = 400L;
+
+		final CompanyModel model = DAOFactory.INSTANCE.getCompanyDAO().getById(id);
+		
+		Assertions.assertThat(model).isNull();
+		/*try {
+			Assertions.fail("the test must fail because of the invalid id");
+		} catch (Exception e) {
+			Assertions.assertThat(e).isInstanceOf(MapperException.class);
+			Assertions.assertThat(e.getMessage()).isEqualTo(expectedMessage);
+		}*/
+	}
+}

@@ -1,5 +1,6 @@
 package com.excilys.persistence;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -9,7 +10,6 @@ import java.util.List;
 import com.excilys.exception.DAOException;
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.ComputerModel;
-import com.mysql.jdbc.Connection;
 import com.mysql.jdbc.MysqlDataTruncation;
 import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.Statement;

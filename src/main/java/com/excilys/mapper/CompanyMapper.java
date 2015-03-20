@@ -31,12 +31,13 @@ public class CompanyMapper implements GenericMapper<CompanyModel> {
 	public CompanyModel mapOne(ResultSet resultSet) {
 
 		CompanyModel companyModel = null;
+		
 		try {
-			resultSet.next();
-	    	companyModel = new CompanyModel(resultSet.getLong(1), resultSet.getString(2));
+			if (resultSet.next() != false) {
+				companyModel = new CompanyModel(resultSet.getLong(1), resultSet.getString(2));
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			throw new MapperException(e);
 		}
 		return companyModel;
 	}

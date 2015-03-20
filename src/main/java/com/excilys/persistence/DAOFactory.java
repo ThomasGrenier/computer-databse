@@ -3,17 +3,17 @@ package com.excilys.persistence;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
 import com.excilys.exception.ConnectionException;
-import com.mysql.jdbc.Connection;
 
 public enum DAOFactory {
 	INSTANCE;
 
-	private static final String FILE_NAME = "ressources/MysqlProperties.properties";
+	private static final String FILE_NAME = "ressources/";
 
 	private ComputerDAO computerDao;
 
@@ -27,13 +27,37 @@ public enum DAOFactory {
 	public Connection getConnection() {
 		Properties configProp = new Properties();
 		Connection connect = null;
+		String config = null;
+		if ("TEST".equals(System.getProperty("env"))) {
+			config = "MysqlProperties-test.properties";
+			try {
+				Class.forName("org.h2.Driver");
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		} else {
+			try {
+				Class.forName("com.mysql.jdbc.Driver").newInstance();
+			} catch (InstantiationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			config = "MysqlProperties.properties";
+		}
 		try {
-			InputStream ips = new FileInputStream(FILE_NAME);           
+			InputStream ips = new FileInputStream(FILE_NAME + config);           
 			configProp.load(ips);
-			String url = configProp.getProperty("URL");
-			String user = configProp.getProperty("USR");
-			String password = configProp.getProperty("PWD");
-			connect = (Connection) DriverManager.getConnection(url, user, password);
+			String url = configProp.getProperty("url");
+			String user = configProp.getProperty("user");
+			String password = configProp.getProperty("password");
+			connect = DriverManager.getConnection(url, user, password);
 		} catch (IOException e) {
 			throw new IllegalStateException("fichier introuvable");
 		} catch (SQLException e) {

@@ -1,16 +1,16 @@
 package com.excilys.persistence;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.excilys.exception.DAOException;
 import com.excilys.mapper.CompanyMapper;
 import com.excilys.model.CompanyModel;
-import com.mysql.jdbc.Connection;
-import com.mysql.jdbc.PreparedStatement;
-import com.mysql.jdbc.Statement;
 
 public class CompanyDAOImpl implements CompanyDAO {
 
@@ -20,7 +20,7 @@ public class CompanyDAOImpl implements CompanyDAO {
     	Connection connection = DAOFactory.INSTANCE.getConnection();
 	    try {
 	        // create new statement
-	        Statement st = (Statement) connection.createStatement();
+	        Statement st = connection.createStatement();
 
 	        String query = "SELECT * FROM company";
 	        ResultSet rs = st.executeQuery(query);
@@ -45,7 +45,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	    	int i = 1;
 	        String query = "SELECT * FROM company WHERE id =?";
 	        PreparedStatement st = null;
-	        st = (PreparedStatement) connection.prepareStatement(query);
+	        st = connection.prepareStatement(query);
 	        st.setLong(i++, id);
 	        
 	        ResultSet rs = st.executeQuery();
@@ -71,7 +71,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	        String query = "SELECT * FROM company limit ? offset ?";
 
 	        int i = 1;
-	        PreparedStatement st = (PreparedStatement) connection.prepareStatement(query);
+	        PreparedStatement st = connection.prepareStatement(query);
 	        st.setInt(i++, limit);
 	        st.setInt(i++, offset);
 	        ResultSet rs = st.executeQuery();
@@ -95,7 +95,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	        // create new connection and statement
 	        String query = "SELECT count(*) FROM company";
 
-	        Statement st = (Statement) connection.createStatement();
+	        Statement st = connection.createStatement();
 	        
 	        ResultSet rs = st.executeQuery(query);
 	        

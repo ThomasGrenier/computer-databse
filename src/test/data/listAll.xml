@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+    <!-- Company -->
+    <company id="1" name="Comp1"/>
+    <company id="2" name="Comp2"/>
+    <company id="3" name="Comp3"/>
+    <company id="4" name="Comp4"/>
+    <company id="5" name="Comp5"/>
+</dataset>
