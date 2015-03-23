@@ -1,7 +1,6 @@
 package com.excilys.util;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,7 +27,7 @@ public class DBUtil {
 	public static String jdbcUrl;
 	public static String user;
 	public static String password;
-	private static final String CONFIG_TEST = "ressources/MysqlProperties-test.properties";
+	private static final String CONFIG_TEST = "MysqlProperties-test.properties";
 
 	static {
 
@@ -51,7 +50,8 @@ public class DBUtil {
 		}*/
 		InputStream ips;
 		try {
-			ips = new FileInputStream(CONFIG_TEST);
+			//ips = new FileInputStream(CONFIG_TEST);
+			ips = DBUtil.class.getClassLoader().getResourceAsStream(CONFIG_TEST);
 			properties.load(ips);
 			jdbcUrl = properties.getProperty("url");
 			user = properties.getProperty("user");
@@ -82,7 +82,8 @@ public class DBUtil {
 		System.out.println("1");
 		final BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 		System.out.println("2");*/
-		final InputStream is = new FileInputStream(file);
+		//final InputStream is = new FileInputStream(file);
+		final InputStream is = DBUtil.class.getClassLoader().getResourceAsStream(file);
 		final BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 		final StringBuilder sb = new StringBuilder();
 		String str = null;
@@ -110,7 +111,8 @@ public class DBUtil {
 		InputStream ips;
 		String url = null;
 		try {
-			ips = new FileInputStream(CONFIG_TEST);
+			//ips = new FileInputStream(CONFIG_TEST);
+			ips = DBUtil.class.getClassLoader().getResourceAsStream(CONFIG_TEST);
 			properties.load(ips);
 			url = properties.getProperty("url");
 			return DriverManager.getConnection(url, properties);

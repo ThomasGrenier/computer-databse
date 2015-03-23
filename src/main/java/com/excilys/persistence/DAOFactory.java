@@ -1,6 +1,5 @@
 package com.excilys.persistence;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -12,8 +11,6 @@ import com.excilys.exception.ConnectionException;
 
 public enum DAOFactory {
 	INSTANCE;
-
-	private static final String FILE_NAME = "ressources/";
 
 	private ComputerDAO computerDao;
 
@@ -52,7 +49,8 @@ public enum DAOFactory {
 			config = "MysqlProperties.properties";
 		}
 		try {
-			InputStream ips = new FileInputStream(FILE_NAME + config);           
+			//InputStream ips = new FileInputStream(FILE_NAME + config);  
+			InputStream ips = DAOFactory.class.getClassLoader().getResourceAsStream(config);
 			configProp.load(ips);
 			String url = configProp.getProperty("url");
 			String user = configProp.getProperty("user");

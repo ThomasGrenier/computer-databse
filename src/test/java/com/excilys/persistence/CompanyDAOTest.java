@@ -11,7 +11,6 @@ import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.excilys.exception.MapperException;
 import com.excilys.model.CompanyModel;
 import com.excilys.util.DBUtil;
 
@@ -21,7 +20,7 @@ public class CompanyDAOTest {
 	public static void setUpDB() {
 		System.setProperty("env", "TEST");
 		try {
-			DBUtil.executeSqlFile("ressources/bdTest.sql", DBUtil.getConnection());
+			DBUtil.executeSqlFile("bdTest.sql", DBUtil.getConnection());
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
