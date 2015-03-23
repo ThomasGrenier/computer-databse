@@ -46,10 +46,13 @@ public class CompanyDAOTest {
 		final List<CompanyModel> companies = DAOFactory.INSTANCE.getCompanyDAO().listAll();
 		final CompanyModel expectedCompany1 = new CompanyModel(1L, "Comp1");
 		final CompanyModel expectedCompany2 = new CompanyModel(2L, "Comp2");
+		final CompanyModel expectedCompany3 = new CompanyModel(3L, "Comp3");
+		final CompanyModel expectedCompany4 = new CompanyModel(4L, "Comp4");
+		final CompanyModel expectedCompany5 = new CompanyModel(5L, "Comp5");
 
 		Assertions.assertThat(companies).isNotNull();
 		Assertions.assertThat(companies.size()).isEqualTo(expectedSize);
-		Assertions.assertThat(companies).contains(expectedCompany1, expectedCompany2);
+		Assertions.assertThat(companies).contains(expectedCompany1, expectedCompany2, expectedCompany3, expectedCompany4, expectedCompany5);
 	}
 
 	@Test
@@ -88,11 +91,5 @@ public class CompanyDAOTest {
 		final CompanyModel model = DAOFactory.INSTANCE.getCompanyDAO().getById(id);
 		
 		Assertions.assertThat(model).isNull();
-		/*try {
-			Assertions.fail("the test must fail because of the invalid id");
-		} catch (Exception e) {
-			Assertions.assertThat(e).isInstanceOf(MapperException.class);
-			Assertions.assertThat(e.getMessage()).isEqualTo(expectedMessage);
-		}*/
 	}
 }
