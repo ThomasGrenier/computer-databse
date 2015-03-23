@@ -15,6 +15,7 @@ public class Dashboard extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		request.getParameterMap();
 		request.setAttribute("computers", new ComputerServiceImpl().listAll());
 		getServletContext()
 		.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(
