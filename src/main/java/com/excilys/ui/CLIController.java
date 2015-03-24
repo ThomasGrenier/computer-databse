@@ -44,9 +44,11 @@ public class CLIController {
 			case "computerList":
 				List<ComputerModel> computerList = new LinkedList<ComputerModel>();
 				computerList = computerService.listAll();
-				for (int i = 0; i < computerList.size(); i++) {
+				computerList.stream().forEach(System.out::println);
+				//computerList.stream().map(e -> e + 1).map(e -> e + 2).forEach(System.out::println);
+				/*for (int i = 0; i < computerList.size(); i++) {
 					System.out.println(computerList.get(i).toString());
-				}
+				}*/
 				break;
 			case "companyList":
 				List<CompanyModel> companyList = new LinkedList<CompanyModel>();

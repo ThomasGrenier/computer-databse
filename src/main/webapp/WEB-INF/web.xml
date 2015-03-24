@@ -7,8 +7,16 @@
 		<servlet-name>Dashboard</servlet-name>
 		<servlet-class>com.excilys.controller.Dashboard</servlet-class>
 	</servlet>
+	<servlet>
+		<servlet-name>EditComputer</servlet-name>
+		<servlet-class>com.excilys.controller.EditComputer</servlet-class>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>Dashboard</servlet-name>
 		<url-pattern>/dashboard</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>EditComputer</servlet-name>
+		<url-pattern>/editComputer</url-pattern>
 	</servlet-mapping>
 </web-app>
