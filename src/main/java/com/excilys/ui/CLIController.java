@@ -99,7 +99,7 @@ public class CLIController {
 				while (!str.equals("stop")) {
 					switch (str) {
 					case "next":
-						if (currentPage < p.getTotalPages()) {
+						if (currentPage < p.getTotalPage()) {
 							currentPage += 1;
 						}
 						p = computerService.getPage(currentPage, nbResult);
@@ -146,7 +146,7 @@ public class CLIController {
 				while (!str.equals("stop")) {
 					switch (str) {
 					case "next":
-						if (currentPageComp < pa.getTotalPages()) {
+						if (currentPageComp < pa.getTotalPage()) {
 							currentPageComp += 1;
 						}
 						pa = companyService.getPage(currentPageComp, nbResultComp);

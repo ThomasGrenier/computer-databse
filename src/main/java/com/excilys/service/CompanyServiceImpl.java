@@ -40,6 +40,7 @@ public class CompanyServiceImpl implements CompanyService {
 			currentPage = total;
 		}
 		Page<CompanyModel> page = new Page<CompanyModel>(currentPage, limit);
+		page.setTotalResult(companyDao.totalRow());
 		page.setTotalPages(total);
 		page.setList(getCompaniesByPage(page.getCurrentPage() * page.getNbResult() - limit, limit));
 		return page;

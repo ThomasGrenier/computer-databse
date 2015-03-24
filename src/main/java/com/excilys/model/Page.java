@@ -8,6 +8,7 @@ public class Page<T> {
 	private int nbResult;
 	private int totalPage;
 	private int currentPage;
+	private int totalResult;
 	
 	public Page(int currentPage, int nbResult) {
 		this.currentPage = currentPage;
@@ -31,7 +32,7 @@ public class Page<T> {
 		this.currentPage = currentPage;
 	}
 	
-	public int getTotalPages() {
+	public int getTotalPage() {
 		return totalPage;
 	}
 	
@@ -45,6 +46,14 @@ public class Page<T> {
 	
 	public void setNbResult(int nbResult) {
 		this.nbResult = nbResult;
+	}
+	
+	public int getTotalResult() {
+		return totalResult;
+	}
+	
+	public void setTotalResult(int totalResult) {
+		this.totalResult = totalResult;
 	}
 	
 	public String toString() {

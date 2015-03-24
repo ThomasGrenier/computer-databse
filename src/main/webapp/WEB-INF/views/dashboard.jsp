@@ -1,28 +1,29 @@
 <%@page pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib tagdir="/WEB-INF/tags" prefix="mylib"%>
 <!DOCTYPE html>
 <html>
 <head>
-<title>Computer Database</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta charset="utf-8">
-<!-- Bootstrap -->
-<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="css/main.css" rel="stylesheet" media="screen">
+	<title>Computer Database</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="utf-8">
+	<!-- Bootstrap -->
+	<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="css/font-awesome.css" rel="stylesheet" media="screen">
+	<link href="css/main.css" rel="stylesheet" media="screen">
 </head>
 <body>
 	<header class="navbar navbar-inverse navbar-fixed-top">
 		<div class="container">
-			<a class="navbar-brand" href="dashboard.html"> Application -
+			<a class="navbar-brand" href="dashboard?limit=${page.nbResult}"> Application -
 				Computer Database </a>
 		</div>
 	</header>
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${fn:length(computers)} Computers found</h1>
+			<h1 id="homeTitle">${page.totalResult} Computers found</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
@@ -71,26 +72,24 @@
 				<!-- Browse attribute computers -->
 				<tbody id="results">
 
-					<c:forEach items="${computers}" var="computer">
-						<tbody>
-							<tr>
-								<td class="editMode"><input type="checkbox" name="cb"
-									class="cb" value="0" /></td>
-								<td><a
-									href="<c:url value="/editComputer?id=${computer.id}" />">${computer.name}</a>
-									<%-- <a href="editComputer.html" onclick="">${computer.name}</a> --%>
-								</td>
-								<td>${computer.introduced}</td>
-								<td>${computer.discontinued}</td>
-								<td><c:choose>
-										<c:when test="${empty computer.company}">
-										</c:when>
-										<c:otherwise>
+					<c:forEach items="${page.list}" var="computer">
+						<tr>
+							<td class="editMode"><input type="checkbox" name="cb"
+								class="cb" value="0" /></td>
+							<td><a
+								href="<c:url value="/editComputer?id=${computer.id}" />">${computer.name}</a>
+								<%-- <a href="editComputer.html" onclick="">${computer.name}</a> --%>
+							</td>
+							<td>${computer.introduced}</td>
+							<td>${computer.discontinued}</td>
+							<td><c:choose>
+									<c:when test="${empty computer.company}">
+									</c:when>
+									<c:otherwise>
 											${computer.company.name}
 										</c:otherwise>
-									</c:choose></td>
-							</tr>
-						</tbody>
+								</c:choose></td>
+						</tr>
 					</c:forEach>
 
 				</tbody>
@@ -99,27 +98,9 @@
 	</section>
 
 	<footer class="navbar-fixed-bottom">
-		<div class="container text-center">
-			<ul class="pagination">
-				<li><a href="#" aria-label="Previous"> <span
-						aria-hidden="true">&laquo;</span>
-				</a></li>
-				<li><a href="#">1</a></li>
-				<li><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li><a href="#" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-				</a></li>
-			</ul>
-
-			<div class="btn-group btn-group-sm pull-right" role="group">
-				<button type="button" class="btn btn-default">10</button>
-				<button type="button" class="btn btn-default">50</button>
-				<button type="button" class="btn btn-default">100</button>
-			</div>
-		</div>
+		<mylib:pages offset="${page.currentPage}" limit="${page.nbResult}" />
 	</footer>
+	
 	<script src="js/jquery.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/dashboard.js"></script>

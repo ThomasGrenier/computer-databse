@@ -60,6 +60,7 @@ public class ComputerServiceImpl implements ComputerService {
 			currentPage = total;
 		}
 		Page<ComputerModel> page = new Page<ComputerModel>(currentPage, limit);
+		page.setTotalResult(computerDao.totalRow());
 		page.setTotalPages(total);
 		page.setList(getComputersByPage(page.getCurrentPage() * page.getNbResult() - limit, limit));
 		return page;
