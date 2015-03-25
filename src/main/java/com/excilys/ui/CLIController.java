@@ -184,7 +184,7 @@ public class CLIController {
 			case "create":
 				System.out.println("quel est le nom de votre ordinateur : ");
 				str = sc.nextLine().trim();
-				long id = computerService.create(str);
+				long id = computerService.create(str, null, null, -1);
 				System.out.println("ordinateur enregistré, id = " + id);
 				break;
 			case "update":

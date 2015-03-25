@@ -1,5 +1,6 @@
 package com.excilys.persistence;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import com.excilys.model.ComputerModel;
@@ -10,7 +11,7 @@ public interface ComputerDAO {
 	
 	ComputerModel getById(long id);
 	
-	long create(String name);
+	long create(String name, LocalDateTime introduced, LocalDateTime discontinued, long idCompany);
 	
 	void update(ComputerModel computer);
 	

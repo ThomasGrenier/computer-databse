@@ -12,77 +12,92 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.model.CompanyModel;
-import com.excilys.model.ComputerModel;
 import com.excilys.service.CompanyServiceImpl;
 import com.excilys.service.ComputerServiceImpl;
 import com.excilys.utils.Regex;
 
 @SuppressWarnings("serial")
-public class EditComputer extends HttpServlet {
-	
+public class AddComputer extends HttpServlet {
 
 	@Override
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		int id = -1;
-		if (request.getParameter("id") != null) {
-			if (Pattern.matches(Regex.DIGIT.getRegex(), request.getParameter("id"))) {
-				id = Integer.parseInt(request.getParameter("id"));
-			}
-		}
 		List<CompanyModel> comp = new CompanyServiceImpl().listAll();
-		ComputerModel m = new ComputerServiceImpl().getById(id);
-		request.setAttribute("computer", m);
 		request.setAttribute("companies", comp);
 		getServletContext()
-		.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(
+		.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(
 				request, response);
 	}
-	
+
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		
-		long id = 0L;
-		String name = "";
+
 		LocalDateTime introduced = null;
 		LocalDateTime discontinued = null;
 		long idCompany = 0L;
-		
 
-		if (request.getParameter("id") != null) {
-			if (Pattern.matches(Regex.DIGIT.getRegex(), request.getParameter("id"))) {
-				id = Integer.parseInt(request.getParameter("id"));
-			}
+		String name = request.getParameter("name");
+
+		boolean error = false;
+
+		if (name == null || name.isEmpty()) {
+			request.setAttribute("errorName", "name is required");
+			error = true;
+		} else {
+			request.setAttribute("name", name);
 		}
-		
-		name = request.getParameter("name");
+
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		
+
 		if (request.getParameter("intro") != null) {
-			if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), request.getParameter("intro").trim())) {
-				introduced = LocalDateTime.parse(request.getParameter("intro"), formatter);
+			if (!request.getParameter("intro").isEmpty()) {
+				if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), request.getParameter("intro").trim())) {
+					introduced = LocalDateTime.parse(request.getParameter("intro"), formatter);
+					request.setAttribute("intro", request.getParameter("intro"));
+				} else {
+					request.setAttribute("errorIntro", "bad Format (yyyy-MM-dd HH:mm:ss)");
+					error = true;
+				}
 			}
 		}
-		
+
 		if (request.getParameter("disco") != null) {
-			if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), request.getParameter("disco").trim())) {
-				discontinued = LocalDateTime.parse(request.getParameter("disco"), formatter);
+			if (!request.getParameter("disco").isEmpty()) {
+				if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), request.getParameter("disco").trim())) {
+					discontinued = LocalDateTime.parse(request.getParameter("disco"), formatter);
+					request.setAttribute("disco", request.getParameter("disco"));
+				} else {
+					request.setAttribute("errorDisco", "bad Format (yyyy-MM-dd HH:mm:ss)");
+					error = true;
+				}
 			}
 		}
 
 		if (request.getParameter("comp") != null) {
 			if (Pattern.matches(Regex.DIGIT.getRegex(), request.getParameter("comp"))) {
 				idCompany = Integer.parseInt(request.getParameter("comp"));
+				request.setAttribute("comp", idCompany);
+			} else {
+				request.setAttribute("errorComp", "company not valid");
+				error = true;
 			}
-		}		
-		
-		new ComputerServiceImpl().update(id, name, introduced, discontinued, idCompany);
-		
+		}
+
+		if (error) {
+			doGet(request, response);
+			return ;
+		}
+
+		request.removeAttribute("intro");
+		request.removeAttribute("disco");
+		request.removeAttribute("comp");
+
+		new ComputerServiceImpl().create(name, introduced, discontinued, idCompany);
+
 		request.setAttribute("page", new ComputerServiceImpl().getPage(1, 10));
 		getServletContext()
 		.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(
 				request, response);
 	}
-
 }

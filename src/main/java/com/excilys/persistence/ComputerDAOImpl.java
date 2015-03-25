@@ -65,15 +65,26 @@ public class ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public long create(String name) {
+	public long create(String name, LocalDateTime introduced, LocalDateTime discontinued, long idCompany) {
 	    long id = 0;
     	Connection connection = DAOFactory.INSTANCE.getConnection();
 	    try {
 
 	        int i = 1;
-	        String query = "insert into computer (name,introduced,discontinued,company_id) values (?, null, null, null);";
+	        String query = "insert into computer (name,introduced,discontinued,company_id) values (?, ?, ?, ?);";
 	        PreparedStatement sp = (PreparedStatement) connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 	        sp.setString(i++, name);
+	        if (introduced != null) {
+	        	sp.setString(i++, introduced.toString());
+	        } else {
+	        	sp.setString(i++,  null);
+	        }
+	        if (discontinued != null) {
+	        	sp.setString(i++, discontinued.toString());
+	        } else {
+	        	sp.setString(i++,  null);
+	        }
+	        sp.setLong(i++,  idCompany);
 	        sp.executeUpdate();
 	        
 	        ResultSet generatedKeys = sp.getGeneratedKeys();

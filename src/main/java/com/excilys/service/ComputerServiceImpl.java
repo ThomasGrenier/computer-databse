@@ -28,8 +28,8 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public long create(String name) {
-		return computerDao.create(name);
+	public long create(String name, LocalDateTime introduced, LocalDateTime discontinued, long idCompany) {
+		return computerDao.create(name, introduced, discontinued, idCompany);
 	}
 
 	@Override

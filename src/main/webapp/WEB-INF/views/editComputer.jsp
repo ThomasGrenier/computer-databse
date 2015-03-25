@@ -16,7 +16,7 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <div class="label label-default pull-right">
-                        id: 0
+                        id: ${computer.id }
                     </div>
                     <h1>Edit Computer</h1>
 
