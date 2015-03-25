@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.model.ComputerModel;
+import com.excilys.model.Page;
 import com.excilys.service.ComputerServiceImpl;
 import com.excilys.utils.Regex;
 
@@ -29,7 +31,26 @@ public class Dashboard extends HttpServlet {
 				limit = Integer.parseInt(request.getParameter("limit"));
 			}
 		}
-		request.setAttribute("page", new ComputerServiceImpl().getPage(offset, limit));
+		
+		String test = "";
+		if (request.getParameter("search") != null) {
+			test = request.getParameter("search");
+		}
+		
+		String order = "id";
+
+		if (request.getParameter("order") != null) {
+			order = request.getParameter("order");
+		}
+		
+		String option = "";
+
+		if (request.getParameter("option") != null) {
+			option = request.getParameter("option");
+		}
+		
+		
+		request.setAttribute("page", new ComputerServiceImpl().getPage(offset, limit, test, order, option));
 		getServletContext()
 		.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(
 				request, response);

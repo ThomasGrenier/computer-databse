@@ -17,7 +17,7 @@ public interface ComputerDAO {
 	
 	void delete(long id);
 	
-	List<ComputerModel> getComputersByPage(int offset, int limit);
+	List<ComputerModel> getComputersByPage(int offset, int limit, String searchBy, String orderBy, String option);
 	
-	int totalRow();
+	int totalRow(String searchBy);
 }

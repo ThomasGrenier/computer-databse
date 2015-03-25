@@ -10,7 +10,7 @@ public interface CompanyDAO {
 	
 	CompanyModel getById(long id);
 
-	List<CompanyModel> getCompaniesByPage(int offset, int limit);
+	List<CompanyModel> getCompaniesByPage(int offset, int limit, String searchBy, String orderBy, String option);
 	
-	int totalRow();
+	int totalRow(String searchBy);
 }

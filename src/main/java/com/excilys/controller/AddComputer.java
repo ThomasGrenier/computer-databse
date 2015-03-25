@@ -95,7 +95,7 @@ public class AddComputer extends HttpServlet {
 
 		new ComputerServiceImpl().create(name, introduced, discontinued, idCompany);
 
-		request.setAttribute("page", new ComputerServiceImpl().getPage(1, 10));
+		request.setAttribute("page", new ComputerServiceImpl().getPage(1, 10, "", "id", ""));
 		getServletContext()
 		.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(
 				request, response);

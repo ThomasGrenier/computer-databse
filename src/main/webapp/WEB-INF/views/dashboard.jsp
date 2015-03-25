@@ -52,7 +52,33 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
-						<th>Computer name</th>
+						<th>
+						<a href="<c:url value="dashboard">
+							<c:param name="offset" value="${page.currentPage}" />
+							<c:param name="limit" value="${page.nbResult}" />
+							<c:param name="order" value="name" />
+							<c:choose>
+								<c:when test="${page.option == 'DESC' }">
+									<c:param name="option" value="" />
+								</c:when>
+								<c:otherwise>
+									<c:param name="option" value="DESC" />
+								</c:otherwise>
+							</c:choose>
+							</c:url>" aria-label="LastPage"> <span aria-hidden="true">
+								Computer name</span>
+						</a>
+							<div id="right">
+							<c:choose>
+									<c:when test="${page.option == 'DESC'}">
+										&#x21E7;
+									</c:when>
+									<c:otherwise>
+											&#x21E9;
+										</c:otherwise>
+								</c:choose>
+							</div>
+						</th>
 						<th>Introduced date</th>
 						<!-- Table header for Discontinued Date -->
 						<th>Discontinued date</th>

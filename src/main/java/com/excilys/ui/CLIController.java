@@ -92,7 +92,7 @@ public class CLIController {
 					str = sc.nextLine().trim();
 				}
 				int nbResult = Integer.parseInt(str);
-				Page<ComputerModel> p = computerService.getPage(currentPage, nbResult);
+				Page<ComputerModel> p = computerService.getPage(currentPage, nbResult, "", "id", "");
 				System.out.println(p.toString());
 				System.out.println(" - next pour avancer d'une page");
 				System.out.println(" - previous pour reculer d'une page");
@@ -104,14 +104,14 @@ public class CLIController {
 						if (currentPage < p.getTotalPage()) {
 							currentPage += 1;
 						}
-						p = computerService.getPage(currentPage, nbResult);
+						p = computerService.getPage(currentPage, nbResult, "", "id", "");
 						System.out.println(p.toString());
 						break;
 					case "previous":
 						if (currentPage > 1) {
 							currentPage -= 1;
 						}
-						p = computerService.getPage(currentPage, nbResult);
+						p = computerService.getPage(currentPage, nbResult, "", "id", "");
 						System.out.println(p.toString());
 						break;
 					default:
@@ -139,7 +139,7 @@ public class CLIController {
 					str = sc.nextLine().trim();
 				}
 				int nbResultComp = Integer.parseInt(str);
-				Page<CompanyModel> pa = companyService.getPage(currentPageComp, nbResultComp);
+				Page<CompanyModel> pa = companyService.getPage(currentPageComp, nbResultComp, "", "id", "");
 				System.out.println(pa.toString());
 				System.out.println(" - next pour avancer d'une page");
 				System.out.println(" - previous pour reculer d'une page");
@@ -151,14 +151,14 @@ public class CLIController {
 						if (currentPageComp < pa.getTotalPage()) {
 							currentPageComp += 1;
 						}
-						pa = companyService.getPage(currentPageComp, nbResultComp);
+						pa = companyService.getPage(currentPageComp, nbResultComp, "", "id", "");
 						System.out.println(pa.toString());
 						break;
 					case "previous":
 						if (currentPageComp > 1) {
 							currentPageComp -= 1;
 						}
-						pa = companyService.getPage(currentPageComp, nbResultComp);
+						pa = companyService.getPage(currentPageComp, nbResultComp, "", "id", "");
 						System.out.println(pa.toString());
 						break;
 					default:

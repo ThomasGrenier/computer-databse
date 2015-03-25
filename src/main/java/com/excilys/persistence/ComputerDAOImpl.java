@@ -158,18 +158,30 @@ public class ComputerDAOImpl implements ComputerDAO {
 	    DAOFactory.INSTANCE.CloseConnection(connection);
 	}
 	
-	public List<ComputerModel> getComputersByPage(int offset, int limit) {
+	public List<ComputerModel> getComputersByPage(int offset, int limit, String searchBy, String orderBy, String option) {
 		List<ComputerModel> computerList = new LinkedList<ComputerModel>();
     	Connection connection = DAOFactory.INSTANCE.getConnection();
 	    try {
 	        // create new connection and statement
-	        String query = "SELECT * FROM computer as compu left outer join company as compa on compa.id=compu.company_id limit ? offset ?";
+	        String query = "SELECT * FROM computer as compu left outer join company as compa on compa.id=compu.company_id";
+	        if (!searchBy.isEmpty()) {
+	        	query += " WHERE compu.name LIKE '%" + searchBy + "%' OR compa.name LIKE '%" + searchBy + "%'";
+	        }
+	        if (!orderBy.isEmpty()) {
+	        	query += " ORDER BY compu." + orderBy;
+	        }
+	        if (!option.isEmpty()) {
+	        	query += " " + option;
+	        }
+	        query += " limit ? offset ?";
 
 	        int i = 1;
 	        PreparedStatement st = (PreparedStatement) connection.prepareStatement(query);
 	        st.setInt(i++, limit);
 	        st.setInt(i++, offset);
+	        System.out.println(st.toString());
 	        ResultSet rs = st.executeQuery();
+	        
 	        
 	        computerList = (new ComputerMapper()).mapAll(rs);
 	        
@@ -183,12 +195,16 @@ public class ComputerDAOImpl implements ComputerDAO {
 	}
 
 	@Override
-	public int totalRow() {
+	public int totalRow(String searchBy) {
     	Connection connection = DAOFactory.INSTANCE.getConnection();
     	int nb = 0;
 	    try {
 	        // create new connection and statement
-	        String query = "SELECT count(*) FROM computer";
+	        String query = "SELECT count(*) FROM computer as compu left outer join company as compa on compa.id=compu.company_id";
+	        
+	        if (!searchBy.isEmpty()) {
+	        	query += " WHERE compu.name LIKE '%" + searchBy + "%' OR compa.name LIKE '%" + searchBy + "%'";
+	        }
 
 	        Statement st = (Statement) connection.createStatement();
 	        

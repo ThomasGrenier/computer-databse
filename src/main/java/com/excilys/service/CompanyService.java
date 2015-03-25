@@ -11,7 +11,7 @@ public interface CompanyService {
 	
 	CompanyModel getById(long id);
 
-	List<CompanyModel> getCompaniesByPage(int offset, int limit);
+	List<CompanyModel> getCompaniesByPage(int offset, int limit, String searchBy, String orderBy, String option);
 	
-	Page<CompanyModel> getPage(int currentPage, int limit);
+	Page<CompanyModel> getPage(int currentPage, int limit, String searchBy, String orderBy, String option);
 }

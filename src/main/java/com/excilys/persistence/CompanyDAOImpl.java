@@ -63,12 +63,22 @@ public class CompanyDAOImpl implements CompanyDAO {
 	}
 
 	
-	public List<CompanyModel> getCompaniesByPage(int offset, int limit) {
+	public List<CompanyModel> getCompaniesByPage(int offset, int limit, String searchBy, String orderBy, String option) {
 		List<CompanyModel> companyList = new LinkedList<CompanyModel>();
     	Connection connection = DAOFactory.INSTANCE.getConnection();
 	    try {
 	        // create new connection and statement
-	        String query = "SELECT * FROM company limit ? offset ?";
+	        String query = "SELECT * FROM company";
+	        if (!searchBy.isEmpty()) {
+	        	query += " WHERE company.name LIKE '%" + searchBy + "%'";
+	        }
+	        if (!orderBy.isEmpty()) {
+	        	query += " ORDER BY compu." + orderBy;
+	        }
+	        if (!option.isEmpty()) {
+	        	query += " " + option;
+	        }
+	        query += " limit ? offset ?";
 
 	        int i = 1;
 	        PreparedStatement st = connection.prepareStatement(query);
@@ -88,12 +98,15 @@ public class CompanyDAOImpl implements CompanyDAO {
 	}
 
 	@Override
-	public int totalRow() {
+	public int totalRow(String searchBy) {
     	Connection connection = DAOFactory.INSTANCE.getConnection();
     	int nb = 0;
 	    try {
 	        // create new connection and statement
 	        String query = "SELECT count(*) FROM company";
+	        if (!searchBy.isEmpty()) {
+	        	query += " WHERE company.name LIKE '%" + searchBy + "%'";
+	        }
 
 	        Statement st = connection.createStatement();
 	        

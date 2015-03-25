@@ -47,7 +47,7 @@ public class EditComputer extends HttpServlet {
 		String name = "";
 		LocalDateTime introduced = null;
 		LocalDateTime discontinued = null;
-		long idCompany = 0L;
+		long idCompany = -1L;
 		
 
 		if (request.getParameter("id") != null) {
@@ -79,7 +79,7 @@ public class EditComputer extends HttpServlet {
 		
 		new ComputerServiceImpl().update(id, name, introduced, discontinued, idCompany);
 		
-		request.setAttribute("page", new ComputerServiceImpl().getPage(1, 10));
+		request.setAttribute("page", new ComputerServiceImpl().getPage(1, 10, "", "id", ""));
 		getServletContext()
 		.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(
 				request, response);

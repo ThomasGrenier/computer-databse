@@ -46,23 +46,25 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public List<ComputerModel> getComputersByPage(int offset, int limit) {
-		return computerDao.getComputersByPage(offset, limit);
+	public List<ComputerModel> getComputersByPage(int offset, int limit, String searchBy, String orderBy, String option) {
+		return computerDao.getComputersByPage(offset, limit, searchBy, orderBy, option);
 	}
 
 	@Override
-	public Page<ComputerModel> getPage(int currentPage, int limit) {
-		int total = computerDao.totalRow() / limit;
-		if ((computerDao.totalRow() % limit) > 0) {
+	public Page<ComputerModel> getPage(int currentPage, int limit, String searchBy, String orderBy, String option) {
+		int total = computerDao.totalRow(searchBy) / limit;
+		if ((computerDao.totalRow(searchBy) % limit) > 0) {
 			total += 1;
 		}
 		if (currentPage > total) {
 			currentPage = total;
 		}
-		Page<ComputerModel> page = new Page<ComputerModel>(currentPage, limit);
-		page.setTotalResult(computerDao.totalRow());
+		Page<ComputerModel> page = new Page<ComputerModel>(currentPage, limit, searchBy);
+		page.setTotalResult(computerDao.totalRow(searchBy));
 		page.setTotalPages(total);
-		page.setList(getComputersByPage(page.getCurrentPage() * page.getNbResult() - limit, limit));
+		page.setOption(option);
+		page.setOrderBy(orderBy);
+		page.setList(getComputersByPage(page.getCurrentPage() * page.getNbResult() - limit, limit, searchBy, orderBy, option));
 		return page;
 	}
 
