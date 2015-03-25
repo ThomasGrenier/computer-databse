@@ -13,6 +13,7 @@
 						<c:param name="limit" value="${limit}" />
 						<c:param name="order" value="${page.orderBy }" />
 						<c:param name="option" value="${page.option }" />
+						<c:param name="search" value="${page.searchBy }" />
 						</c:url>" aria-label="firstPage"> <span aria-hidden=true>&#8606;</span>
 			</a></li>
 		</c:if>
@@ -23,6 +24,7 @@
 						<c:param name="limit" value="${limit}" />
 						<c:param name="order" value="${page.orderBy }" />
 						<c:param name="option" value="${page.option }" />
+						<c:param name="search" value="${page.searchBy }" />
 						</c:url>" aria-label="Previous"> <span aria-hidden=true>&laquo;</span>
 			</a></li>
 		</c:if>
@@ -32,6 +34,7 @@
 						<c:param name="offset" value="${offset-2}" />
 						<c:param name="limit" value="${limit}" />
 						<c:param name="order" value="${page.orderBy }" />
+						<c:param name="search" value="${page.searchBy }" />
 						<c:param name="option" value="${page.option }" /></c:url>">${offset-2}</a></li>
 		</c:if>
 		
@@ -40,6 +43,7 @@
 						<c:param name="offset" value="${offset-1}" />
 						<c:param name="limit" value="${limit}" />
 						<c:param name="order" value="${page.orderBy }" />
+						<c:param name="search" value="${page.searchBy }" />
 						<c:param name="option" value="${page.option }" /></c:url>">${offset-1}</a></li>
 		</c:if>
 		
@@ -50,6 +54,7 @@
 						<c:param name="offset" value="${offset+1}" />
 						<c:param name="limit" value="${limit}" />
 						<c:param name="order" value="${page.orderBy }" />
+						<c:param name="search" value="${page.searchBy }" />
 						<c:param name="option" value="${page.option }" /></c:url>">${offset+1}</a></li>
 		</c:if>
 		
@@ -58,6 +63,7 @@
 						<c:param name="offset" value="${offset+2}" />
 						<c:param name="limit" value="${limit}" />
 						<c:param name="order" value="${page.orderBy }" />
+						<c:param name="search" value="${page.searchBy }" />
 						<c:param name="option" value="${page.option }" /></c:url>">${offset+2}</a></li>
 		</c:if>
 		
@@ -67,6 +73,7 @@
 						<c:param name="limit" value="${limit}" />
 						<c:param name="order" value="${page.orderBy }" />
 						<c:param name="option" value="${page.option }" />
+						<c:param name="search" value="${page.searchBy }" />
 						</c:url>" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
 			</a></li>
 		</c:if>
@@ -77,6 +84,7 @@
 						<c:param name="limit" value="${limit}" />
 						<c:param name="order" value="${page.orderBy }" />
 						<c:param name="option" value="${page.option }" />
+						<c:param name="search" value="${page.searchBy }" />
 						</c:url>" aria-label="LastPage"> <span aria-hidden="true">&#8608;</span>
 			</a></li>
 		</c:if>

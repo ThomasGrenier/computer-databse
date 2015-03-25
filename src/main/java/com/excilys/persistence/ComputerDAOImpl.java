@@ -179,7 +179,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        PreparedStatement st = (PreparedStatement) connection.prepareStatement(query);
 	        st.setInt(i++, limit);
 	        st.setInt(i++, offset);
-	        System.out.println(st.toString());
 	        ResultSet rs = st.executeQuery();
 	        
 	        
