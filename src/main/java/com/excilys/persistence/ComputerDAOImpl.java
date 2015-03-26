@@ -1,8 +1,10 @@
 package com.excilys.persistence;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,19 +13,23 @@ import com.excilys.exception.DAOException;
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.ComputerModel;
 import com.mysql.jdbc.MysqlDataTruncation;
-import com.mysql.jdbc.PreparedStatement;
-import com.mysql.jdbc.Statement;
 
 public class ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public List<ComputerModel> listAll() {
 
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = null;
+		try {
+			connection = DAOFactory.INSTANCE.getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+	    	throw new DAOException(e);
+		}
 	    List<ComputerModel> computerList = new LinkedList<ComputerModel>();
 	    try {
 	        // create new connection and statement
-	        Statement st = (Statement) connection.createStatement();
+	        Statement st = connection.createStatement();
 
 	        String query = "SELECT * FROM computer as compu left outer join company as compa on compa.id=compu.company_id";
 	        ResultSet rs = st.executeQuery(query);
@@ -42,12 +48,18 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@Override
 	public ComputerModel getById(long id) {
 	    ComputerModel computerModel = null;
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = null;
+		try {
+			connection = DAOFactory.INSTANCE.getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+	    	throw new DAOException(e);
+		}
 	    try {
 	        // create new statement
 	    	int i = 1;
 	        String query = "SELECT * FROM computer as compu left outer join company as compa on compa.id=compu.company_id where compu.id=?";
-	        PreparedStatement st = (PreparedStatement) connection.prepareStatement(query);
+	        PreparedStatement st = connection.prepareStatement(query);
 	        st.setLong(i++, id);
 
 	        ResultSet rs = st.executeQuery();        	
@@ -67,12 +79,18 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@Override
 	public long create(String name, LocalDateTime introduced, LocalDateTime discontinued, long idCompany) {
 	    long id = 0;
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = null;
+		try {
+			connection = DAOFactory.INSTANCE.getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+	    	throw new DAOException(e);
+		}
 	    try {
 
 	        int i = 1;
 	        String query = "insert into computer (name,introduced,discontinued,company_id) values (?, ?, ?, ?);";
-	        PreparedStatement sp = (PreparedStatement) connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+	        PreparedStatement sp = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 	        sp.setString(i++, name);
 	        if (introduced != null) {
 	        	sp.setString(i++, introduced.toString());
@@ -103,10 +121,16 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public void update(ComputerModel computer) {
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = null;
+		try {
+			connection = DAOFactory.INSTANCE.getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+	    	throw new DAOException(e);
+		}
 	    try {
 	        // create new statement
-	        Statement st = (Statement) connection.createStatement();
+	        Statement st = connection.createStatement();
 
 	        String question = "SELECT * FROM computer as compu left outer join company as compa on compa.id=compu.company_id where compu.id=" + computer.getId();
 	        ResultSet rs = st.executeQuery(question);
@@ -143,12 +167,18 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public void delete(long id) {
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = null;
+		try {
+			connection = DAOFactory.INSTANCE.getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+	    	throw new DAOException(e);
+		}
 	    try {
 	        // create new statement
 	    	int i = 1;
 	        String query = "DELETE FROM computer WHERE id = ?";
-	        PreparedStatement st = (PreparedStatement) connection.prepareStatement(query);
+	        PreparedStatement st = connection.prepareStatement(query);
 	        st.setLong(i++, id);
 	        st.executeUpdate();
 	        st.close();
@@ -160,12 +190,21 @@ public class ComputerDAOImpl implements ComputerDAO {
 	
 	public List<ComputerModel> getComputersByPage(int offset, int limit, String searchBy, String orderBy, String option) {
 		List<ComputerModel> computerList = new LinkedList<ComputerModel>();
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = null;
+		try {
+			connection = DAOFactory.INSTANCE.getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+	    	throw new DAOException(e);
+		}
+    	if (offset < 0) {
+    		offset = 0;
+    	}
 	    try {
 	        // create new connection and statement
 	        String query = "SELECT * FROM computer as compu left outer join company as compa on compa.id=compu.company_id";
 	        if (!searchBy.isEmpty()) {
-	        	query += " WHERE compu.name LIKE '%" + searchBy + "%' OR compa.name LIKE '%" + searchBy + "%'";
+	        	query += " WHERE compu.name LIKE ? OR compa.name LIKE ?";
 	        }
 	        if (!orderBy.isEmpty()) {
 	        	query += " ORDER BY compu." + orderBy;
@@ -176,11 +215,14 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        query += " limit ? offset ?";
 
 	        int i = 1;
-	        PreparedStatement st = (PreparedStatement) connection.prepareStatement(query);
+	        PreparedStatement st = connection.prepareStatement(query);
+	        if (!searchBy.isEmpty()) {
+		        st.setString(i++, "%" + searchBy + "%");
+		        st.setString(i++, "%" + searchBy + "%");
+		    }
 	        st.setInt(i++, limit);
 	        st.setInt(i++, offset);
 	        ResultSet rs = st.executeQuery();
-	        
 	        
 	        computerList = (new ComputerMapper()).mapAll(rs);
 	        
@@ -195,7 +237,13 @@ public class ComputerDAOImpl implements ComputerDAO {
 
 	@Override
 	public int totalRow(String searchBy) {
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = null;
+		try {
+			connection = DAOFactory.INSTANCE.getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+	    	throw new DAOException(e);
+		}
     	int nb = 0;
 	    try {
 	        // create new connection and statement
@@ -205,13 +253,13 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        	query += " WHERE compu.name LIKE '%" + searchBy + "%' OR compa.name LIKE '%" + searchBy + "%'";
 	        }
 
-	        Statement st = (Statement) connection.createStatement();
+	        Statement st = connection.createStatement();
 	        
 	        ResultSet rs = st.executeQuery(query);
 	        
-	        rs.next();
-	        
-	        nb = rs.getInt(1);
+		    rs.next();
+		        
+		    nb = rs.getInt(1);
 	        
 	        rs.close();
 	        st.close();

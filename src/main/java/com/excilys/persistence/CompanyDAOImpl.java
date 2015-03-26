@@ -17,7 +17,13 @@ public class CompanyDAOImpl implements CompanyDAO {
 	@Override
 	public List<CompanyModel> listAll() {
 	    List<CompanyModel> companyList = null;
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = null;
+		try {
+			connection = DAOFactory.INSTANCE.getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+	    	throw new DAOException(e);
+		}
 	    try {
 	        // create new statement
 	        Statement st = connection.createStatement();
@@ -39,7 +45,13 @@ public class CompanyDAOImpl implements CompanyDAO {
 	@Override
 	public CompanyModel getById(long id) {
 		CompanyModel companyModel = null;
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = null;
+		try {
+			connection = DAOFactory.INSTANCE.getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+	    	throw new DAOException(e);
+		}
 	    try {
 	        // create new statement
 	    	int i = 1;
@@ -65,7 +77,13 @@ public class CompanyDAOImpl implements CompanyDAO {
 	
 	public List<CompanyModel> getCompaniesByPage(int offset, int limit, String searchBy, String orderBy, String option) {
 		List<CompanyModel> companyList = new LinkedList<CompanyModel>();
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = null;
+		try {
+			connection = DAOFactory.INSTANCE.getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+	    	throw new DAOException(e);
+		}
 	    try {
 	        // create new connection and statement
 	        String query = "SELECT * FROM company";
@@ -99,7 +117,13 @@ public class CompanyDAOImpl implements CompanyDAO {
 
 	@Override
 	public int totalRow(String searchBy) {
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = null;
+		try {
+			connection = DAOFactory.INSTANCE.getConnection();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+	    	throw new DAOException(e);
+		}
     	int nb = 0;
 	    try {
 	        // create new connection and statement
@@ -123,5 +147,49 @@ public class CompanyDAOImpl implements CompanyDAO {
 	    }
 	    DAOFactory.INSTANCE.CloseConnection(connection);
 	    return nb;
+	}
+
+	@Override
+	public void delete(long id) {
+    	Connection connection = null;
+		try {
+			connection = DAOFactory.INSTANCE.getConnection();
+			connection.setAutoCommit(false);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+	    	throw new DAOException(e);
+		}
+		try {
+	        // create new connection and statement
+	        String query = "SELECT id FROM computer WHERE computer.company_id=?";
+
+	        PreparedStatement st = connection.prepareStatement(query);
+	        st.setLong(1, id);
+	        
+	        ResultSet rs = st.executeQuery();
+	        ComputerDAOImpl computerDaoImpl = new ComputerDAOImpl();
+			while (rs.next()) {
+				computerDaoImpl.delete(rs.getLong(1));
+			}
+			
+			st.close();
+	        
+	        query = "DELETE FROM company WHERE company.id=?";
+	        st = connection.prepareStatement(query);
+	        st.setLong(1,  id);
+	        st.executeUpdate();
+			
+	        rs.close();
+	        st.close();
+	        connection.commit();
+	    } catch (SQLException e) {
+	    	try {
+				connection.rollback();
+			} catch (SQLException e1) {
+		    	throw new DAOException(e1);
+			}
+	    	throw new DAOException(e);
+	    }
+	    DAOFactory.INSTANCE.CloseConnection(connection);
 	}
 }

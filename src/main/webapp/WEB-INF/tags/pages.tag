@@ -7,7 +7,7 @@
 <div class="container text-center">
 	<ul class="pagination">
 	
-		<c:if test="${offset != 1}">
+		<c:if test="${offset > 1}">
 			<li><a href="<c:url value="dashboard">
 						<c:param name="offset" value="${1}" />
 						<c:param name="limit" value="${limit}" />
@@ -18,7 +18,7 @@
 			</a></li>
 		</c:if>
 		
-		<c:if test="${offset != 1}">
+		<c:if test="${offset > 1}">
 			<li><a href="<c:url value="dashboard">
 						<c:param name="offset" value="${offset-1}" />
 						<c:param name="limit" value="${limit}" />
@@ -67,7 +67,7 @@
 						<c:param name="option" value="${page.option }" /></c:url>">${offset+2}</a></li>
 		</c:if>
 		
-		<c:if test="${offset != page.totalPage}">
+		<c:if test="${offset < page.totalPage}">
 			<li><a href="<c:url value="dashboard">
 						<c:param name="offset" value="${offset+1}" />
 						<c:param name="limit" value="${limit}" />
@@ -78,7 +78,7 @@
 			</a></li>
 		</c:if>
 		
-		<c:if test="${offset != page.totalPage}">
+		<c:if test="${offset < page.totalPage}">
 			<li><a href="<c:url value="dashboard">
 						<c:param name="offset" value="${page.totalPage}" />
 						<c:param name="limit" value="${limit}" />

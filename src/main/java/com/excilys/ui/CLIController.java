@@ -259,6 +259,9 @@ public class CLIController {
 				computerService.update(Long.parseLong(str), name, intro, discon, idCompany);
 				System.out.println("ordinateur mi à jour");
 				break;
+			case "deleteComp":
+				companyService.delete(44);
+				break;
 			default:
 				System.out.println("help pour la liste des commandes");
 				break;

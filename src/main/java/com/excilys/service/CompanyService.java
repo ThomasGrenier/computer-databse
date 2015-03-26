@@ -14,4 +14,6 @@ public interface CompanyService {
 	List<CompanyModel> getCompaniesByPage(int offset, int limit, String searchBy, String orderBy, String option);
 	
 	Page<CompanyModel> getPage(int currentPage, int limit, String searchBy, String orderBy, String option);
+	
+	void delete(long id);
 }

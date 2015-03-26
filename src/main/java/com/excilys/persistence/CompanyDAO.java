@@ -13,4 +13,6 @@ public interface CompanyDAO {
 	List<CompanyModel> getCompaniesByPage(int offset, int limit, String searchBy, String orderBy, String option);
 	
 	int totalRow(String searchBy);
+	
+	void delete(long id);
 }

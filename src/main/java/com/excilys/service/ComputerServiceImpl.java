@@ -52,15 +52,16 @@ public class ComputerServiceImpl implements ComputerService {
 
 	@Override
 	public Page<ComputerModel> getPage(int currentPage, int limit, String searchBy, String orderBy, String option) {
-		int total = computerDao.totalRow(searchBy) / limit;
-		if ((computerDao.totalRow(searchBy) % limit) > 0) {
+		int totalRow = computerDao.totalRow(searchBy);
+		int total = totalRow / limit;
+		if ((totalRow % limit) > 0) {
 			total += 1;
 		}
 		if (currentPage > total) {
 			currentPage = total;
 		}
 		Page<ComputerModel> page = new Page<ComputerModel>(currentPage, limit, searchBy);
-		page.setTotalResult(computerDao.totalRow(searchBy));
+		page.setTotalResult(totalRow);
 		page.setTotalPages(total);
 		page.setOption(option);
 		page.setOrderBy(orderBy);

@@ -48,4 +48,9 @@ public class CompanyServiceImpl implements CompanyService {
 		return page;
 	}
 
+	@Override
+	public void delete(long id) {
+		companyDao.delete(id);
+	}
+
 }
