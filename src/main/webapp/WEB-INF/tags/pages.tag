@@ -85,7 +85,7 @@
 						<c:param name="order" value="${page.orderBy }" />
 						<c:param name="option" value="${page.option }" />
 						<c:param name="search" value="${page.searchBy }" />
-						</c:url>" aria-label="LastPage"> <span aria-hidden="true">&#8608;</span>
+						</c:url>" aria-label="LastPage"> <span aria-hidden="true" id="lastPage">&#8608;</span>
 			</a></li>
 		</c:if>
 	</ul>

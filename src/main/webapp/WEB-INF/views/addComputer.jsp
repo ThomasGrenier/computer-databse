@@ -29,17 +29,17 @@
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
                                 <input type="text" class="form-control" id="computerName" name="name" placeholder="Computer name" value="${name }">
-                                <div><c:if test="${errorName != null}">${errorName }</c:if></div>
+                                <div id="errorName"><c:if test="${errorName != null}">${errorName }</c:if></div>
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
                                 <input type="date" class="form-control" id="introduced" name="intro" placeholder="Introduced date" value="${intro }">
-                                <div><c:if test="${errorIntro != null}">${errorIntro }</c:if></div>
+                                <div id="errorIntro"><c:if test="${errorIntro != null}">${errorIntro }</c:if></div>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
                                 <input type="date" class="form-control" id="discontinued" name="disco" placeholder="Discontinued date" value="${disco }">
-                                <div><c:if test="${errorDisco != null}">${errorDisco }</c:if></div>
+                                <div id="errorDisco"><c:if test="${errorDisco != null}">${errorDisco }</c:if></div>
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
