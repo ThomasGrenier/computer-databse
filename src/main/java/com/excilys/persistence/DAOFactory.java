@@ -3,7 +3,6 @@ package com.excilys.persistence;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 
@@ -136,6 +135,7 @@ public enum DAOFactory {
 
 	public void CloseConnection(Connection connection) {
 		try {
+			connection.setAutoCommit(true);
 			connection.close();
 		} catch (SQLException e) {
 			throw new ConnectionException(e);

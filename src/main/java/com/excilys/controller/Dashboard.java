@@ -7,9 +7,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import com.excilys.model.ComputerModel;
-import com.excilys.model.Page;
 import com.excilys.service.ComputerServiceImpl;
 import com.excilys.utils.Regex;
 
@@ -31,26 +28,45 @@ public class Dashboard extends HttpServlet {
 				limit = Integer.parseInt(request.getParameter("limit"));
 			}
 		}
-		
+
 		String test = "";
 		if (request.getParameter("search") != null) {
 			test = request.getParameter("search");
 		}
-		
+
 		String order = "id";
 
 		if (request.getParameter("order") != null) {
 			order = request.getParameter("order");
 		}
-		
+
 		String option = "";
 
 		if (request.getParameter("option") != null) {
 			option = request.getParameter("option");
 		}
-		
-		
+
+
 		request.setAttribute("page", new ComputerServiceImpl().getPage(offset, limit, test, order, option));
+		getServletContext()
+		.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(
+				request, response);
+	}
+	@Override
+	protected void doPost(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+
+		String selectedComputersId = request.getParameter("selection");
+		if ((selectedComputersId != null) && (!selectedComputersId.isEmpty())) {
+			String[] computerId = selectedComputersId.split(",");
+			ComputerServiceImpl computerService = new ComputerServiceImpl();
+			for (String id : computerId) {
+				long idCompu = Long.parseLong(id);
+				computerService.delete(idCompu);
+			}
+		}
+
+		request.setAttribute("page", new ComputerServiceImpl().getPage(1, 10, "", "id", ""));
 		getServletContext()
 		.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(
 				request, response);

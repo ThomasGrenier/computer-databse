@@ -2,6 +2,8 @@ package com.excilys.ui;
 
 import java.util.List;
 
+import org.assertj.core.api.Assertions;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -10,14 +12,23 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 
 
 public class InterfaceTest {
+	private static WebDriver webDriver;
+	
+	@BeforeClass
+	public static void init() {
+		webDriver = new FirefoxDriver();
+	}
 
 	@Test
-	public void test() {
+	public void TheNumberOfComputerIsIncreaseByOneWhenYouSuccessfullyAddAComputer() {
 		
-		WebDriver webDriver = new FirefoxDriver();
-        //WHEN
+		//GIVEN
+		//webDriver = new FirefoxDriver();
 
         webDriver.get("http://localhost:8080/computer-database/dashboard");
+        
+        String[] result = webDriver.findElement(By.id("homeTitle")).getText().split(" ");
+        int oldNumber = Integer.parseInt(result[0]);
         
         webDriver.findElement(By.id("addComputer")).click();
         
@@ -39,7 +50,16 @@ public class InterfaceTest {
             }
         }
         
+        //WHEN
         webDriver.findElement(By.tagName("form")).submit();
+
+        
+        //THEN
+
+        result = webDriver.findElement(By.id("homeTitle")).getText().split(" ");
+        int newNumber = Integer.parseInt(result[0]);
+        
+		Assertions.assertThat(newNumber).isEqualTo(oldNumber + 1);
 
         webDriver.close();
 	}
