@@ -36,13 +36,11 @@ public class InterfaceTest {
 	public void theNumberOfComputerIsIncreaseByOneWhenYouSuccessfullyAddAComputerAndTheLastComputerIsTheAddedComputer() {
 		
 		//GIVEN
-
-		
-        //WHEN
-        
         String[] result = webDriver.findElement(By.id("homeTitle")).getText().split(" ");
         int oldNumber = Integer.parseInt(result[0]);
-        
+		
+        //WHEN
+                
         webDriver.findElement(By.id("addComputer")).click();
         
         webDriver.findElement(By.id("computerName"))
@@ -153,7 +151,30 @@ public class InterfaceTest {
 	}
 	
 	@Test
+	public void addComputerShouldRedirectToDashboardAndTheNumberOfComputerIsTheSameWhenYouCancel() {
+		
+		//GIVEN
+        String[] result = webDriver.findElement(By.id("homeTitle")).getText().split(" ");
+        int oldNumber = Integer.parseInt(result[0]);
+        
+        webDriver.findElement(By.id("addComputer")).click();
+        
+        //WHEN
+        webDriver.findElement(By.id("cancelAdd")).click();
+        
+        String page = webDriver.getCurrentUrl();
+        
+        result = webDriver.findElement(By.id("homeTitle")).getText().split(" ");
+        int newNumber = Integer.parseInt(result[0]);
+        
+        //THEN
+		Assertions.assertThat(page).isEqualTo("http://localhost:8080/computer-database/dashboard");
+		Assertions.assertThat(newNumber).isEqualTo(oldNumber); 
+	}
+	
+	@Test
 	public void theNumberOfComputerIsDecreaseByOneWhenYouSuccessfullyDeleteAComputer() {
+		
 		//GIVEN
         String[] result = webDriver.findElement(By.id("homeTitle")).getText().split(" ");
         int oldNumber = Integer.parseInt(result[0]);
@@ -171,7 +192,596 @@ public class InterfaceTest {
 		
         result = webDriver.findElement(By.id("homeTitle")).getText().split(" ");
         int newNumber = Integer.parseInt(result[0]);
+        
 		//THEN
 		Assertions.assertThat(newNumber).isEqualTo(oldNumber - 1);
+	}
+	
+	@Test
+	public void theNumberOfComputerIsTheSameWhenYouCancelDeleteAComputer() {
+		
+		//GIVEN
+        String[] result = webDriver.findElement(By.id("homeTitle")).getText().split(" ");
+        int oldNumber = Integer.parseInt(result[0]);
+		
+		//WHEN
+		webDriver.findElement(By.id("lastPage")).click();
+		webDriver.findElement(By.id("editComputer")).click();
+		
+        List<WebElement> table_element = webDriver.findElements(By.id("editCheck"));
+        table_element.get(table_element.size() - 1).click();
+
+		webDriver.findElement(By.id("deleteSelected")).click();
+        Alert alert = webDriver.switchTo().alert();
+        alert.dismiss();
+		
+        result = webDriver.findElement(By.id("homeTitle")).getText().split(" ");
+        int newNumber = Integer.parseInt(result[0]);
+        
+		//THEN
+		Assertions.assertThat(newNumber).isEqualTo(oldNumber);
+	}
+	
+	@Test
+	public void theNumberOfComputerIsTheSameWhenYouSuccessfullyDeleteNothing() {
+		
+		//GIVEN
+        String[] result = webDriver.findElement(By.id("homeTitle")).getText().split(" ");
+        int oldNumber = Integer.parseInt(result[0]);
+		
+		//WHEN
+		webDriver.findElement(By.id("lastPage")).click();
+		webDriver.findElement(By.id("editComputer")).click();
+
+		webDriver.findElement(By.id("deleteSelected")).click();
+        Alert alert = webDriver.switchTo().alert();
+        alert.accept();
+		
+        result = webDriver.findElement(By.id("homeTitle")).getText().split(" ");
+        int newNumber = Integer.parseInt(result[0]);
+        
+		//THEN
+		Assertions.assertThat(newNumber).isEqualTo(oldNumber);
+	}
+	
+	@Test
+	public void UpdateAComputerShouldShowTheInformationOfThisComputer() {
+
+		//GIVEN
+        
+        webDriver.findElement(By.id("lastPage")).click();
+        
+        List<WebElement> table_element = webDriver.findElements(By.id("computerName"));
+        String lastName = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerIntro"));
+        String lastIntroduced = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerDisco"));
+        String lastDiscontinued = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("companyId"));
+        String lastCompany = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        table_element = webDriver.findElements(By.id("editCheck"));
+        String lastId = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        //WHEN
+        table_element = webDriver.findElements(By.id("computerLink"));
+        table_element.get(table_element.size() - 1).click();
+        
+        String thisName = webDriver.findElement(By.id("computerName")).getAttribute("value");
+        
+        String thisIntroduced = webDriver.findElement(By.id("introduced")).getAttribute("value");
+        
+        String thisDiscontinued = webDriver.findElement(By.id("discontinued")).getAttribute("value");
+        
+        String thisCompany = webDriver.findElement(By.id("companyId")).getAttribute("value");
+        
+        String thisId = webDriver.findElement(By.id("computerId")).getText().split(":")[1].trim();
+        
+        //THEN
+		Assertions.assertThat(thisId).isEqualTo(lastId);
+		Assertions.assertThat(thisName).isEqualTo(lastName);
+		Assertions.assertThat(thisIntroduced).isEqualTo(lastIntroduced);
+		Assertions.assertThat(thisDiscontinued).isEqualTo(lastDiscontinued);
+		Assertions.assertThat(thisCompany).isEqualTo(lastCompany);
+	}
+	
+	@Test
+	public void editComputerShouldRedirectToDashboardAndTheComputerIsTheSameWhenYouCancelEdit() {
+		
+		//GIVEN
+        webDriver.findElement(By.id("lastPage")).click();
+        
+        List<WebElement> table_element = webDriver.findElements(By.id("computerName"));
+        String lastName = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerIntro"));
+        String lastIntroduced = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerDisco"));
+        String lastDiscontinued = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("companyId"));
+        String lastCompany = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        table_element = webDriver.findElements(By.id("editCheck"));
+        String lastId = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        //WHEN
+        table_element = webDriver.findElements(By.id("computerLink"));
+        table_element.get(table_element.size() - 1).click();
+        
+        webDriver.findElement(By.id("cancelEdit")).click();
+        webDriver.findElement(By.id("lastPage")).click();
+        
+        table_element = webDriver.findElements(By.id("computerName"));
+        String thisName = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerIntro"));
+        String thisIntroduced = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerDisco"));
+        String thisDiscontinued = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("companyId"));
+        String thisCompany = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        table_element = webDriver.findElements(By.id("editCheck"));
+        String thisId = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        //THEN
+		Assertions.assertThat(thisId).isEqualTo(lastId);
+		Assertions.assertThat(thisName).isEqualTo(lastName);
+		Assertions.assertThat(thisIntroduced).isEqualTo(lastIntroduced);
+		Assertions.assertThat(thisDiscontinued).isEqualTo(lastDiscontinued);
+		Assertions.assertThat(thisCompany).isEqualTo(lastCompany);
+	}
+	
+	@Test
+	public void editComputerShouldOnlyChangeTheNameOfTheComputerIfISuccessfullyChangeHisName() {
+		
+		//GIVEN
+        webDriver.findElement(By.id("lastPage")).click();
+        
+        
+        List<WebElement> table_element = webDriver.findElements(By.id("computerIntro"));
+        String lastIntroduced = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerDisco"));
+        String lastDiscontinued = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("companyId"));
+        String lastCompany = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        table_element = webDriver.findElements(By.id("editCheck"));
+        String lastId = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        //WHEN
+        table_element = webDriver.findElements(By.id("computerLink"));
+        table_element.get(table_element.size() - 1).click();
+        
+
+        
+        webDriver.findElement(By.id("computerName")).clear();
+        webDriver.findElement(By.id("computerName")).sendKeys("newName");
+        
+        webDriver.findElement(By.id("submitEdit")).click();
+        webDriver.findElement(By.id("lastPage")).click();
+        
+        table_element = webDriver.findElements(By.id("computerName"));
+        String thisName = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerIntro"));
+        String thisIntroduced = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerDisco"));
+        String thisDiscontinued = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("companyId"));
+        String thisCompany = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        table_element = webDriver.findElements(By.id("editCheck"));
+        String thisId = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        //THEN
+		Assertions.assertThat(thisId).isEqualTo(lastId);
+		Assertions.assertThat(thisName).isEqualTo("newName");
+		Assertions.assertThat(thisIntroduced).isEqualTo(lastIntroduced);
+		Assertions.assertThat(thisDiscontinued).isEqualTo(lastDiscontinued);
+		Assertions.assertThat(thisCompany).isEqualTo(lastCompany);
+	}
+	
+	@Test
+	public void editComputerShouldOnlyChangeTheIntroducedOfTheComputerIfISuccessfullyChangeHisIntroduced() {
+		
+		//GIVEN
+        webDriver.findElement(By.id("lastPage")).click();
+
+        List<WebElement> table_element = webDriver.findElements(By.id("computerName"));
+        String lastName = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerDisco"));
+        String lastDiscontinued = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("companyId"));
+        String lastCompany = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        table_element = webDriver.findElements(By.id("editCheck"));
+        String lastId = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        //WHEN
+        table_element = webDriver.findElements(By.id("computerLink"));
+        table_element.get(table_element.size() - 1).click();
+        
+
+        
+        webDriver.findElement(By.id("introduced")).clear();
+        webDriver.findElement(By.id("introduced")).sendKeys("2011-11-11 11:11:11");
+        
+        webDriver.findElement(By.id("submitEdit")).click();
+        webDriver.findElement(By.id("lastPage")).click();
+        
+        table_element = webDriver.findElements(By.id("computerName"));
+        String thisName = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerIntro"));
+        String thisIntroduced = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerDisco"));
+        String thisDiscontinued = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("companyId"));
+        String thisCompany = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        table_element = webDriver.findElements(By.id("editCheck"));
+        String thisId = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        //THEN
+		Assertions.assertThat(thisId).isEqualTo(lastId);
+		Assertions.assertThat(thisName).isEqualTo(lastName);
+		Assertions.assertThat(thisIntroduced).isEqualTo("2011-11-11T11:11:11");
+		Assertions.assertThat(thisDiscontinued).isEqualTo(lastDiscontinued);
+		Assertions.assertThat(thisCompany).isEqualTo(lastCompany);
+	}
+	
+	@Test
+	public void editComputerShouldOnlyChangeTheDiscontinuedOfTheComputerIfISuccessfullyChangeHisDiscontinued() {
+		
+		//GIVEN
+        webDriver.findElement(By.id("lastPage")).click();
+
+        List<WebElement> table_element = webDriver.findElements(By.id("computerName"));
+        String lastName = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerIntro"));
+        String lastIntroduced = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("companyId"));
+        String lastCompany = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        table_element = webDriver.findElements(By.id("editCheck"));
+        String lastId = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        //WHEN
+        table_element = webDriver.findElements(By.id("computerLink"));
+        table_element.get(table_element.size() - 1).click();
+        
+
+        
+        webDriver.findElement(By.id("discontinued")).clear();
+        webDriver.findElement(By.id("discontinued")).sendKeys("2013-11-11 11:11:11");
+        
+        webDriver.findElement(By.id("submitEdit")).click();
+        webDriver.findElement(By.id("lastPage")).click();
+        
+        table_element = webDriver.findElements(By.id("computerName"));
+        String thisName = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerIntro"));
+        String thisIntroduced = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerDisco"));
+        String thisDiscontinued = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("companyId"));
+        String thisCompany = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        table_element = webDriver.findElements(By.id("editCheck"));
+        String thisId = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        //THEN
+		Assertions.assertThat(thisId).isEqualTo(lastId);
+		Assertions.assertThat(thisName).isEqualTo(lastName);
+		Assertions.assertThat(thisIntroduced).isEqualTo(lastIntroduced);
+		Assertions.assertThat(thisDiscontinued).isEqualTo("2013-11-11T11:11:11");
+		Assertions.assertThat(thisCompany).isEqualTo(lastCompany);
+	}
+	
+	@Test
+	public void editComputerShouldOnlyChangeTheCompanyOfTheComputerIfISuccessfullyChangeHisCompany() {
+		
+		//GIVEN
+        webDriver.findElement(By.id("lastPage")).click();
+
+        List<WebElement> table_element = webDriver.findElements(By.id("computerName"));
+        String lastName = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerIntro"));
+        String lastIntroduced = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerDisco"));
+        String lastDiscontinued = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("editCheck"));
+        String lastId = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        //WHEN
+        table_element = webDriver.findElements(By.id("computerLink"));
+        table_element.get(table_element.size() - 1).click();
+        
+
+        
+        WebElement select = webDriver.findElement(By.id("companyId"));
+        List<WebElement> options = select.findElements(By.tagName("option"));
+        for(WebElement option : options){
+            if(option.getText().equals("IBM")) {
+                option.click();
+                break;
+            }
+        }
+        
+        webDriver.findElement(By.id("submitEdit")).click();
+        webDriver.findElement(By.id("lastPage")).click();
+        
+        table_element = webDriver.findElements(By.id("computerName"));
+        String thisName = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerIntro"));
+        String thisIntroduced = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerDisco"));
+        String thisDiscontinued = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("companyId"));
+        String thisCompany = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        table_element = webDriver.findElements(By.id("editCheck"));
+        String thisId = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        //THEN
+		Assertions.assertThat(thisId).isEqualTo(lastId);
+		Assertions.assertThat(thisName).isEqualTo(lastName);
+		Assertions.assertThat(thisIntroduced).isEqualTo(lastIntroduced);
+		Assertions.assertThat(thisDiscontinued).isEqualTo(lastDiscontinued);
+		Assertions.assertThat(thisCompany).isEqualTo("13");
+	}
+	
+	@Test
+	public void editComputerWontChangeTheNameOfTheComputerIfNoNameIsSend() {
+		
+		//GIVEN
+        webDriver.findElement(By.id("lastPage")).click();
+        
+        List<WebElement> table_element = webDriver.findElements(By.id("computerName"));
+        String lastName = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerIntro"));
+        String lastIntroduced = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerDisco"));
+        String lastDiscontinued = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("companyId"));
+        String lastCompany = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        table_element = webDriver.findElements(By.id("editCheck"));
+        String lastId = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        //WHEN
+        table_element = webDriver.findElements(By.id("computerLink"));
+        table_element.get(table_element.size() - 1).click();
+        
+
+        webDriver.findElement(By.id("computerName")).clear();
+        webDriver.findElement(By.id("submitEdit")).click();
+        
+        
+        webDriver.findElement(By.id("lastPage")).click();
+        
+        table_element = webDriver.findElements(By.id("computerName"));
+        String thisName = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerIntro"));
+        String thisIntroduced = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerDisco"));
+        String thisDiscontinued = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("companyId"));
+        String thisCompany = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        table_element = webDriver.findElements(By.id("editCheck"));
+        String thisId = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        //THEN
+		Assertions.assertThat(thisId).isEqualTo(lastId);
+		Assertions.assertThat(thisName).isEqualTo(lastName);
+		Assertions.assertThat(thisIntroduced).isEqualTo(lastIntroduced);
+		Assertions.assertThat(thisDiscontinued).isEqualTo(lastDiscontinued);
+		Assertions.assertThat(thisCompany).isEqualTo(lastCompany);
+	}
+	
+	@Test
+	public void editComputerWontChangeTheIntroducedOfTheComputerIfNoIntroducedIsSend() {
+		
+		//GIVEN
+        webDriver.findElement(By.id("lastPage")).click();
+        
+        List<WebElement> table_element = webDriver.findElements(By.id("computerName"));
+        String lastName = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerIntro"));
+        String lastIntroduced = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerDisco"));
+        String lastDiscontinued = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("companyId"));
+        String lastCompany = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        table_element = webDriver.findElements(By.id("editCheck"));
+        String lastId = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        //WHEN
+        table_element = webDriver.findElements(By.id("computerLink"));
+        table_element.get(table_element.size() - 1).click();
+        
+
+        webDriver.findElement(By.id("introduced")).clear();
+        webDriver.findElement(By.id("submitEdit")).click();
+        
+        
+        webDriver.findElement(By.id("lastPage")).click();
+        
+        table_element = webDriver.findElements(By.id("computerName"));
+        String thisName = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerIntro"));
+        String thisIntroduced = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerDisco"));
+        String thisDiscontinued = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("companyId"));
+        String thisCompany = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        table_element = webDriver.findElements(By.id("editCheck"));
+        String thisId = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        //THEN
+		Assertions.assertThat(thisId).isEqualTo(lastId);
+		Assertions.assertThat(thisName).isEqualTo(lastName);
+		Assertions.assertThat(thisIntroduced).isEqualTo(lastIntroduced);
+		Assertions.assertThat(thisDiscontinued).isEqualTo(lastDiscontinued);
+		Assertions.assertThat(thisCompany).isEqualTo(lastCompany);
+	}
+	
+	@Test
+	public void editComputerWontChangeTheDiscontinuedOfTheComputerIfNoDiscontinuedIsSend() {
+		
+		//GIVEN
+        webDriver.findElement(By.id("lastPage")).click();
+        
+        List<WebElement> table_element = webDriver.findElements(By.id("computerName"));
+        String lastName = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerIntro"));
+        String lastIntroduced = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerDisco"));
+        String lastDiscontinued = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("companyId"));
+        String lastCompany = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        table_element = webDriver.findElements(By.id("editCheck"));
+        String lastId = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        //WHEN
+        table_element = webDriver.findElements(By.id("computerLink"));
+        table_element.get(table_element.size() - 1).click();
+        
+
+        webDriver.findElement(By.id("discontinued")).clear();
+        webDriver.findElement(By.id("submitEdit")).click();
+        
+        
+        webDriver.findElement(By.id("lastPage")).click();
+        
+        table_element = webDriver.findElements(By.id("computerName"));
+        String thisName = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerIntro"));
+        String thisIntroduced = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerDisco"));
+        String thisDiscontinued = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("companyId"));
+        String thisCompany = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        table_element = webDriver.findElements(By.id("editCheck"));
+        String thisId = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        //THEN
+		Assertions.assertThat(thisId).isEqualTo(lastId);
+		Assertions.assertThat(thisName).isEqualTo(lastName);
+		Assertions.assertThat(thisIntroduced).isEqualTo(lastIntroduced);
+		Assertions.assertThat(thisDiscontinued).isEqualTo(lastDiscontinued);
+		Assertions.assertThat(thisCompany).isEqualTo(lastCompany);
+	}
+	
+	@Test
+	public void editComputerWontChangeTheCompanyOfTheComputerIfNoCompanyIsSend() {
+		
+		//GIVEN
+        webDriver.findElement(By.id("lastPage")).click();
+        
+        List<WebElement> table_element = webDriver.findElements(By.id("computerName"));
+        String lastName = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerIntro"));
+        String lastIntroduced = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerDisco"));
+        String lastDiscontinued = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("companyId"));
+        String lastCompany = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        table_element = webDriver.findElements(By.id("editCheck"));
+        String lastId = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        //WHEN
+        table_element = webDriver.findElements(By.id("computerLink"));
+        table_element.get(table_element.size() - 1).click();
+        
+
+        WebElement select = webDriver.findElement(By.id("companyId"));
+        List<WebElement> options = select.findElements(By.tagName("option"));
+        for(WebElement option : options){
+            if(option.getText().equals("--")) {
+                option.click();
+                break;
+            }
+        }
+        webDriver.findElement(By.id("submitEdit")).click();
+        
+        
+        webDriver.findElement(By.id("lastPage")).click();
+        
+        table_element = webDriver.findElements(By.id("computerName"));
+        String thisName = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerIntro"));
+        String thisIntroduced = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("computerDisco"));
+        String thisDiscontinued = table_element.get(table_element.size() - 1).getText();
+        
+        table_element = webDriver.findElements(By.id("companyId"));
+        String thisCompany = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        table_element = webDriver.findElements(By.id("editCheck"));
+        String thisId = table_element.get(table_element.size() - 1).getAttribute("value");
+        
+        //THEN
+		Assertions.assertThat(thisId).isEqualTo(lastId);
+		Assertions.assertThat(thisName).isEqualTo(lastName);
+		Assertions.assertThat(thisIntroduced).isEqualTo(lastIntroduced);
+		Assertions.assertThat(thisDiscontinued).isEqualTo(lastDiscontinued);
+		Assertions.assertThat(thisCompany).isEqualTo(lastCompany);
 	}
 }

@@ -40,28 +40,22 @@ public enum DAOFactory {
 				Class.forName("org.h2.Driver");
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
-				LOGGER.error("class.forName(h2 driver) not found");
 				e.printStackTrace();
 			} 
-			LOGGER.info("connection bd h2 test properties");
 		} else {
 			try {
 				Class.forName("com.mysql.jdbc.Driver").newInstance();
 			} catch (InstantiationException e) {
 				// TODO Auto-generated catch block
-				LOGGER.error("mysql jdbc driver instantiation exception");
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
 				// TODO Auto-generated catch block
-				LOGGER.error("mysql jdbc driver access exception");
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
-				LOGGER.error("class.forName(mysql jdbc driver) not found");
 				e.printStackTrace();
 			}
 			config = "MysqlProperties.properties";
-			LOGGER.info("connection bd mysql properties");
 		}
 		try {
 			//InputStream ips = new FileInputStream(FILE_NAME + config);  
@@ -96,7 +90,6 @@ public enum DAOFactory {
 		} catch (SQLException e) {
 			throw new ConnectionException(e);
 		}
-		LOGGER.info("init connection pool");
 		return connection;
 		
 	}
@@ -142,6 +135,7 @@ public enum DAOFactory {
 			throw new ConnectionException(e);
 		}
 		return connect;*/
+		LOGGER.info("DAOFactory getConnection");
 		return connectionPool.getConnection();
 	}
 

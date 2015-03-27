@@ -180,10 +180,11 @@
 						<tr>
 							<td class="editMode"><input type="checkbox" name="cb"
 								class="cb" value="${computer.id }" id="editCheck"/></td>
-							<td id="computerName"><a
+							<td id="computerName"><a id="computerLink"
 								href="<c:url value="/editComputer?id=${computer.id}" />">${computer.name}</a>
 								<%-- <a href="editComputer.html" onclick="">${computer.name}</a> --%>
 							</td>
+							<td hidden="true" ><input id="companyId" value="${computer.company.id }" /></td>
 							<td id="computerIntro">${computer.introduced}</td>
 							<td id="computerDisco">${computer.discontinued}</td>
 							<td id="computerCompId"><c:choose>

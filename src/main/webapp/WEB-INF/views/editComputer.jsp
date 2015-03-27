@@ -15,7 +15,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
-                    <div class="label label-default pull-right">
+                    <div class="label label-default pull-right" id="computerId">
                         id: ${computer.id }
                     </div>
                     <h1>Edit Computer</h1>
@@ -48,9 +48,9 @@
                             </div>            
                         </fieldset>
                         <div class="actions pull-right">
-                            <input type="submit" value="Edit" class="btn btn-primary">
+                            <input type="submit" value="Edit" class="btn btn-primary" id="submitEdit">
                             or
-                            <a href="dashboard.html" class="btn btn-default">Cancel</a>
+                            <a href="dashboard" class="btn btn-default" id="cancelEdit">Cancel</a>
                         </div>
                     </form>
                 </div>
