@@ -6,6 +6,9 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Properties;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.exception.ConnectionException;
 import com.jolbox.bonecp.BoneCP;
 import com.jolbox.bonecp.BoneCPConfig;
@@ -18,6 +21,8 @@ public enum DAOFactory {
 	private CompanyDAO companyDao;
 	
 	private BoneCP connectionPool;
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(DAOFactory.class);
 
 	private DAOFactory() {
 		computerDao = new ComputerDAOImpl();
@@ -35,22 +40,28 @@ public enum DAOFactory {
 				Class.forName("org.h2.Driver");
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
+				LOGGER.error("class.forName(h2 driver) not found");
 				e.printStackTrace();
 			} 
+			LOGGER.info("connection bd h2 test properties");
 		} else {
 			try {
 				Class.forName("com.mysql.jdbc.Driver").newInstance();
 			} catch (InstantiationException e) {
 				// TODO Auto-generated catch block
+				LOGGER.error("mysql jdbc driver instantiation exception");
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
 				// TODO Auto-generated catch block
+				LOGGER.error("mysql jdbc driver access exception");
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
+				LOGGER.error("class.forName(mysql jdbc driver) not found");
 				e.printStackTrace();
 			}
 			config = "MysqlProperties.properties";
+			LOGGER.info("connection bd mysql properties");
 		}
 		try {
 			//InputStream ips = new FileInputStream(FILE_NAME + config);  
@@ -85,6 +96,7 @@ public enum DAOFactory {
 		} catch (SQLException e) {
 			throw new ConnectionException(e);
 		}
+		LOGGER.info("init connection pool");
 		return connection;
 		
 	}
@@ -138,8 +150,10 @@ public enum DAOFactory {
 			connection.setAutoCommit(true);
 			connection.close();
 		} catch (SQLException e) {
+			LOGGER.error("DAOFactory closeConnection failed");
 			throw new ConnectionException(e);
 		}
+		LOGGER.info("DAOFactory closeConnection succeed");
 	}
 
 	public ComputerDAO getComputerDAO() {

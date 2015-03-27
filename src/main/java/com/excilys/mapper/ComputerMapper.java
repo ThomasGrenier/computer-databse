@@ -5,11 +5,16 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.excilys.exception.MapperException;
 import com.excilys.model.CompanyModel;
 import com.excilys.model.ComputerModel;
 
 public class ComputerMapper implements GenericMapper<ComputerModel> {
+	
+	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerMapper.class);
 
 	public List<ComputerModel> mapAll(ResultSet resultSet) {
 		List<ComputerModel> computerList = new LinkedList<ComputerModel>();
@@ -29,8 +34,10 @@ public class ComputerMapper implements GenericMapper<ComputerModel> {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+	        LOGGER.error("computer mapping failed");
 			throw new MapperException(e);
 		}
+        LOGGER.info("computer mapping succeed");
 		return computerList;
 	}
 
@@ -47,8 +54,10 @@ public class ComputerMapper implements GenericMapper<ComputerModel> {
 					, companyModel);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
+	        LOGGER.error("computer mapping failed");
 			throw new MapperException(e);
 		}
+        LOGGER.info("computer mapping succeed");
 		return computerModel;
 	}
 }
