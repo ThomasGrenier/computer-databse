@@ -19,7 +19,7 @@ import com.excilys.utils.Regex;
 
 @SuppressWarnings("serial")
 public class EditComputer extends HttpServlet {
-	
+
 
 	@Override
 	protected void doGet(HttpServletRequest request,
@@ -33,52 +33,86 @@ public class EditComputer extends HttpServlet {
 		}
 		List<CompanyModel> comp = new CompanyServiceImpl().listAll();
 		ComputerModel m = new ComputerServiceImpl().getById(id);
+		if (m.getIntroduced() != null) {
+			String parseIntro = m.getIntroduced().toString().replaceAll("T", " ");
+			request.setAttribute("parseIntro", parseIntro);
+		}
+		if (m.getDiscontinued() != null) {
+			String parseDisco = m.getDiscontinued().toString().replaceAll("T", " ");
+			request.setAttribute("parseDisco", parseDisco);
+		}
 		request.setAttribute("computer", m);
 		request.setAttribute("companies", comp);
 		getServletContext()
 		.getRequestDispatcher("/WEB-INF/views/editComputer.jsp").forward(
 				request, response);
 	}
-	
+
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
-		
+
 		long id = 0L;
 		String name = "";
 		LocalDateTime introduced = null;
 		LocalDateTime discontinued = null;
 		long idCompany = -1L;
-		
+
 
 		if (request.getParameter("id") != null) {
 			if (Pattern.matches(Regex.DIGIT.getRegex(), request.getParameter("id"))) {
 				id = Integer.parseInt(request.getParameter("id"));
 			}
 		}
-		
+
 		name = request.getParameter("name");
+
+		boolean error = false;
+
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-		
-		if (request.getParameter("intro") != null) {
-			if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), request.getParameter("intro").trim())) {
-				introduced = LocalDateTime.parse(request.getParameter("intro"), formatter);
-			}
-		}
-		
-		if (request.getParameter("disco") != null) {
-			if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), request.getParameter("disco").trim())) {
-				discontinued = LocalDateTime.parse(request.getParameter("disco"), formatter);
+
+		String result = request.getParameter("intro");
+		if (result != null) {
+			if (!result.isEmpty()) {
+				if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), result.trim())) {
+					introduced = LocalDateTime.parse(result, formatter);
+				} else {
+					request.setAttribute("errorIntro", "bad Format (yyyy-MM-dd HH:mm:ss)");
+					error = true;
+				}
 			}
 		}
 
-		if (request.getParameter("comp") != null) {
-			if (Pattern.matches(Regex.DIGIT.getRegex(), request.getParameter("comp"))) {
-				idCompany = Integer.parseInt(request.getParameter("comp"));
+		result = request.getParameter("disco");
+		if (result != null) {
+			if (!result.isEmpty()) {
+				if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), result.trim())) {
+					discontinued = LocalDateTime.parse(result, formatter);
+				} else {
+					request.setAttribute("errorDisco", "bad Format (yyyy-MM-dd HH:mm:ss)");
+					error = true;
+				}
 			}
-		}		
-		
+		}
+
+		result = request.getParameter("comp");
+		if (result != null) {
+			if (!result.isEmpty()) {
+				if (Pattern.matches(Regex.DIGIT.getRegex(), result)) {
+					idCompany = Integer.parseInt(result);
+				} else {
+					request.setAttribute("errorComp", "company not valid");
+					error = true;
+				}
+			}
+		}	
+
+		if (error) {
+			doGet(request, response);
+			return ;
+		}
+
 		new ComputerServiceImpl().update(id, name, introduced, discontinued, idCompany);
-		
+
 		request.setAttribute("page", new ComputerServiceImpl().getPage(1, 10, "", "id", ""));
 		getServletContext()
 		.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(

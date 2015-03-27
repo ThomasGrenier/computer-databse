@@ -29,11 +29,13 @@
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" name="intro" value="${computer.introduced}">
+                                <input type="date" class="form-control" id="introduced" name="intro" value="${parseIntro }">
+                                <div id="errorIntro"><c:if test="${errorIntro != null}">${errorIntro }</c:if></div>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" name="disco" value="${computer.discontinued}">
+                                <input type="date" class="form-control" id="discontinued" name="disco" value="${parseDisco }">
+                                <div id="errorDisco"><c:if test="${errorDisco != null}">${errorDisco }</c:if></div>
                             </div>
                             <div class="form-group">
                                 <label for="companyId">Company</label>
@@ -45,7 +47,8 @@
                                    		selected</c:if>>${company.name }</option>
 								</c:forEach>
                                 </select>
-                            </div>            
+                            </div>      
+                            <div><c:if test="${errorComp != null}">${errorComp }</c:if></div>      
                         </fieldset>
                         <div class="actions pull-right">
                             <input type="submit" value="Edit" class="btn btn-primary" id="submitEdit">

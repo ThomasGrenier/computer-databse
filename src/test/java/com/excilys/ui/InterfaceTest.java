@@ -784,4 +784,72 @@ public class InterfaceTest {
 		Assertions.assertThat(thisDiscontinued).isEqualTo(lastDiscontinued);
 		Assertions.assertThat(thisCompany).isEqualTo(lastCompany);
 	}
+	
+	@Test
+	public void editComputerShouldShowAnErrorMessageWhenTheDateFormatOfIntroducedDateIsInvalid() {
+
+		//GIVEN
+        webDriver.findElement(By.id("lastPage")).click();
+        
+        List<WebElement> table_element = webDriver.findElements(By.id("computerLink"));
+        table_element.get(table_element.size() - 1).click();
+		
+		//WHEN
+        webDriver.findElement(By.id("introduced")).clear();
+        webDriver.findElement(By.id("introduced")).sendKeys("bad format");
+        
+        webDriver.findElement(By.id("submitEdit")).click();
+
+        String errorMessage = webDriver.findElement(By.id("errorIntro")).getText();
+        
+        //THEN
+		Assertions.assertThat(errorMessage).isEqualTo("bad Format (yyyy-MM-dd HH:mm:ss)");
+	}
+	
+	@Test
+	public void editComputerShouldShowAnErrorMessageWhenTheDateFormatOfDiscontinuedDateIsInvalid() {
+
+		//GIVEN
+        webDriver.findElement(By.id("lastPage")).click();
+        
+        List<WebElement> table_element = webDriver.findElements(By.id("computerLink"));
+        table_element.get(table_element.size() - 1).click();
+		
+		//WHEN
+        webDriver.findElement(By.id("discontinued")).clear();
+        webDriver.findElement(By.id("discontinued")).sendKeys("bad format");
+        
+        webDriver.findElement(By.id("submitEdit")).click();
+
+        String errorMessage = webDriver.findElement(By.id("errorDisco")).getText();
+        
+        //THEN
+		Assertions.assertThat(errorMessage).isEqualTo("bad Format (yyyy-MM-dd HH:mm:ss)");
+	}
+	
+	@Test
+	public void ChangeTheLimitOfThePaginationTo10ShouldShow10ComputerMaxByPage() {
+		
+		//GIVEN
+		webDriver.findElement(By.id("buttonTen")).click();
+		
+		//WHEN
+        List<WebElement> table_element = webDriver.findElements(By.id("computerLink"));
+        
+        //THEN
+		Assertions.assertThat(table_element.size()).isLessThanOrEqualTo(10);
+	}
+	
+	@Test
+	public void ChangeTheLimitOfThePaginationTo50ShouldShow10ComputerMaxByPage() {
+		
+		//GIVEN
+		webDriver.findElement(By.id("buttonFifty")).click();
+		
+		//WHEN
+        List<WebElement> table_element = webDriver.findElements(By.id("computerLink"));
+        
+        //THEN
+		Assertions.assertThat(table_element.size()).isLessThanOrEqualTo(50);
+	}
 }

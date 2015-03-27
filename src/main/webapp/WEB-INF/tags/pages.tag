@@ -91,11 +91,11 @@
 	</ul>
 	
 	<div class="btn-group btn-group-sm pull-right" role="group">
-		<button type="button" class="btn btn-default"
+		<button type="button" class="btn btn-default" id="buttonTen"
 			onclick="document.location.href='dashboard?limit=10&search=${page.searchBy }&order=${page.orderBy }&option=${page.option }'">10</button>
-		<button type="button" class="btn btn-default"
+		<button type="button" class="btn btn-default" id="buttonFifty"
 			onclick="document.location.href='dashboard?limit=50&search=${page.searchBy }&order=${page.orderBy }&option=${page.option }'">50</button>
-		<button type="button" class="btn btn-default"
+		<button type="button" class="btn btn-default" id="buttonHundred"
 			onclick="document.location.href='dashboard?limit=100&search=${page.searchBy }&order=${page.orderBy }&option=${page.option }'">100</button>
 	</div>
 </div>
