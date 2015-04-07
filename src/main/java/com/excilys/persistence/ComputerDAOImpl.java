@@ -24,14 +24,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@Override
 	public List<ComputerModel> listAll() {
 
-    	Connection connection = null;
-		try {
-			connection = DAOFactory.INSTANCE.getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-	        LOGGER.error("computerDAO listAll connection failed");
-	    	throw new DAOException(e);
-		}
+    	Connection connection = DAOFactory.INSTANCE.getConnection();
 	    List<ComputerModel> computerList = new LinkedList<ComputerModel>();
 	    try {
 	        // create new connection and statement
@@ -48,7 +41,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        LOGGER.error("computerDAO listAll failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection(connection);
+	    DAOFactory.INSTANCE.CloseConnection();
         LOGGER.info("computerDAO listAll succeed");
         return computerList;
 	}
@@ -56,14 +49,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@Override
 	public ComputerModel getById(long id) {
 	    ComputerModel computerModel = null;
-    	Connection connection = null;
-		try {
-			connection = DAOFactory.INSTANCE.getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-	        LOGGER.error("computerDAO getById connection failed");
-	    	throw new DAOException(e);
-		}
+    	Connection connection = DAOFactory.INSTANCE.getConnection();
 	    try {
 	        // create new statement
 	    	int i = 1;
@@ -82,7 +68,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        LOGGER.error("computerDAO getById failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection(connection);
+	    DAOFactory.INSTANCE.CloseConnection();
         LOGGER.info("computerDAO getById succeed");
 	    return computerModel;
 	}
@@ -90,14 +76,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@Override
 	public long create(String name, LocalDateTime introduced, LocalDateTime discontinued, long idCompany) {
 	    long id = 0;
-    	Connection connection = null;
-		try {
-			connection = DAOFactory.INSTANCE.getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-	        LOGGER.error("computerDAO create connection failed");
-	    	throw new DAOException(e);
-		}
+    	Connection connection = DAOFactory.INSTANCE.getConnection();
 	    try {
 
 	        int i = 1;
@@ -128,21 +107,14 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        LOGGER.error("computerDAO create failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection(connection);
+	    DAOFactory.INSTANCE.CloseConnection();
         LOGGER.info("computerDAO create succeed");
 	    return id;
 	}
 
 	@Override
 	public void update(ComputerModel computer) {
-    	Connection connection = null;
-		try {
-			connection = DAOFactory.INSTANCE.getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-	        LOGGER.error("computerDAO update connection failed");
-	    	throw new DAOException(e);
-		}
+    	Connection connection = DAOFactory.INSTANCE.getConnection();
 	    try {
 	        // create new statement
 	        Statement st = connection.createStatement();
@@ -179,20 +151,13 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        LOGGER.error("computerDAO update failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection(connection);
+	    DAOFactory.INSTANCE.CloseConnection();
         LOGGER.info("computerDAO update succeed");
 	}
 
 	@Override
 	public void delete(long id) {
-    	Connection connection = null;
-		try {
-			connection = DAOFactory.INSTANCE.getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-	        LOGGER.error("computerDAO delete connection failed");
-	    	throw new DAOException(e);
-		}
+    	Connection connection = DAOFactory.INSTANCE.getConnection();
 	    try {
 	        // create new statement
 	    	int i = 1;
@@ -205,20 +170,13 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        LOGGER.error("computerDAO delete failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection(connection);
+	    DAOFactory.INSTANCE.CloseConnection();
         LOGGER.info("computerDAO delete succeed");
 	}
 	
 	public List<ComputerModel> getComputersByPage(int offset, int limit, String searchBy, String orderBy, String option) {
 		List<ComputerModel> computerList = new LinkedList<ComputerModel>();
-    	Connection connection = null;
-		try {
-			connection = DAOFactory.INSTANCE.getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-	        LOGGER.error("computerDAO getComputersByPage connection failed");
-	    	throw new DAOException(e);
-		}
+    	Connection connection = DAOFactory.INSTANCE.getConnection();
     	if (offset < 0) {
     		offset = 0;
     	}
@@ -254,21 +212,14 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        LOGGER.error("computerDAO getComputersByPage failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection(connection);
+	    DAOFactory.INSTANCE.CloseConnection();
         LOGGER.info("computerDAO getComputersByPage succeed");
 		return computerList;
 	}
 
 	@Override
 	public int totalRow(String searchBy) {
-    	Connection connection = null;
-		try {
-			connection = DAOFactory.INSTANCE.getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-	        LOGGER.error("computerDAO totalRow connection failed");
-	    	throw new DAOException(e);
-		}
+    	Connection connection = DAOFactory.INSTANCE.getConnection();
     	int nb = 0;
 	    try {
 	        // create new connection and statement
@@ -292,7 +243,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        LOGGER.error("computerDAO totalRow failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection(connection);
+	    DAOFactory.INSTANCE.CloseConnection();
         LOGGER.info("computerDAO totalRow succeed");
 	    return nb;
 	}

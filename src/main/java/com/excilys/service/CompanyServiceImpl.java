@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.exception.DAOException;
 import com.excilys.model.CompanyModel;
 import com.excilys.model.Page;
 import com.excilys.persistence.CompanyDAOImpl;
@@ -60,7 +61,15 @@ public class CompanyServiceImpl implements CompanyService {
 	@Override
 	public void delete(long id) {
 		LOGGER.info("CompanyService delete");
-		companyDao.delete(id);
+		DAOFactory.INSTANCE.startTransaction();
+		try {
+			companyDao.delete(id);
+			DAOFactory.INSTANCE.commit();
+		} catch (DAOException e) {
+			DAOFactory.INSTANCE.rollback();
+		}
+		DAOFactory.INSTANCE.endTransaction();
+		DAOFactory.INSTANCE.CloseConnection();
 	}
 
 }

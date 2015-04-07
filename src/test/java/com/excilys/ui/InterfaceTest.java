@@ -255,10 +255,10 @@ public class InterfaceTest {
         String lastName = table_element.get(table_element.size() - 1).getText();
         
         table_element = webDriver.findElements(By.id("computerIntro"));
-        String lastIntroduced = table_element.get(table_element.size() - 1).getText();
+        String lastIntroduced = table_element.get(table_element.size() - 1).getText().replaceAll("T", " ");
         
         table_element = webDriver.findElements(By.id("computerDisco"));
-        String lastDiscontinued = table_element.get(table_element.size() - 1).getText();
+        String lastDiscontinued = table_element.get(table_element.size() - 1).getText().replaceAll("T", " ");
         
         table_element = webDriver.findElements(By.id("companyId"));
         String lastCompany = table_element.get(table_element.size() - 1).getAttribute("value");
@@ -759,7 +759,6 @@ public class InterfaceTest {
         }
         webDriver.findElement(By.id("submitEdit")).click();
         
-        
         webDriver.findElement(By.id("lastPage")).click();
         
         table_element = webDriver.findElements(By.id("computerName"));
@@ -841,7 +840,7 @@ public class InterfaceTest {
 	}
 	
 	@Test
-	public void ChangeTheLimitOfThePaginationTo50ShouldShow10ComputerMaxByPage() {
+	public void ChangeTheLimitOfThePaginationTo50ShouldShow50ComputerMaxByPage() {
 		
 		//GIVEN
 		webDriver.findElement(By.id("buttonFifty")).click();
@@ -851,5 +850,18 @@ public class InterfaceTest {
         
         //THEN
 		Assertions.assertThat(table_element.size()).isLessThanOrEqualTo(50);
+	}
+	
+	@Test
+	public void ChangeTheLimitOfThePaginationTo100ShouldShow100ComputerMaxByPage() {
+		
+		//GIVEN
+		webDriver.findElement(By.id("buttonHundred")).click();
+		
+		//WHEN
+        List<WebElement> table_element = webDriver.findElements(By.id("computerLink"));
+        
+        //THEN
+		Assertions.assertThat(table_element.size()).isLessThanOrEqualTo(100);
 	}
 }

@@ -260,7 +260,14 @@ public class CLIController {
 				System.out.println("ordinateur mi à jour");
 				break;
 			case "deleteComp":
-				companyService.delete(44);
+				System.out.println("quel est l'id de la compagnie à supprimer : ");
+				str = sc.nextLine().trim();
+				if (Pattern.matches(Regex.DIGIT.getRegex(), str)) {
+					companyService.delete(Long.parseLong(str));
+					System.out.println("company " + Long.parseLong(str) + " supprimé");
+				} else {
+					System.err.println("id invalid");
+				}
 				break;
 			default:
 				System.out.println("help pour la liste des commandes");

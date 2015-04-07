@@ -22,14 +22,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	@Override
 	public List<CompanyModel> listAll() {
 	    List<CompanyModel> companyList = null;
-    	Connection connection = null;
-		try {
-			connection = DAOFactory.INSTANCE.getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-	        LOGGER.error("companyDao listAll connection failed");
-	    	throw new DAOException(e);
-		}
+    	Connection connection = DAOFactory.INSTANCE.getConnection();
 	    try {
 	        // create new statement
 	        Statement st = connection.createStatement();
@@ -45,7 +38,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	        LOGGER.error("companyDao listAll failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection(connection);
+	    DAOFactory.INSTANCE.CloseConnection();
         LOGGER.info("companyDao listAll succeed");
 	    return companyList;
 	}
@@ -53,14 +46,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	@Override
 	public CompanyModel getById(long id) {
 		CompanyModel companyModel = null;
-    	Connection connection = null;
-		try {
-			connection = DAOFactory.INSTANCE.getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-	        LOGGER.error("companyDao getById connection failed");
-	    	throw new DAOException(e);
-		}
+    	Connection connection = DAOFactory.INSTANCE.getConnection();
 	    try {
 	        // create new statement
 	    	int i = 1;
@@ -80,7 +66,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	        LOGGER.error("companyDao getById failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection(connection);
+	    DAOFactory.INSTANCE.CloseConnection();
         LOGGER.info("companyDao getById succeed");
 	    return companyModel;
 	}
@@ -88,14 +74,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	
 	public List<CompanyModel> getCompaniesByPage(int offset, int limit, String searchBy, String orderBy, String option) {
 		List<CompanyModel> companyList = new LinkedList<CompanyModel>();
-    	Connection connection = null;
-		try {
-			connection = DAOFactory.INSTANCE.getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-	        LOGGER.error("companyDao getCompaniesByPage connection failed");
-	    	throw new DAOException(e);
-		}
+    	Connection connection = DAOFactory.INSTANCE.getConnection();
 	    try {
 	        // create new connection and statement
 	        String query = "SELECT * FROM company";
@@ -124,21 +103,14 @@ public class CompanyDAOImpl implements CompanyDAO {
 	        LOGGER.error("companyDao getCompaniesByPage failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection(connection);
+	    DAOFactory.INSTANCE.CloseConnection();
         LOGGER.info("companyDao getCompaniesByPage succeed");
 		return companyList;
 	}
 
 	@Override
 	public int totalRow(String searchBy) {
-    	Connection connection = null;
-		try {
-			connection = DAOFactory.INSTANCE.getConnection();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-	        LOGGER.error("companyDao totalRow connection failed");
-	    	throw new DAOException(e);
-		}
+    	Connection connection = DAOFactory.INSTANCE.getConnection();
     	int nb = 0;
 	    try {
 	        // create new connection and statement
@@ -161,34 +133,28 @@ public class CompanyDAOImpl implements CompanyDAO {
 	        LOGGER.error("companyDao totalRow failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection(connection);
+	    DAOFactory.INSTANCE.CloseConnection();
         LOGGER.info("companyDao totalRow succeed");
 	    return nb;
 	}
 
 	@Override
 	public void delete(long id) {
-    	Connection connection = null;
+    	Connection connection = DAOFactory.INSTANCE.getConnection();
 		try {
-			connection = DAOFactory.INSTANCE.getConnection();
-			connection.setAutoCommit(false);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-	        LOGGER.error("companyDao delete connection failed");
-	    	throw new DAOException(e);
-		}
-		try {
+			
 	        // create new connection and statement
-	        String query = "SELECT id FROM computer WHERE computer.company_id=?";
+	        String query = "DELETE FROM computer WHERE computer.company_id=?";
 
 	        PreparedStatement st = connection.prepareStatement(query);
 	        st.setLong(1, id);
 	        
-	        ResultSet rs = st.executeQuery();
+	        /*ResultSet rs = st.executeQuery();
 	        ComputerDAOImpl computerDaoImpl = new ComputerDAOImpl();
 			while (rs.next()) {
 				computerDaoImpl.delete(rs.getLong(1));
-			}
+			}*/
+	        st.executeUpdate();
 			
 			st.close();
 	        
@@ -197,20 +163,19 @@ public class CompanyDAOImpl implements CompanyDAO {
 	        st.setLong(1,  id);
 	        st.executeUpdate();
 			
-	        rs.close();
 	        st.close();
-	        connection.commit();
+	        //connection.commit();
 	    } catch (SQLException e) {
-	    	try {
+	    	/*try {
 				connection.rollback();
 			} catch (SQLException e1) {
 		        LOGGER.error("companyDao delete rollback failed");
 		    	throw new DAOException(e1);
-			}
+			}*/
 	        LOGGER.error("companyDao delete failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection(connection);
+	    //DAOFactory.INSTANCE.CloseConnection(connection);
         LOGGER.info("companyDao delete succeed");
 	}
 }

@@ -97,7 +97,7 @@ public class EditComputer extends HttpServlet {
 		result = request.getParameter("comp");
 		if (result != null) {
 			if (!result.isEmpty()) {
-				if (Pattern.matches(Regex.DIGIT.getRegex(), result)) {
+				if ((Pattern.matches(Regex.DIGIT.getRegex(), result)) || (result.equals("-1"))) {
 					idCompany = Integer.parseInt(result);
 				} else {
 					request.setAttribute("errorComp", "company not valid");
