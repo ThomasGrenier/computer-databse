@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.model.CompanyDTO;
 import com.excilys.model.CompanyModel;
+import com.excilys.model.ComputerDTO;
 import com.excilys.service.CompanyServiceImpl;
 import com.excilys.service.ComputerServiceImpl;
 import com.excilys.utils.Regex;
@@ -23,7 +25,7 @@ public class AddComputer extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 
-		List<CompanyModel> comp = new CompanyServiceImpl().listAll();
+		List<CompanyDTO> comp = new CompanyServiceImpl().listAll();
 		request.setAttribute("companies", comp);
 		getServletContext()
 		.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(

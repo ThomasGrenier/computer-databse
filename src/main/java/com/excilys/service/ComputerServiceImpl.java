@@ -1,12 +1,16 @@
 package com.excilys.service;
 
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.excilys.mapper.DTOMapper;
+import com.excilys.model.CompanyDTO;
 import com.excilys.model.CompanyModel;
+import com.excilys.model.ComputerDTO;
 import com.excilys.model.ComputerModel;
 import com.excilys.model.Page;
 import com.excilys.persistence.ComputerDAOImpl;
@@ -23,15 +27,21 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public List<ComputerModel> listAll() {
+	public List<ComputerDTO> listAll() {
 		LOGGER.info("ComputerService listAll");
-		return computerDao.listAll();
+		List<ComputerModel> list = computerDao.listAll();
+		List<ComputerDTO> dtos = new LinkedList<ComputerDTO>();
+		DTOMapper mapper = new DTOMapper();
+		for (ComputerModel c : list) {
+			dtos.add(mapper.computerModelToDTO(c));
+		}
+		return dtos;
 	}
 
 	@Override
-	public ComputerModel getById(long id) {
+	public ComputerDTO getById(long id) {
 		LOGGER.info("ComputerService getById");
-		return computerDao.getById(id);
+		return (new DTOMapper()).computerModelToDTO(computerDao.getById(id));
 	}
 
 	@Override
@@ -56,13 +66,19 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
-	public List<ComputerModel> getComputersByPage(int offset, int limit, String searchBy, String orderBy, String option) {
+	public List<ComputerDTO> getComputersByPage(int offset, int limit, String searchBy, String orderBy, String option) {
 		LOGGER.info("ComputerService getComputersByPage");
-		return computerDao.getComputersByPage(offset, limit, searchBy, orderBy, option);
+		List<ComputerModel> list = computerDao.getComputersByPage(offset, limit, searchBy, orderBy, option);
+		List<ComputerDTO> dtos = new LinkedList<ComputerDTO>();
+		DTOMapper mapper = new DTOMapper();
+		for (ComputerModel c : list) {
+			dtos.add(mapper.computerModelToDTO(c));
+		}
+		return dtos;
 	}
 
 	@Override
-	public Page<ComputerModel> getPage(int currentPage, int limit, String searchBy, String orderBy, String option) {
+	public Page<ComputerDTO> getPage(int currentPage, int limit, String searchBy, String orderBy, String option) {
 		LOGGER.info("ComputerService getPage");
 		int totalRow = computerDao.totalRow(searchBy);
 		int total = totalRow / limit;
@@ -72,7 +88,7 @@ public class ComputerServiceImpl implements ComputerService {
 		if (currentPage > total) {
 			currentPage = total;
 		}
-		Page<ComputerModel> page = new Page<ComputerModel>(currentPage, limit, searchBy);
+		Page<ComputerDTO> page = new Page<ComputerDTO>(currentPage, limit, searchBy);
 		page.setTotalResult(totalRow);
 		page.setTotalPages(total);
 		page.setOption(option);

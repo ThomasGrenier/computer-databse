@@ -11,7 +11,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.excilys.model.CompanyDTO;
 import com.excilys.model.CompanyModel;
+import com.excilys.model.ComputerDTO;
 import com.excilys.model.ComputerModel;
 import com.excilys.service.CompanyServiceImpl;
 import com.excilys.service.ComputerServiceImpl;
@@ -31,8 +33,8 @@ public class EditComputer extends HttpServlet {
 				id = Integer.parseInt(request.getParameter("id"));
 			}
 		}
-		List<CompanyModel> comp = new CompanyServiceImpl().listAll();
-		ComputerModel m = new ComputerServiceImpl().getById(id);
+		List<CompanyDTO> comp = new CompanyServiceImpl().listAll();
+		ComputerDTO m = new ComputerServiceImpl().getById(id);
 		if (m.getIntroduced() != null) {
 			String parseIntro = m.getIntroduced().toString().replaceAll("T", " ");
 			request.setAttribute("parseIntro", parseIntro);

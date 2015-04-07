@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
+import com.excilys.model.CompanyDTO;
 import com.excilys.model.CompanyModel;
+import com.excilys.model.ComputerDTO;
 import com.excilys.model.ComputerModel;
 import com.excilys.model.Page;
 import com.excilys.service.CompanyService;
@@ -42,7 +44,7 @@ public class CLIController {
 				System.out.println(result.toString());
 				break;
 			case "computerList":
-				List<ComputerModel> computerList = new LinkedList<ComputerModel>();
+				List<ComputerDTO> computerList = new LinkedList<ComputerDTO>();
 				computerList = computerService.listAll();
 				computerList.stream().forEach(System.out::println);
 				//computerList.stream().map(e -> e + 1).map(e -> e + 2).forEach(System.out::println);
@@ -51,7 +53,7 @@ public class CLIController {
 				}*/
 				break;
 			case "companyList":
-				List<CompanyModel> companyList = new LinkedList<CompanyModel>();
+				List<CompanyDTO> companyList = new LinkedList<CompanyDTO>();
 				companyList = companyService.listAll();
 				for (int i = 0; i < companyList.size(); i++) {
 					System.out.println(companyList.get(i).toString());
@@ -61,7 +63,7 @@ public class CLIController {
 				System.out.println("quel est l'id de l'ordinateur : ");
 				str = sc.nextLine().trim();
 				if (Pattern.matches(Regex.DIGIT.getRegex(), str)) {
-					ComputerModel c = computerService.getById(Long.parseLong(str));
+					ComputerDTO c = computerService.getById(Long.parseLong(str));
 					System.out.println(c.toString());
 				} else {
 					System.err.println("id invalid");
@@ -71,7 +73,7 @@ public class CLIController {
 				System.out.println("quel est l'id de la compagnie ? : ");
 				str = sc.nextLine().trim();
 				if (Pattern.matches(Regex.DIGIT.getRegex(), str)) {
-					CompanyModel comp = companyService.getById(Long.parseLong(str));
+					CompanyDTO comp = companyService.getById(Long.parseLong(str));
 					System.out.println(comp.toString());
 				} else {
 					System.err.println("is not a number");
@@ -92,7 +94,7 @@ public class CLIController {
 					str = sc.nextLine().trim();
 				}
 				int nbResult = Integer.parseInt(str);
-				Page<ComputerModel> p = computerService.getPage(currentPage, nbResult, "", "id", "");
+				Page<ComputerDTO> p = computerService.getPage(currentPage, nbResult, "", "id", "");
 				System.out.println(p.toString());
 				System.out.println(" - next pour avancer d'une page");
 				System.out.println(" - previous pour reculer d'une page");
@@ -139,7 +141,7 @@ public class CLIController {
 					str = sc.nextLine().trim();
 				}
 				int nbResultComp = Integer.parseInt(str);
-				Page<CompanyModel> pa = companyService.getPage(currentPageComp, nbResultComp, "", "id", "");
+				Page<CompanyDTO> pa = companyService.getPage(currentPageComp, nbResultComp, "", "id", "");
 				System.out.println(pa.toString());
 				System.out.println(" - next pour avancer d'une page");
 				System.out.println(" - previous pour reculer d'une page");
@@ -193,7 +195,7 @@ public class CLIController {
 
 				System.out.println("vous avez choisi l'odinateur : ");
 				if (Pattern.matches(Regex.DIGIT.getRegex(), str)) {
-					ComputerModel computer = computerService.getById(Long.parseLong(str));
+					ComputerDTO computer = computerService.getById(Long.parseLong(str));
 					System.out.println(computer.toString());
 				} else {
 					System.err.println("id invalid");

@@ -1,11 +1,14 @@
 package com.excilys.service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.excilys.exception.DAOException;
+import com.excilys.mapper.DTOMapper;
+import com.excilys.model.CompanyDTO;
 import com.excilys.model.CompanyModel;
 import com.excilys.model.Page;
 import com.excilys.persistence.CompanyDAOImpl;
@@ -22,25 +25,37 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
-	public List<CompanyModel> listAll() {
+	public List<CompanyDTO> listAll() {
 		LOGGER.info("CompanyService listAll");
-		return companyDao.listAll();
+		List<CompanyModel> list = companyDao.listAll();
+		List<CompanyDTO> dtos = new LinkedList<CompanyDTO>();
+		DTOMapper mapper = new DTOMapper();
+		for (CompanyModel c : list) {
+			dtos.add(mapper.companyModelToDTO(c));
+		}
+		return dtos;
 	}
 
 	@Override
-	public CompanyModel getById(long id) {
+	public CompanyDTO getById(long id) {
 		LOGGER.info("CompanyService getById");
-		return companyDao.getById(id);
+		return (new DTOMapper()).companyModelToDTO(companyDao.getById(id));
 	}
 
 	@Override
-	public List<CompanyModel> getCompaniesByPage(int offset, int limit, String searchBy, String orderBy, String option) {
+	public List<CompanyDTO> getCompaniesByPage(int offset, int limit, String searchBy, String orderBy, String option) {
 		LOGGER.info("CompanyService getCompaniesByPage");
-		return companyDao.getCompaniesByPage(offset, limit, searchBy, orderBy, option);
+		List<CompanyModel> list = companyDao.getCompaniesByPage(offset, limit, searchBy, orderBy, option);
+		List<CompanyDTO> dtos = new LinkedList<CompanyDTO>();
+		DTOMapper mapper = new DTOMapper();
+		for (CompanyModel c : list) {
+			dtos.add(mapper.companyModelToDTO(c));
+		}
+		return dtos;
 	}
 
 	@Override
-	public Page<CompanyModel> getPage(int currentPage, int limit, String searchBy, String orderBy, String option) {
+	public Page<CompanyDTO> getPage(int currentPage, int limit, String searchBy, String orderBy, String option) {
 		int total = companyDao.totalRow(searchBy) / limit;
 		if ((companyDao.totalRow(searchBy) % limit) > 0) {
 			total += 1;
@@ -48,7 +63,7 @@ public class CompanyServiceImpl implements CompanyService {
 		if (currentPage > total) {
 			currentPage = total;
 		}
-		Page<CompanyModel> page = new Page<CompanyModel>(currentPage, limit, searchBy);
+		Page<CompanyDTO> page = new Page<CompanyDTO>(currentPage, limit, searchBy);
 		LOGGER.info("CompanyService getPage");
 		page.setTotalResult(companyDao.totalRow(searchBy));
 		page.setTotalPages(total);
