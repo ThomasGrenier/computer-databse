@@ -28,6 +28,17 @@ input[type='checkbox'] {
     white-space: nowrap;
 }
 
-#right {
+.right {
 	float: right;
+}
+
+.valid {
+	border:2px solid #4F8A10 !important;
+}
+
+input.error{border:2px solid #FF0000 !important; }
+
+label.error,div.error{
+	font-weight:normal;
+	color:#FF0000 !important;
 }

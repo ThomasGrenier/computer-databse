@@ -20,7 +20,7 @@
                     </div>
                     <h1>Edit Computer</h1>
 
-                    <form action="editComputer" method="POST">
+                    <form action="editComputer" method="POST" id="editComputer">
                         <input type="hidden" value="${computer.id }" name="id"/>
                         <fieldset>
                             <div class="form-group">
@@ -29,12 +29,12 @@
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" name="intro" value="${parseIntro }">
+                                <input type="text" class="form-control" id="introduced" name="intro" value="${parseIntro }">
                                 <div id="errorIntro"><c:if test="${errorIntro != null}">${errorIntro }</c:if></div>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" name="disco" value="${parseDisco }">
+                                <input type="text" class="form-control" id="discontinued" name="disco" value="${parseDisco }">
                                 <div id="errorDisco"><c:if test="${errorDisco != null}">${errorDisco }</c:if></div>
                             </div>
                             <div class="form-group">
@@ -60,5 +60,8 @@
             </div>
         </div>
     </section>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery.validate.min.js"></script>
+	<script src="js/validate.js"></script>
 </body>
 </html>

@@ -70,7 +70,7 @@
 							aria-label="LastPage"> <span aria-hidden="true">
 									Computer name</span>
 						</a> <c:if test="${page.orderBy == 'name' }">
-								<div id="right">
+								<div class="right">
 									<c:choose>
 										<c:when test="${page.option == 'DESC'}">
 										&#x21E7;
@@ -99,7 +99,7 @@
 							aria-label="LastPage"> <span aria-hidden="true">
 									Introduced date</span>
 						</a> <c:if test="${page.orderBy == 'introduced' }">
-								<div id="right">
+								<div class="right">
 									<c:choose>
 										<c:when test="${page.option == 'DESC'}">
 										&#x21E7;
@@ -129,7 +129,7 @@
 							aria-label="LastPage"> <span aria-hidden="true">
 									Discontinued date</span>
 						</a> <c:if test="${page.orderBy == 'discontinued' }">
-								<div id="right">
+								<div class="right">
 									<c:choose>
 										<c:when test="${page.option == 'DESC'}">
 										&#x21E7;
@@ -159,7 +159,7 @@
 							aria-label="LastPage"> <span aria-hidden="true">
 									Company</span>
 						</a> <c:if test="${page.orderBy == 'company_id' }">
-								<div id="right">
+								<div class="right">
 									<c:choose>
 										<c:when test="${page.option == 'DESC'}">
 										&#x21E7;

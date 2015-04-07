@@ -4,14 +4,7 @@
 <%@ taglib tagdir="/WEB-INF/tags" prefix="mylib"%>
 <!DOCTYPE html>
 <html>
-<head>
-<title>Computer Database</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!-- Bootstrap -->
-<link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="css/font-awesome.css" rel="stylesheet" media="screen">
-<link href="css/main.css" rel="stylesheet" media="screen">
-</head>
+	<mylib:header />
 <body>
     <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
@@ -24,7 +17,7 @@
             <div class="row">
                 <div class="col-xs-8 col-xs-offset-2 box">
                     <h1>Add Computer</h1>
-                    <form action="addComputer" method="POST">
+                    <form action="addComputer" method="POST" id="addComputer">
                         <fieldset>
                             <div class="form-group">
                                 <label for="computerName">Computer name</label>
@@ -33,12 +26,12 @@
                             </div>
                             <div class="form-group">
                                 <label for="introduced">Introduced date</label>
-                                <input type="date" class="form-control" id="introduced" name="intro" placeholder="Introduced date" value="${intro }">
+                                <input type="text" class="form-control" id="introduced" name="intro" placeholder="Introduced date" value="${intro }">
                                 <div id="errorIntro"><c:if test="${errorIntro != null}">${errorIntro }</c:if></div>
                             </div>
                             <div class="form-group">
                                 <label for="discontinued">Discontinued date</label>
-                                <input type="date" class="form-control" id="discontinued" name="disco" placeholder="Discontinued date" value="${disco }">
+                                <input type="text" class="form-control" id="discontinued" name="disco" placeholder="Discontinued date" value="${disco }">
                                 <div id="errorDisco"><c:if test="${errorDisco != null}">${errorDisco }</c:if></div>
                             </div>
                             <div class="form-group">
@@ -64,5 +57,8 @@
             </div>
         </div>
     </section>
+	<script src="js/jquery.min.js"></script>
+	<script src="js/jquery.validate.min.js"></script>
+	<script src="js/validate.js"></script>
 </body>
 </html>
