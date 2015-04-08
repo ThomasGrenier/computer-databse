@@ -8,13 +8,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.excilys.exception.DAOException;
 import com.excilys.mapper.DTOMapper;
 import com.excilys.model.CompanyDTO;
 import com.excilys.model.CompanyModel;
 import com.excilys.model.Page;
 import com.excilys.persistence.CompanyDAOImpl;
-import com.excilys.persistence.DAOFactory;
 
 @Service
 public class CompanyServiceImpl implements CompanyService {

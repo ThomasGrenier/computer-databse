@@ -45,10 +45,6 @@ public class CLIController {
 				List<ComputerDTO> computerList = new LinkedList<ComputerDTO>();
 				computerList = computerService.listAll();
 				computerList.stream().forEach(System.out::println);
-				//computerList.stream().map(e -> e + 1).map(e -> e + 2).forEach(System.out::println);
-				/*for (int i = 0; i < computerList.size(); i++) {
-					System.out.println(computerList.get(i).toString());
-				}*/
 				break;
 			case "companyList":
 				List<CompanyDTO> companyList = new LinkedList<CompanyDTO>();

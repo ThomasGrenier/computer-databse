@@ -31,7 +31,6 @@ public class CompanyDAOImpl implements CompanyDAO {
 	    List<CompanyModel> companyList = null;
     	Connection connection = daoFactory.getConnection();
 	    try {
-	        // create new statement
 	        Statement st = connection.createStatement();
 
 	        String query = "SELECT * FROM company";
@@ -55,7 +54,6 @@ public class CompanyDAOImpl implements CompanyDAO {
 		CompanyModel companyModel = null;
     	Connection connection = daoFactory.getConnection();
 	    try {
-	        // create new statement
 	    	int i = 1;
 	        String query = "SELECT * FROM company WHERE id =?";
 	        PreparedStatement st = null;
@@ -65,8 +63,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	        ResultSet rs = st.executeQuery();
 	        
 	        companyModel = (new CompanyMapper()).mapOne(rs);
-	            /*System.out.printf("%-5d | %-70s | %-25s | %-25s | %-1s \n", //
-	                    rs.getLong(1), rs.getString(2), rs.getTimestamp(3), rs.getTimestamp(4), rs.getLong(5));*/
+	        
 	        rs.close();
 	        st.close();
 	    } catch (SQLException e) {
@@ -83,7 +80,6 @@ public class CompanyDAOImpl implements CompanyDAO {
 		List<CompanyModel> companyList = new LinkedList<CompanyModel>();
     	Connection connection = daoFactory.getConnection();
 	    try {
-	        // create new connection and statement
 	        String query = "SELECT * FROM company";
 	        if (!searchBy.isEmpty()) {
 	        	query += " WHERE company.name LIKE '%" + searchBy + "%'";
@@ -120,7 +116,6 @@ public class CompanyDAOImpl implements CompanyDAO {
     	Connection connection = daoFactory.getConnection();
     	int nb = 0;
 	    try {
-	        // create new connection and statement
 	        String query = "SELECT count(*) FROM company";
 	        if (!searchBy.isEmpty()) {
 	        	query += " WHERE company.name LIKE '%" + searchBy + "%'";
@@ -151,17 +146,11 @@ public class CompanyDAOImpl implements CompanyDAO {
     	Connection connection = daoFactory.getConnection();
 		try {
 			
-	        // create new connection and statement
 	        String query = "DELETE FROM computer WHERE computer.company_id=?";
 
 	        PreparedStatement st = connection.prepareStatement(query);
 	        st.setLong(1, id);
 	        
-	        /*ResultSet rs = st.executeQuery();
-	        ComputerDAOImpl computerDaoImpl = new ComputerDAOImpl();
-			while (rs.next()) {
-				computerDaoImpl.delete(rs.getLong(1));
-			}*/
 	        st.executeUpdate();
 			
 			st.close();
@@ -172,18 +161,10 @@ public class CompanyDAOImpl implements CompanyDAO {
 	        st.executeUpdate();
 			
 	        st.close();
-	        //connection.commit();
 	    } catch (SQLException e) {
-	    	/*try {
-				connection.rollback();
-			} catch (SQLException e1) {
-		        LOGGER.error("companyDao delete rollback failed");
-		    	throw new DAOException(e1);
-			}*/
 	        LOGGER.error("companyDao delete failed");
 	    	throw new DAOException(e);
 	    }
-	    //DAOFactory.INSTANCE.CloseConnection(connection);
 	    daoFactory.closeConnection();
         LOGGER.info("companyDao delete succeed");
 	}

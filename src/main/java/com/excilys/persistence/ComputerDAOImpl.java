@@ -33,7 +33,6 @@ public class ComputerDAOImpl implements ComputerDAO {
     	Connection connection = daoFactory.getConnection();
 	    List<ComputerModel> computerList = new LinkedList<ComputerModel>();
 	    try {
-	        // create new connection and statement
 	        Statement st = connection.createStatement();
 
 	        String query = "SELECT * FROM computer as compu left outer join company as compa on compa.id=compu.company_id";
@@ -57,7 +56,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 	    ComputerModel computerModel = null;
     	Connection connection = daoFactory.getConnection();
 	    try {
-	        // create new statement
 	    	int i = 1;
 	        String query = "SELECT * FROM computer as compu left outer join company as compa on compa.id=compu.company_id where compu.id=?";
 	        PreparedStatement st = connection.prepareStatement(query);
@@ -66,8 +64,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        ResultSet rs = st.executeQuery();        	
 
 	        computerModel = (new ComputerMapper()).mapOne(rs);
-	            /*System.out.printf("%-5d | %-70s | %-25s | %-25s | %-1s \n", //
-	                    rs.getLong(1), rs.getString(2), rs.getTimestamp(3), rs.getTimestamp(4), rs.getLong(5));*/
+	        
 	        rs.close();
 	        st.close();
 	    } catch (SQLException e) {
@@ -106,8 +103,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        if (generatedKeys.next()) {
 	        	id = generatedKeys.getLong(1);
 	        }
-	            /*System.out.printf("%-5d | %-70s | %-25s | %-25s | %-1s \n", //
-	                    rs.getLong(1), rs.getString(2), rs.getTimestamp(3), rs.getTimestamp(4), rs.getLong(5));*/
 	        sp.close();
 	    } catch (SQLException e) {
 	        LOGGER.error("computerDAO create failed");
@@ -122,7 +117,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 	public void update(ComputerModel computer) {
     	Connection connection = daoFactory.getConnection();
 	    try {
-	        // create new statement
 	        Statement st = connection.createStatement();
 
 	        String question = "SELECT * FROM computer as compu left outer join company as compa on compa.id=compu.company_id where compu.id=" + computer.getId();
@@ -137,9 +131,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        
 	        rs.close();
 	        
-	        /*DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-	        LocalDateTime formatterIntroduced = LocalDateTime.parse(introduced, formatter);
-	        LocalDateTime formatterDiscontinued = LocalDateTime.parse(discontinued, formatter);*/
 	        String query = "UPDATE computer " +
 	        				"SET name = '" + (((computer.getName() == null) || (computer.getName().equals(""))) ? actualName : computer.getName()) +
 	        				"', introduced = '" + ((computer.getIntroduced() == null) ? actualIntroduced : computer.getIntroduced()) + 
@@ -147,8 +138,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        				"', company_id = '" + ((computer.getCompany().getId() == -1) ? actualCompany : computer.getCompany().getId()) + "' " +
 	        				"WHERE id = " + computer.getId() + ";";
 	        st.executeUpdate(query);
-	            /*System.out.printf("%-5d | %-70s | %-25s | %-25s | %-1s \n", //
-	                    rs.getLong(1), rs.getString(2), rs.getTimestamp(3), rs.getTimestamp(4), rs.getLong(5));*/
 	        st.close();
 	    } catch (MysqlDataTruncation e) {
 	        LOGGER.error("computerDAO update failed invalid date");
@@ -165,7 +154,6 @@ public class ComputerDAOImpl implements ComputerDAO {
 	public void delete(long id) {
     	Connection connection = daoFactory.getConnection();
 	    try {
-	        // create new statement
 	    	int i = 1;
 	        String query = "DELETE FROM computer WHERE id = ?";
 	        PreparedStatement st = connection.prepareStatement(query);
@@ -187,7 +175,6 @@ public class ComputerDAOImpl implements ComputerDAO {
     		offset = 0;
     	}
 	    try {
-	        // create new connection and statement
 	        String query = "SELECT * FROM computer as compu left outer join company as compa on compa.id=compu.company_id";
 	        if (!searchBy.isEmpty()) {
 	        	query += " WHERE compu.name LIKE ? OR compa.name LIKE ?";
@@ -228,7 +215,6 @@ public class ComputerDAOImpl implements ComputerDAO {
     	Connection connection = daoFactory.getConnection();
     	int nb = 0;
 	    try {
-	        // create new connection and statement
 	        String query = "SELECT count(*) FROM computer as compu left outer join company as compa on compa.id=compu.company_id";
 	        
 	        if (!searchBy.isEmpty()) {

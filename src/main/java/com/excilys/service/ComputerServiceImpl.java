@@ -15,7 +15,6 @@ import com.excilys.model.ComputerDTO;
 import com.excilys.model.ComputerModel;
 import com.excilys.model.Page;
 import com.excilys.persistence.ComputerDAOImpl;
-import com.excilys.persistence.DAOFactory;
 
 @Service
 public class ComputerServiceImpl implements ComputerService {
