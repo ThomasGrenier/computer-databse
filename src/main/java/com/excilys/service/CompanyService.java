@@ -3,7 +3,6 @@ package com.excilys.service;
 import java.util.List;
 
 import com.excilys.model.CompanyDTO;
-import com.excilys.model.CompanyModel;
 import com.excilys.model.Page;
 
 public interface CompanyService {

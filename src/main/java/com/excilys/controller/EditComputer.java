@@ -12,9 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.excilys.model.CompanyDTO;
-import com.excilys.model.CompanyModel;
 import com.excilys.model.ComputerDTO;
-import com.excilys.model.ComputerModel;
 import com.excilys.service.CompanyServiceImpl;
 import com.excilys.service.ComputerServiceImpl;
 import com.excilys.utils.Regex;

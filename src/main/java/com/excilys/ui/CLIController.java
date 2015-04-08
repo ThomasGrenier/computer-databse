@@ -8,9 +8,7 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import com.excilys.model.CompanyDTO;
-import com.excilys.model.CompanyModel;
 import com.excilys.model.ComputerDTO;
-import com.excilys.model.ComputerModel;
 import com.excilys.model.Page;
 import com.excilys.service.CompanyService;
 import com.excilys.service.CompanyServiceImpl;

@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.excilys.model.ComputerDTO;
-import com.excilys.model.ComputerModel;
 import com.excilys.model.Page;
 
 public interface ComputerService {

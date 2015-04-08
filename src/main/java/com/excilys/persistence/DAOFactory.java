@@ -3,11 +3,8 @@ package com.excilys.persistence;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
-
-import javax.sql.ConnectionPoolDataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
