@@ -29,8 +29,6 @@ public class ComputerMapper implements GenericMapper<ComputerModel> {
 						, ((resultSet.getTimestamp(4) == null) ? null : resultSet.getTimestamp(4).toLocalDateTime())
 						, companyModel);
 				computerList.add(computerModel);
-				/*System.out.printf("%-5d | %-70s | %-25s | %-25s | %-1s \n", //
-			            rs.getLong(1), rs.getString(2), rs.getTimestamp(3), rs.getTimestamp(4), rs.getLong(5));*/
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

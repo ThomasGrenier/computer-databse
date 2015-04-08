@@ -22,8 +22,6 @@ public class CompanyMapper implements GenericMapper<CompanyModel> {
             CompanyModel companyModel = null;
 			while (resultSet.next()) {
 				companyModel = new CompanyModel(resultSet.getLong(1), resultSet.getString(2));
-			    /*System.out.printf("%-10d | %-10s \n", //
-			            rs.getLong(1), rs.getString(2));*/
 				companyList.add(companyModel);
 			}
 		} catch (SQLException e) {
