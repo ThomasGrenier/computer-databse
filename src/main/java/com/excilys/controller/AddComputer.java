@@ -42,7 +42,7 @@ public class AddComputer extends HttpServlet {
 		boolean error = false;
 
 		if (name == null || name.isEmpty()) {
-			request.setAttribute("errorName", "name is required");
+			request.setAttribute("errorName", "The name is required");
 			error = true;
 		} else {
 			request.setAttribute("name", name);

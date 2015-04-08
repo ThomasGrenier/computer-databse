@@ -32,25 +32,8 @@ public class DBUtil {
 	static {
 
 		final Properties properties = new Properties();
-		/*try (final InputStream is = DAOFactory.class
-				.getClassLoader().getResourceAsStream(CONFIG_TEST)) {
-			System.out.println("gg3");
-			properties.load(is);
-			System.out.println("gg4");
-			jdbcDriver = "org.h2.Driver";
-			System.out.println("gg5");
-			jdbcUrl = properties.getProperty("URL");
-			System.out.println("gg6");
-			user = properties.getProperty("USR");
-			System.out.println("gg7");
-			password = properties.getProperty("PWD");
-			System.out.println("gg8");
-		} catch (IOException e) {
-			System.err.println(e.getMessage());
-		}*/
 		InputStream ips;
 		try {
-			//ips = new FileInputStream(CONFIG_TEST);
 			ips = DBUtil.class.getClassLoader().getResourceAsStream(CONFIG_TEST);
 			properties.load(ips);
 			jdbcUrl = properties.getProperty("url");
@@ -77,12 +60,6 @@ public class DBUtil {
 	}
 
 	public static void executeSqlFile(String file, Connection connection) throws IOException, SQLException {
-		/*final InputStream is = DAOFactory.class
-				.getClassLoader().getResourceAsStream(file);
-		System.out.println("1");
-		final BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
-		System.out.println("2");*/
-		//final InputStream is = new FileInputStream(file);
 		final InputStream is = DBUtil.class.getClassLoader().getResourceAsStream(file);
 		final BufferedReader br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 		final StringBuilder sb = new StringBuilder();
@@ -99,19 +76,9 @@ public class DBUtil {
 
 	public static Connection getConnection() throws IOException, SQLException {
 		final Properties properties = new Properties();
-		/*try (final InputStream is = DAOFactory.class
-				.getClassLoader().getResourceAsStream(CONFIG_TEST)) {
-			System.out.println("c");
-			properties.load(is);
-			System.out.println("d");
-			final String url = properties.getProperty("URL");
-			System.out.println("e");
-			return (Connection) DriverManager.getConnection(url, properties);
-		}*/
 		InputStream ips;
 		String url = null;
 		try {
-			//ips = new FileInputStream(CONFIG_TEST);
 			ips = DBUtil.class.getClassLoader().getResourceAsStream(CONFIG_TEST);
 			properties.load(ips);
 			url = properties.getProperty("url");

@@ -38,7 +38,7 @@ $(document).ready(function () {
 		},
 		messages : {
 			name: {
-				required : "The name is required.",
+				required : "The name is required",
 				minlength : "Minimum length is 2"
 			},
 

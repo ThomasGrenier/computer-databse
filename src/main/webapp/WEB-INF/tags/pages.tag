@@ -14,7 +14,7 @@
 						<c:param name="order" value="${page.orderBy }" />
 						<c:param name="option" value="${page.option }" />
 						<c:param name="search" value="${page.searchBy }" />
-						</c:url>" aria-label="firstPage"> <span aria-hidden=true>&#8606;</span>
+						</c:url>" aria-label="firstPage"> <span aria-hidden="true" id="firstPage">&#8606;</span>
 			</a></li>
 		</c:if>
 		
@@ -25,7 +25,7 @@
 						<c:param name="order" value="${page.orderBy }" />
 						<c:param name="option" value="${page.option }" />
 						<c:param name="search" value="${page.searchBy }" />
-						</c:url>" aria-label="Previous"> <span aria-hidden=true>&laquo;</span>
+						</c:url>" aria-label="Previous"> <span aria-hidden="true" id="previous">&laquo;</span>
 			</a></li>
 		</c:if>
 		
@@ -74,7 +74,7 @@
 						<c:param name="order" value="${page.orderBy }" />
 						<c:param name="option" value="${page.option }" />
 						<c:param name="search" value="${page.searchBy }" />
-						</c:url>" aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+						</c:url>" aria-label="Next"> <span aria-hidden="true" id="next">&raquo;</span>
 			</a></li>
 		</c:if>
 		
