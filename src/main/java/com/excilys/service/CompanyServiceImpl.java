@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.excilys.exception.DAOException;
 import com.excilys.mapper.DTOMapper;
@@ -14,14 +16,16 @@ import com.excilys.model.Page;
 import com.excilys.persistence.CompanyDAOImpl;
 import com.excilys.persistence.DAOFactory;
 
+@Service
 public class CompanyServiceImpl implements CompanyService {
 	
-	private CompanyDAOImpl companyDao;
+	@Autowired
+	CompanyDAOImpl companyDao;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyServiceImpl.class);
 	
 	public CompanyServiceImpl() {
-		companyDao = (CompanyDAOImpl) DAOFactory.INSTANCE.getCompanyDAO();
+		
 	}
 
 	@Override
@@ -76,15 +80,7 @@ public class CompanyServiceImpl implements CompanyService {
 	@Override
 	public void delete(long id) {
 		LOGGER.info("CompanyService delete");
-		DAOFactory.INSTANCE.startTransaction();
-		try {
-			companyDao.delete(id);
-			DAOFactory.INSTANCE.commit();
-		} catch (DAOException e) {
-			DAOFactory.INSTANCE.rollback();
-		}
-		DAOFactory.INSTANCE.endTransaction();
-		DAOFactory.INSTANCE.CloseConnection();
+		companyDao.delete(id);
 	}
 
 }

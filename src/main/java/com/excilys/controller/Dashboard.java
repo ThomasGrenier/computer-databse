@@ -4,14 +4,32 @@ import java.io.IOException;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+
 import com.excilys.service.ComputerServiceImpl;
 import com.excilys.utils.Regex;
 
 @SuppressWarnings("serial")
+@Controller
+@WebServlet(urlPatterns = "/dashboard")
 public class Dashboard extends HttpServlet {
+
+	@Autowired
+	ComputerServiceImpl computerService;
+
+
+	@Override
+	public void init() throws ServletException {
+		super.init();
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	}
 
 	@Override
 	protected void doGet(HttpServletRequest request,
@@ -47,7 +65,7 @@ public class Dashboard extends HttpServlet {
 		}
 
 
-		request.setAttribute("page", new ComputerServiceImpl().getPage(offset, limit, test, order, option));
+		request.setAttribute("page", computerService.getPage(offset, limit, test, order, option));
 		getServletContext()
 		.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(
 				request, response);
@@ -59,14 +77,13 @@ public class Dashboard extends HttpServlet {
 		String selectedComputersId = request.getParameter("selection");
 		if ((selectedComputersId != null) && (!selectedComputersId.isEmpty())) {
 			String[] computerId = selectedComputersId.split(",");
-			ComputerServiceImpl computerService = new ComputerServiceImpl();
 			for (String id : computerId) {
 				long idCompu = Long.parseLong(id);
 				computerService.delete(idCompu);
 			}
 		}
 
-		request.setAttribute("page", new ComputerServiceImpl().getPage(1, 10, "", "id", ""));
+		request.setAttribute("page", computerService.getPage(1, 10, "", "id", ""));
 		getServletContext()
 		.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(
 				request, response);

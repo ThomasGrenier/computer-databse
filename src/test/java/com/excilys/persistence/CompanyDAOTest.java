@@ -10,11 +10,18 @@ import org.dbunit.dataset.xml.FlatXmlDataSetBuilder;
 import org.junit.After;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.excilys.model.CompanyModel;
 import com.excilys.util.DBUtil;
 
 public class CompanyDAOTest {
+	
+	@Autowired
+	ComputerDAOImpl computerDao;
+	
+	@Autowired
+	CompanyDAOImpl companyDao;
 
 	@BeforeClass
 	public static void setUpDB() {
@@ -42,7 +49,7 @@ public class CompanyDAOTest {
 				"src/test/data/listAll.xml")));
 		final int expectedSize = 5;
 
-		final List<CompanyModel> companies = DAOFactory.INSTANCE.getCompanyDAO().listAll();
+		final List<CompanyModel> companies = companyDao.listAll();
 		final CompanyModel expectedCompany1 = new CompanyModel(1L, "Comp1");
 		final CompanyModel expectedCompany2 = new CompanyModel(2L, "Comp2");
 		final CompanyModel expectedCompany3 = new CompanyModel(3L, "Comp3");
@@ -59,7 +66,7 @@ public class CompanyDAOTest {
 		DBUtil.cleanlyInsert(new FlatXmlDataSetBuilder().build(new File(
 				"src/test/data/emptyBD.xml")));
 
-		final List<CompanyModel> companies = DAOFactory.INSTANCE.getCompanyDAO().listAll();
+		final List<CompanyModel> companies = companyDao.listAll();
 
 		Assertions.assertThat(companies).isNotNull();
 		Assertions.assertThat(companies).isEmpty();
@@ -73,7 +80,7 @@ public class CompanyDAOTest {
 		final long expectedId = 2L;
 		final String expectedName = "Comp2";
 
-		final CompanyModel model = DAOFactory.INSTANCE.getCompanyDAO().getById(id);
+		final CompanyModel model = companyDao.getById(id);
 
 		Assertions.assertThat(model).isNotNull();
 		Assertions.assertThat(model.getId()).isEqualTo(expectedId);
@@ -87,7 +94,7 @@ public class CompanyDAOTest {
 
 		final long id = 400L;
 
-		final CompanyModel model = DAOFactory.INSTANCE.getCompanyDAO().getById(id);
+		final CompanyModel model = companyDao.getById(id);
 		
 		Assertions.assertThat(model).isNull();
 	}

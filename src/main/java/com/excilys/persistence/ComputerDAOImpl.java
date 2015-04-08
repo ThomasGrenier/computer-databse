@@ -11,20 +11,26 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import com.excilys.exception.DAOException;
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.ComputerModel;
 import com.mysql.jdbc.MysqlDataTruncation;
 
+@Repository
 public class ComputerDAOImpl implements ComputerDAO {
+	
+	@Autowired
+	DAOFactory daoFactory;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAOImpl.class);
 
 	@Override
 	public List<ComputerModel> listAll() {
 
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = daoFactory.getConnection();
 	    List<ComputerModel> computerList = new LinkedList<ComputerModel>();
 	    try {
 	        // create new connection and statement
@@ -41,7 +47,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        LOGGER.error("computerDAO listAll failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection();
+	    daoFactory.closeConnection();
         LOGGER.info("computerDAO listAll succeed");
         return computerList;
 	}
@@ -49,7 +55,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@Override
 	public ComputerModel getById(long id) {
 	    ComputerModel computerModel = null;
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = daoFactory.getConnection();
 	    try {
 	        // create new statement
 	    	int i = 1;
@@ -68,7 +74,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        LOGGER.error("computerDAO getById failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection();
+	    daoFactory.closeConnection();
         LOGGER.info("computerDAO getById succeed");
 	    return computerModel;
 	}
@@ -76,7 +82,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@Override
 	public long create(String name, LocalDateTime introduced, LocalDateTime discontinued, long idCompany) {
 	    long id = 0;
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = daoFactory.getConnection();
 	    try {
 
 	        int i = 1;
@@ -107,14 +113,14 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        LOGGER.error("computerDAO create failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection();
+	    daoFactory.closeConnection();
         LOGGER.info("computerDAO create succeed");
 	    return id;
 	}
 
 	@Override
 	public void update(ComputerModel computer) {
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = daoFactory.getConnection();
 	    try {
 	        // create new statement
 	        Statement st = connection.createStatement();
@@ -151,13 +157,13 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        LOGGER.error("computerDAO update failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection();
+	    daoFactory.closeConnection();
         LOGGER.info("computerDAO update succeed");
 	}
 
 	@Override
 	public void delete(long id) {
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = daoFactory.getConnection();
 	    try {
 	        // create new statement
 	    	int i = 1;
@@ -170,13 +176,13 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        LOGGER.error("computerDAO delete failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection();
+	    daoFactory.closeConnection();
         LOGGER.info("computerDAO delete succeed");
 	}
 	
 	public List<ComputerModel> getComputersByPage(int offset, int limit, String searchBy, String orderBy, String option) {
 		List<ComputerModel> computerList = new LinkedList<ComputerModel>();
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = daoFactory.getConnection();
     	if (offset < 0) {
     		offset = 0;
     	}
@@ -212,14 +218,14 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        LOGGER.error("computerDAO getComputersByPage failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection();
+	    daoFactory.closeConnection();
         LOGGER.info("computerDAO getComputersByPage succeed");
 		return computerList;
 	}
 
 	@Override
 	public int totalRow(String searchBy) {
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = daoFactory.getConnection();
     	int nb = 0;
 	    try {
 	        // create new connection and statement
@@ -243,7 +249,7 @@ public class ComputerDAOImpl implements ComputerDAO {
 	        LOGGER.error("computerDAO totalRow failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection();
+	    daoFactory.closeConnection();
         LOGGER.info("computerDAO totalRow succeed");
 	    return nb;
 	}

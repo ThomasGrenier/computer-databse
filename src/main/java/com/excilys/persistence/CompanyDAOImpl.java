@@ -10,19 +10,26 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.exception.DAOException;
 import com.excilys.mapper.CompanyMapper;
 import com.excilys.model.CompanyModel;
 
+@Repository
 public class CompanyDAOImpl implements CompanyDAO {
+	
+	@Autowired
+	DAOFactory daoFactory;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAOImpl.class);
 
 	@Override
 	public List<CompanyModel> listAll() {
 	    List<CompanyModel> companyList = null;
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = daoFactory.getConnection();
 	    try {
 	        // create new statement
 	        Statement st = connection.createStatement();
@@ -38,7 +45,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	        LOGGER.error("companyDao listAll failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection();
+	    daoFactory.closeConnection();
         LOGGER.info("companyDao listAll succeed");
 	    return companyList;
 	}
@@ -46,7 +53,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	@Override
 	public CompanyModel getById(long id) {
 		CompanyModel companyModel = null;
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = daoFactory.getConnection();
 	    try {
 	        // create new statement
 	    	int i = 1;
@@ -66,7 +73,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	        LOGGER.error("companyDao getById failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection();
+	    daoFactory.closeConnection();
         LOGGER.info("companyDao getById succeed");
 	    return companyModel;
 	}
@@ -74,7 +81,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	
 	public List<CompanyModel> getCompaniesByPage(int offset, int limit, String searchBy, String orderBy, String option) {
 		List<CompanyModel> companyList = new LinkedList<CompanyModel>();
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = daoFactory.getConnection();
 	    try {
 	        // create new connection and statement
 	        String query = "SELECT * FROM company";
@@ -103,14 +110,14 @@ public class CompanyDAOImpl implements CompanyDAO {
 	        LOGGER.error("companyDao getCompaniesByPage failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection();
+	    daoFactory.closeConnection();
         LOGGER.info("companyDao getCompaniesByPage succeed");
 		return companyList;
 	}
 
 	@Override
 	public int totalRow(String searchBy) {
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = daoFactory.getConnection();
     	int nb = 0;
 	    try {
 	        // create new connection and statement
@@ -133,14 +140,15 @@ public class CompanyDAOImpl implements CompanyDAO {
 	        LOGGER.error("companyDao totalRow failed");
 	    	throw new DAOException(e);
 	    }
-	    DAOFactory.INSTANCE.CloseConnection();
+	    daoFactory.closeConnection();
         LOGGER.info("companyDao totalRow succeed");
 	    return nb;
 	}
 
 	@Override
+	@Transactional
 	public void delete(long id) {
-    	Connection connection = DAOFactory.INSTANCE.getConnection();
+    	Connection connection = daoFactory.getConnection();
 		try {
 			
 	        // create new connection and statement
@@ -157,7 +165,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	        st.executeUpdate();
 			
 			st.close();
-	        
+			
 	        query = "DELETE FROM company WHERE company.id=?";
 	        st = connection.prepareStatement(query);
 	        st.setLong(1,  id);
@@ -176,6 +184,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	    	throw new DAOException(e);
 	    }
 	    //DAOFactory.INSTANCE.CloseConnection(connection);
+	    daoFactory.closeConnection();
         LOGGER.info("companyDao delete succeed");
 	}
 }

@@ -7,9 +7,14 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.model.CompanyDTO;
 import com.excilys.model.ComputerDTO;
@@ -18,8 +23,22 @@ import com.excilys.service.ComputerServiceImpl;
 import com.excilys.utils.Regex;
 
 @SuppressWarnings("serial")
+@Controller
+@WebServlet(urlPatterns = "/editComputer")
 public class EditComputer extends HttpServlet {
 
+	@Autowired
+	ComputerServiceImpl computerService;
+
+	@Autowired
+	CompanyServiceImpl companyService;
+
+
+	@Override
+	public void init() throws ServletException {
+		super.init();
+		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
+	}
 
 	@Override
 	protected void doGet(HttpServletRequest request,
@@ -31,8 +50,8 @@ public class EditComputer extends HttpServlet {
 				id = Integer.parseInt(request.getParameter("id"));
 			}
 		}
-		List<CompanyDTO> comp = new CompanyServiceImpl().listAll();
-		ComputerDTO m = new ComputerServiceImpl().getById(id);
+		List<CompanyDTO> comp = companyService.listAll();
+		ComputerDTO m = computerService.getById(id);
 		if (m.getIntroduced() != null) {
 			String parseIntro = m.getIntroduced().toString().replaceAll("T", " ");
 			request.setAttribute("parseIntro", parseIntro);
@@ -111,9 +130,9 @@ public class EditComputer extends HttpServlet {
 			return ;
 		}
 
-		new ComputerServiceImpl().update(id, name, introduced, discontinued, idCompany);
+		computerService.update(id, name, introduced, discontinued, idCompany);
 
-		request.setAttribute("page", new ComputerServiceImpl().getPage(1, 10, "", "id", ""));
+		request.setAttribute("page", computerService.getPage(1, 10, "", "id", ""));
 		getServletContext()
 		.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(
 				request, response);
