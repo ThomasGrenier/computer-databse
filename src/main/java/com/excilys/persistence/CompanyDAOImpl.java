@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.excilys.mapper.CompanyMapper;
 import com.excilys.model.CompanyModel;
 
-@Repository
+@Repository("companyDAO")
 public class CompanyDAOImpl implements CompanyDAO {
 
 	@Autowired
@@ -39,7 +39,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 			query += " WHERE company.name LIKE '%" + searchBy + "%'";
 		}
 		if (!orderBy.isEmpty()) {
-			query += " ORDER BY compu." + orderBy;
+			query += " ORDER BY company." + orderBy;
 		}
 		if (!option.isEmpty()) {
 			query += " " + option;

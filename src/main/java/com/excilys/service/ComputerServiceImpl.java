@@ -7,6 +7,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.excilys.mapper.DTOMapper;
@@ -14,13 +15,14 @@ import com.excilys.model.CompanyModel;
 import com.excilys.model.ComputerDTO;
 import com.excilys.model.ComputerModel;
 import com.excilys.model.Page;
-import com.excilys.persistence.ComputerDAOImpl;
+import com.excilys.persistence.ComputerDAO;
 
-@Service
+@Service("computerService")
 public class ComputerServiceImpl implements ComputerService {
 
 	@Autowired
-	ComputerDAOImpl computerDao;
+	@Qualifier("computerDAO")
+	ComputerDAO computerDao;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerServiceImpl.class);
 

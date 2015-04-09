@@ -13,13 +13,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 
 import com.excilys.model.CompanyDTO;
 import com.excilys.model.ComputerDTO;
-import com.excilys.service.CompanyServiceImpl;
-import com.excilys.service.ComputerServiceImpl;
+import com.excilys.service.CompanyService;
+import com.excilys.service.ComputerService;
 import com.excilys.utils.Regex;
 
 @SuppressWarnings("serial")
@@ -28,10 +29,12 @@ import com.excilys.utils.Regex;
 public class EditComputer extends HttpServlet {
 
 	@Autowired
-	ComputerServiceImpl computerService;
+	@Qualifier("computerService")
+	ComputerService computerService;
 
 	@Autowired
-	CompanyServiceImpl companyService;
+	@Qualifier("companyService")
+	CompanyService companyService;
 
 
 	@Override

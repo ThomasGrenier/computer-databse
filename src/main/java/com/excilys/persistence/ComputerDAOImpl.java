@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import com.excilys.mapper.ComputerMapper;
 import com.excilys.model.ComputerModel;
 
-@Repository
+@Repository("computerDAO")
 public class ComputerDAOImpl implements ComputerDAO {
 
 	@Autowired
@@ -83,6 +83,11 @@ public class ComputerDAOImpl implements ComputerDAO {
 	public void delete(long id) {
 		jdbcTemplate.update("DELETE FROM computer WHERE id = ?", new Object[] {id});
 		LOGGER.info("computerDAO delete succeed");
+	}
+	
+	public void deleteByCompanyId(long id) {
+		jdbcTemplate.update("DELETE FROM computer WHERE computer.company_id=?", new Object[] {id});
+		LOGGER.info("computerDAO deleteByCompanyId succeed");
 	}
 
 	public List<ComputerModel> getComputersByPage(int offset, int limit, String searchBy, String orderBy, String option) {

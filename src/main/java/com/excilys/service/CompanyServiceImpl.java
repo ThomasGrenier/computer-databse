@@ -6,19 +6,27 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.mapper.DTOMapper;
 import com.excilys.model.CompanyDTO;
 import com.excilys.model.CompanyModel;
 import com.excilys.model.Page;
-import com.excilys.persistence.CompanyDAOImpl;
+import com.excilys.persistence.CompanyDAO;
+import com.excilys.persistence.ComputerDAO;
 
-@Service
+@Service("companyService")
 public class CompanyServiceImpl implements CompanyService {
 	
 	@Autowired
-	CompanyDAOImpl companyDao;
+	@Qualifier("companyDAO")
+	CompanyDAO companyDao;
+	
+	@Autowired
+	@Qualifier("computerDAO")
+	ComputerDAO computerDao;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyServiceImpl.class);
 	
@@ -76,9 +84,13 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 
 	@Override
+	@Transactional
 	public void delete(long id) {
 		LOGGER.info("CompanyService delete");
+		computerDao.deleteByCompanyId(id);
+		LOGGER.info("CompanyService deleteByCompanyId succeed");
 		companyDao.delete(id);
+		LOGGER.info("CompanyService delete succeed");
 	}
 
 }
