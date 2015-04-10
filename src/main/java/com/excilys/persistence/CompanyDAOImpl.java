@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.excilys.mapper.CompanyMapper;
 import com.excilys.model.CompanyModel;
@@ -62,9 +61,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 	}
 
 	@Override
-	@Transactional
 	public void delete(long id) {
-		jdbcTemplate.update("DELETE FROM computer WHERE computer.company_id=?", new Object[] {id});
 		jdbcTemplate.update("DELETE FROM company WHERE company.id=?", new Object[] {id});
 		LOGGER.info("companyDao delete succeed");
 	}
