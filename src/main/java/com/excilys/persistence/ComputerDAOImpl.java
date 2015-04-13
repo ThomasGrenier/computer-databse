@@ -50,7 +50,11 @@ public class ComputerDAOImpl implements ComputerDAO {
 		} else {
 			list.add(null);
 		}
-		list.add(idCompany);
+		if (idCompany == -1) {
+			list.add(null);
+		} else {
+			list.add(idCompany);
+		}
 
 		jdbcTemplate.update(query, list.toArray());
 		LOGGER.info("computerDAO create succeed");

@@ -1,31 +1,27 @@
 package com.excilys.controller;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
-
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import com.excilys.model.CompanyDTO;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 import com.excilys.utils.Regex;
 
-@SuppressWarnings("serial")
 @Controller
-@WebServlet(urlPatterns = "/addComputer")
-public class AddComputer extends HttpServlet {
+@RequestMapping(value="/addComputer")
+public class AddComputer {
 
 	@Autowired
 	@Qualifier("computerService")
@@ -34,93 +30,82 @@ public class AddComputer extends HttpServlet {
 	@Autowired
 	@Qualifier("companyService")
 	CompanyService companyService;
-
-
-	@Override
-	public void init() throws ServletException {
-		super.init();
-		SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-	}
-
-	@Override
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
+	
+	@RequestMapping(value = "", method = RequestMethod.GET)
+	public String index(Model model) {
+		
 		List<CompanyDTO> comp = companyService.listAll();
-		request.setAttribute("companies", comp);
-		getServletContext()
-		.getRequestDispatcher("/WEB-INF/views/addComputer.jsp").forward(
-				request, response);
+		model.addAttribute("companies", comp);
+		
+		return "addComputer";
 	}
+	
 
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-
+	@RequestMapping(value = "", method = RequestMethod.POST)
+	public String addComputer(@RequestParam("name") String nameParam,
+			@RequestParam("intro") Optional<String> introParam,
+			@RequestParam("disco") Optional<String> discoParam,
+			@RequestParam("comp") Optional<Integer> compParam, Model model) {
+		
 		LocalDateTime introduced = null;
 		LocalDateTime discontinued = null;
 		long idCompany = 0L;
 
-		String name = request.getParameter("name");
+		String name = nameParam;
 
 		boolean error = false;
 
 		if (name == null || name.isEmpty()) {
-			request.setAttribute("errorName", "The name is required");
+			model.addAttribute("errorName", "label.requiredName");
 			error = true;
 		} else {
-			request.setAttribute("name", name);
+			model.addAttribute("name", name);
 		}
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-		if (request.getParameter("intro") != null) {
-			if (!request.getParameter("intro").isEmpty()) {
-				if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), request.getParameter("intro").trim())) {
-					introduced = LocalDateTime.parse(request.getParameter("intro"), formatter);
-					request.setAttribute("intro", request.getParameter("intro"));
+		if (introParam.isPresent()) {
+			if (!introParam.get().isEmpty()) {
+				if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), introParam.get().trim())) {
+					introduced = LocalDateTime.parse(introParam.get(), formatter);
+					model.addAttribute("intro", introParam.get());
 				} else {
-					request.setAttribute("errorIntro", "bad Format (yyyy-MM-dd HH:mm:ss)");
+					model.addAttribute("errorIntro", "label.badFormat");
 					error = true;
 				}
 			}
 		}
 
-		if (request.getParameter("disco") != null) {
-			if (!request.getParameter("disco").isEmpty()) {
-				if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), request.getParameter("disco").trim())) {
-					discontinued = LocalDateTime.parse(request.getParameter("disco"), formatter);
-					request.setAttribute("disco", request.getParameter("disco"));
+		if (discoParam.isPresent()) {
+			if (!discoParam.get().isEmpty()) {
+				if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), discoParam.get().trim())) {
+					discontinued = LocalDateTime.parse(discoParam.get(), formatter);
+					model.addAttribute("disco", discoParam.get());
 				} else {
-					request.setAttribute("errorDisco", "bad Format (yyyy-MM-dd HH:mm:ss)");
+					model.addAttribute("errorDisco", "label.badFormat");
 					error = true;
 				}
 			}
 		}
 
-		if (request.getParameter("comp") != null) {
-			if (Pattern.matches(Regex.DIGIT.getRegex(), request.getParameter("comp"))) {
-				idCompany = Integer.parseInt(request.getParameter("comp"));
-				request.setAttribute("comp", idCompany);
+		if (compParam.isPresent()) {
+			if ((Pattern.matches(Regex.DIGIT.getRegex(), compParam.get().toString())) || (compParam.get() == -1)) {
+				idCompany = compParam.get();
+				model.addAttribute("comp", idCompany);
 			} else {
-				request.setAttribute("errorComp", "company not valid");
+				model.addAttribute("errorComp", "label.invalidCompany");
 				error = true;
 			}
 		}
 
 		if (error) {
-			doGet(request, response);
-			return ;
+			List<CompanyDTO> comp = companyService.listAll();
+			model.addAttribute("companies", comp);
+			return "addComputer";
 		}
-
-		request.removeAttribute("intro");
-		request.removeAttribute("disco");
-		request.removeAttribute("comp");
 
 		computerService.create(name, introduced, discontinued, idCompany);
 
-		request.setAttribute("page", computerService.getPage(1, 10, "", "id", ""));
-		getServletContext()
-		.getRequestDispatcher("/WEB-INF/views/dashboard.jsp").forward(
-				request, response);
+		return "redirect:dashboard";
 	}
 }

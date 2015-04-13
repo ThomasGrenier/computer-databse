@@ -2,34 +2,30 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="mylib"%>
+<%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
 <!DOCTYPE html>
 <html>
 <mylib:header />
 <body>
-	<header class="navbar navbar-inverse navbar-fixed-top">
-		<div class="container">
-			<a class="navbar-brand" href="dashboard?limit=${page.nbResult}">
-				Application - Computer Database </a>
-		</div>
-	</header>
+	<mylib:bodyHeader />
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${page.totalResult} Computers found</h1>
+			<h1 id="homeTitle">${page.totalResult} <spring:message code="label.computerFound"></spring:message></h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="Search name" /> <input
-							type="submit" id="searchsubmit" value="Filter by name"
+							class="form-control" placeholder="<spring:message code="label.search"></spring:message>" /> <input
+							type="submit" id="searchsubmit" value="<spring:message code="label.filter"></spring:message>"
 							class="btn btn-primary" />
 					</form>
 				</div>
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer">Add
-						Computer</a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();">Edit</a>
+					<a class="btn btn-success" id="addComputer" href="addComputer"><spring:message code="label.addComputer">
+					</spring:message></a> <a class="btn btn-default" id="editComputer" href="#"
+						onclick="$.fn.toggleEditMode();"><spring:message code="label.edit"></spring:message></a>
 				</div>
 			</div>
 		</div>
@@ -68,7 +64,7 @@
 							</c:choose>
 							</c:url>"
 							aria-label="LastPage"> <span aria-hidden="true">
-									Computer name</span>
+									<spring:message code="label.computerName"></spring:message></span>
 						</a> <c:if test="${page.orderBy == 'name' }">
 								<div class="right">
 									<c:choose>
@@ -97,7 +93,7 @@
 							</c:choose>
 							</c:url>"
 							aria-label="LastPage"> <span aria-hidden="true">
-									Introduced date</span>
+									<spring:message code="label.introduced"></spring:message></span>
 						</a> <c:if test="${page.orderBy == 'introduced' }">
 								<div class="right">
 									<c:choose>
@@ -127,7 +123,7 @@
 							</c:choose>
 							</c:url>"
 							aria-label="LastPage"> <span aria-hidden="true">
-									Discontinued date</span>
+									<spring:message code="label.discontinued"></spring:message></span>
 						</a> <c:if test="${page.orderBy == 'discontinued' }">
 								<div class="right">
 									<c:choose>
@@ -157,7 +153,7 @@
 							</c:choose>
 							</c:url>"
 							aria-label="LastPage"> <span aria-hidden="true">
-									Company</span>
+									<spring:message code="label.company"></spring:message></span>
 						</a> <c:if test="${page.orderBy == 'company_id' }">
 								<div class="right">
 									<c:choose>

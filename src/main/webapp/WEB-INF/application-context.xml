@@ -9,7 +9,7 @@
 	http://www.springframework.org/schema/context
 	http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<context:component-scan base-package="com.excilys" />
+	<context:component-scan base-package="com.excilys.persistence, com.excilys.service" />
 	<context:property-placeholder location="classpath:globalConfig.properties" />
 
 	<beans profile="DEV">
@@ -35,5 +35,14 @@
 			<property name="dataSource" ref="dataSource" />
 		</bean>
 		<tx:annotation-driven proxy-target-class="true" />
+	</beans>
+	
+	
+	<beans>
+		<bean id="messageSource"
+			class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+			<property name="basename" value="classpath:messages"></property>
+			<property name="defaultEncoding" value="UTF-8"></property>
+		</bean>
 	</beans>
 </beans>

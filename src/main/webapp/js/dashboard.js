@@ -43,16 +43,23 @@ $(function() {
 
 // Function toggleEditMode
 (function ( $ ) {
-
     $.fn.toggleEditMode = function() {
         if($(".editMode").is(":visible")) {
-            $(".editMode").hide();
-            $("#editComputer").text("Edit");
-        }
-        else {
-            $(".editMode").show();
-            $("#editComputer").text("View");
-        }
+
+			$(".editMode").hide();
+			if ($("#editComputer").text() === "View") {
+				$("#editComputer").text("Edit");
+			} else {
+				$("#editComputer").text("Edition");
+			}
+		} else {
+			$(".editMode").show();
+			if ($("#editComputer").text() === "Edit") {
+				$("#editComputer").text("View");
+			} else {
+				$("#editComputer").text("Vue");
+			}
+		}
         return this;
     };
 
@@ -62,9 +69,16 @@ $(function() {
 // Function delete selected: Asks for confirmation to delete selected computers, then submits it to the deleteForm
 (function ( $ ) {
     $.fn.deleteSelected = function() {
-        if (confirm("Are you sure you want to delete the selected computers?")) { 
-            $('#deleteForm input[name=selection]').setCheckboxValues('selection','cb');
-            $('#deleteForm').submit();
+    	if ($("#editComputer").text() === "View") {
+	        if (confirm("Are you sure you want to delete the selected computers?")) { 
+	            $('#deleteForm input[name=selection]').setCheckboxValues('selection','cb');
+	            $('#deleteForm').submit();
+	        }
+        } else {
+	        if (confirm("Etes-vous sûr de vouloir supprimer les ordinateurs sélectionnés ?")) { 
+	            $('#deleteForm input[name=selection]').setCheckboxValues('selection','cb');
+	            $('#deleteForm').submit();
+	        }
         }
     };
 }( jQuery ));
