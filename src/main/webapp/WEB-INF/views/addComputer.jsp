@@ -7,7 +7,7 @@
 <html>
 <mylib:header />
 <body>
-	<mylib:bodyHeader />
+	<mylib:bodyHeader method="2"/>
 	<section id="main">
 		<div class="container">
 			<div class="row">
@@ -20,7 +20,7 @@
 							<div class="form-group">
 								<label for="computerName"><spring:message code="label.computerName"></spring:message></label> <input
 									type="text" class="form-control" id="computerName" name="name"
-									placeholder="Computer name" value="${name }">
+									placeholder="<spring:message code="label.computerName"></spring:message>" value="${name }">
 								<div id="errorName">
 									<c:if test="${errorName != null}"><spring:message code="${errorName }"></spring:message></c:if>
 								</div>
@@ -28,7 +28,7 @@
 							<div class="form-group">
 								<label for="introduced"><spring:message code="label.introduced"></spring:message></label> <input
 									type="text" class="form-control" id="introduced" name="intro"
-									placeholder="Introduced date" value="${intro }">
+									placeholder="<spring:message code="label.introduced"></spring:message>" value="${intro }">
 								<div id="errorIntro">
 									<c:if test="${errorIntro != null}"><spring:message code="${errorIntro }"></spring:message></c:if>
 								</div>
@@ -36,7 +36,7 @@
 							<div class="form-group">
 								<label for="discontinued"><spring:message code="label.discontinued"></spring:message></label> <input
 									type="text" class="form-control" id="discontinued" name="disco"
-									placeholder="Discontinued date" value="${disco }">
+									placeholder="<spring:message code="label.discontinued"></spring:message>" value="${disco }">
 								<div id="errorDisco">
 									<c:if test="${errorDisco != null}"><spring:message code="${errorDisco }"></spring:message></c:if>
 								</div>

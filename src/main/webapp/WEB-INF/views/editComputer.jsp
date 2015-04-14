@@ -7,7 +7,7 @@
 <html>
 	<mylib:header />
 <body>
-	<mylib:bodyHeader />
+	<mylib:bodyHeader method="3"/>
     <section id="main">
         <div class="container">
             <div class="row">
