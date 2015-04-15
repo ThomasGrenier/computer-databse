@@ -6,10 +6,10 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.service.ComputerService;
 import com.excilys.utils.Regex;
@@ -23,12 +23,12 @@ public class Dashboard {
 	ComputerService computerService;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String index(@RequestParam("offset") Optional<Integer> offsetParam,
+	public ModelAndView index(@RequestParam("offset") Optional<Integer> offsetParam,
 			@RequestParam("limit") Optional<Integer> limitParam,
 			@RequestParam("search") Optional<String> searchParam,
 			@RequestParam("order") Optional<String> orderParam,
 			@RequestParam("option") Optional<String> optionParam,
-			Model model) {
+			ModelAndView model) {
 		int offset = 1;
 		int limit = 10;
 		if (offsetParam.isPresent()) {
@@ -60,13 +60,14 @@ public class Dashboard {
 			option = optionParam.get();
 		}
 
-		model.addAttribute("page", computerService.getPage(offset, limit, test, order, option));
-		return "dashboard";
+		model.addObject("page", computerService.getPage(offset, limit, test, order, option));
+		model.setViewName("dashboard");
+		return model;
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public String deleteComputer(@RequestParam("selection") Optional<String> selectionParam,
-			Model model) {
+	public ModelAndView deleteComputer(@RequestParam("selection") Optional<String> selectionParam,
+			ModelAndView model) {
 
 		if (selectionParam.isPresent()) {
 			String selectedComputersId = selectionParam.get();
@@ -79,7 +80,8 @@ public class Dashboard {
 			}
 		}
 		
-		model.addAttribute("page", computerService.getPage(1, 10, "", "id", ""));
-		return "dashboard";
+		model.addObject("page", computerService.getPage(1, 10, "", "id", ""));
+		model.setViewName("dashboard");
+		return model;
 	}
 }

@@ -9,10 +9,10 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.excilys.model.CompanyDTO;
 import com.excilys.model.ComputerDTO;
@@ -33,7 +33,7 @@ public class EditComputer {
 	CompanyService companyService;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public String index(@RequestParam("id") Optional<Integer> idParam, Model model) {
+	public ModelAndView index(@RequestParam("id") Optional<Integer> idParam, ModelAndView model) {
 
 		int id = -1;
 		if (idParam.isPresent()) {
@@ -48,21 +48,22 @@ public class EditComputer {
 		
 		List<CompanyDTO> comp = companyService.listAll();
 		ComputerDTO m = computerService.getById(id);
-		model.addAttribute("parseIntro", m.getIntroduced());
-		model.addAttribute("parseDisco", m.getDiscontinued());
-		model.addAttribute("computer", m);
-		model.addAttribute("companies", comp);
+		model.addObject("parseIntro", m.getIntroduced());
+		model.addObject("parseDisco", m.getDiscontinued());
+		model.addObject("computer", m);
+		model.addObject("companies", comp);
 		
-		return "editComputer";
+		model.setViewName("editComputer");
+		return model;
 	}
 
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public String editComputer(@RequestParam("id") Optional<Integer> idParam,
+	public ModelAndView editComputer(@RequestParam("id") Optional<Integer> idParam,
 			@RequestParam("name") String nameParam,
 			@RequestParam("intro") Optional<String> introParam,
 			@RequestParam("disco") Optional<String> discoParam,
-			@RequestParam("comp") Optional<Integer> compParam, Model model) {
+			@RequestParam("comp") Optional<Integer> compParam, ModelAndView model) {
 		
 		long id = 0L;
 		String name = "";
@@ -91,7 +92,7 @@ public class EditComputer {
 				if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), introParam.get().trim())) {
 					introduced = LocalDateTime.parse(introParam.get().trim(), formatter);
 				} else {
-					model.addAttribute("errorIntro", "label.badFormat");
+					model.addObject("errorIntro", "label.badFormat");
 					error = true;
 				}
 			}
@@ -102,7 +103,7 @@ public class EditComputer {
 				if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), discoParam.get().trim())) {
 					discontinued = LocalDateTime.parse(discoParam.get().trim(), formatter);
 				} else {
-					model.addAttribute("errorDisco", "label.badFormat");
+					model.addObject("errorDisco", "label.badFormat");
 					error = true;
 				}
 			}
@@ -113,7 +114,7 @@ public class EditComputer {
 				if ((Pattern.matches(Regex.DIGIT.getRegex(), compParam.get().toString())) || (compParam.get().toString().equals("-1"))) {
 					idCompany = compParam.get();
 				} else {
-					model.addAttribute("errorComp", "label.invalidCompany");
+					model.addObject("errorComp", "label.invalidCompany");
 					error = true;
 				}
 			}
@@ -121,16 +122,18 @@ public class EditComputer {
 
 		if (error) {
 			List<CompanyDTO> comp = companyService.listAll();
-			model.addAttribute("companies", comp);
+			model.addObject("companies", comp);
 			ComputerDTO m = computerService.getById(id);
-			model.addAttribute("parseIntro", m.getIntroduced());
-			model.addAttribute("parseDisco", m.getDiscontinued());
-			model.addAttribute("computer", m);
-			return "editComputer";
+			model.addObject("parseIntro", m.getIntroduced());
+			model.addObject("parseDisco", m.getDiscontinued());
+			model.addObject("computer", m);
+			model.setViewName("editComputer");
+			return model;
 		}
 
 		computerService.update(id, name, introduced, discontinued, idCompany);
-		
-		return "redirect:dashboard";
+
+		model.setViewName("redirect:dashboard");
+		return model;
 	}
 }
