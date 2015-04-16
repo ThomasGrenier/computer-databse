@@ -1,9 +1,19 @@
 package com.excilys.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="company")
 public class CompanyModel {
 
+	@Id
+	@Column(name="id")
 	private long id;
-	
+
+	@Column(name="name")
 	private String name;
 	
 	public CompanyModel(long id, String name) {

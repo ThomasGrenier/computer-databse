@@ -2,16 +2,32 @@ package com.excilys.model;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="computer")
 public class ComputerModel {
 
+	@Id
+	@Column(name="id")
 	private long id;
-	
+
+	@Column(name="name")
 	private String name;
-	
+
+	@Column(name="introduced")
 	private LocalDateTime introduced;
-	
+
+	@Column(name="discontinued")
 	private LocalDateTime discontinued;
-	
+
+	@OneToOne
+	@JoinColumn(name="id")
 	private CompanyModel company;
 	
 	public ComputerModel(long id, String name, LocalDateTime introduced, LocalDateTime discontinued, CompanyModel company) {

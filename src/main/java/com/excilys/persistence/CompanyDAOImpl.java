@@ -2,6 +2,9 @@ package com.excilys.persistence;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,19 +13,29 @@ import org.springframework.stereotype.Repository;
 
 import com.excilys.mapper.CompanyMapper;
 import com.excilys.model.CompanyModel;
+import com.excilys.model.QCompanyModel;
+import com.mysema.query.jpa.impl.JPAQuery;
 
 @Repository("companyDAO")
 public class CompanyDAOImpl implements CompanyDAO {
 
 	@Autowired
 	JdbcTemplate jdbcTemplate;
+	
+	@Autowired
+	private EntityManagerFactory entityManagerFactory;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAOImpl.class);
 
 	@Override
 	public List<CompanyModel> listAll() {
 		LOGGER.info("companyDao listAll");
-		return jdbcTemplate.query("SELECT * FROM company", new CompanyMapper());
+		EntityManager em = entityManagerFactory.createEntityManager();
+		JPAQuery query = new JPAQuery(em);
+		QCompanyModel company = QCompanyModel.companyModel;
+
+		List<CompanyModel> companies = query.from(company).list(company);
+		return companies;
 	}
 
 	@Override
