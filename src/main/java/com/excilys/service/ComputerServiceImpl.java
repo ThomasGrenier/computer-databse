@@ -15,6 +15,7 @@ import com.excilys.model.CompanyModel;
 import com.excilys.model.ComputerDTO;
 import com.excilys.model.ComputerModel;
 import com.excilys.model.Page;
+import com.excilys.persistence.CompanyDAO;
 import com.excilys.persistence.ComputerDAO;
 
 @Service("computerService")
@@ -23,6 +24,10 @@ public class ComputerServiceImpl implements ComputerService {
 	@Autowired
 	@Qualifier("computerDAO")
 	ComputerDAO computerDao;
+
+	@Autowired
+	@Qualifier("companyDAO")
+	CompanyDAO companyDao;
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerServiceImpl.class);
 
@@ -50,7 +55,13 @@ public class ComputerServiceImpl implements ComputerService {
 	@Override
 	public long create(String name, LocalDateTime introduced, LocalDateTime discontinued, long idCompany) {
 		LOGGER.info("ComputerService create");
-		return computerDao.create(name, introduced, discontinued, idCompany);
+		CompanyModel company = companyDao.getById(idCompany);
+		ComputerModel computer = new ComputerModel();
+		computer.setName(name);
+		computer.setIntroduced(introduced);
+		computer.setDiscontinued(discontinued);
+		computer.setCompany(company);
+		return computerDao.create(computer);
 	}
 
 	@Override

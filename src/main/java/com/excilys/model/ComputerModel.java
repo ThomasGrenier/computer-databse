@@ -5,9 +5,10 @@ import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table(name="computer")
@@ -21,13 +22,14 @@ public class ComputerModel {
 	private String name;
 
 	@Column(name="introduced")
+	@Type(type="com.excilys.utils.CustomLocalDateTimeUserType")
 	private LocalDateTime introduced;
 
 	@Column(name="discontinued")
+	@Type(type="com.excilys.utils.CustomLocalDateTimeUserType")
 	private LocalDateTime discontinued;
 
 	@OneToOne
-	@JoinColumn(name="id")
 	private CompanyModel company;
 	
 	public ComputerModel(long id, String name, LocalDateTime introduced, LocalDateTime discontinued, CompanyModel company) {
@@ -39,7 +41,6 @@ public class ComputerModel {
 	}
 	
 	public ComputerModel() {
-		this.id = 0;
 		this.name = "";
 		this.introduced = null;
 		this.discontinued = null;

@@ -1,19 +1,27 @@
 package com.excilys.persistence;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.EntityTransaction;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.mapper.ComputerMapper;
+import com.excilys.model.CompanyModel;
 import com.excilys.model.ComputerModel;
+import com.excilys.model.QCompanyModel;
+import com.excilys.model.QComputerModel;
+import com.mysema.query.jpa.impl.JPADeleteClause;
+import com.mysema.query.jpa.impl.JPAQuery;
+import com.mysema.query.jpa.impl.JPAUpdateClause;
+import com.mysema.query.types.OrderSpecifier;
+import com.mysema.query.types.path.PathBuilder;
 
 @Repository("computerDAO")
 public class ComputerDAOImpl implements ComputerDAO {
@@ -21,117 +29,181 @@ public class ComputerDAOImpl implements ComputerDAO {
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 
+	@Autowired
+	private EntityManagerFactory entityManagerFactory;
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAOImpl.class);
 
 	@Override
 	public List<ComputerModel> listAll() {
 		LOGGER.info("computerDAO listAll");
-		return jdbcTemplate.query("SELECT * FROM computer as computer left outer join company as company on company.id=computer.company_id", new ComputerMapper());
+		EntityManager em = entityManagerFactory.createEntityManager();
+		JPAQuery query = new JPAQuery(em);
+		QComputerModel computer = QComputerModel.computerModel;
+		QCompanyModel company = QCompanyModel.companyModel;
+
+		List<ComputerModel> computers = query.from(computer)
+				.leftJoin(computer.company, company)
+				.list(computer);
+		em.close();
+		return computers;
 	}
 
 	@Override
 	public ComputerModel getById(long id) {
-		String query = "SELECT * FROM computer as computer left outer join company as company on company.id=computer.company_id where computer.id=?";
+		
+		EntityManager em = entityManagerFactory.createEntityManager();
+		JPAQuery query = new JPAQuery(em);
+		QComputerModel computer = QComputerModel.computerModel;
+		QCompanyModel company = QCompanyModel.companyModel;
 
+		ComputerModel computers = query.from(computer)
+				.leftJoin(computer.company, company)
+				.where(computer.id.eq(id))
+				.uniqueResult(computer);
 		LOGGER.info("computerDAO getById");
-		return jdbcTemplate.queryForObject(query, new Object[] {id}, new ComputerMapper());
+		em.close();
+		return computers;
 	}
 
 	@Override
-	public long create(String name, LocalDateTime introduced, LocalDateTime discontinued, long idCompany) {
-		String query = "insert into computer (name,introduced,discontinued,company_id) values (?, ?, ?, ?);";
-		List<Object> list = new ArrayList<Object>();
-		list.add(name);
-		if (introduced != null) {
-			list.add(introduced.toString());
-		} else {
-			list.add(null);
-		}
-		if (discontinued != null) {
-			list.add(discontinued.toString());
-		} else {
-			list.add(null);
-		}
-		if (idCompany == -1) {
-			list.add(null);
-		} else {
-			list.add(idCompany);
-		}
+	public long create(ComputerModel computer) {
 
-		jdbcTemplate.update(query, list.toArray());
-		LOGGER.info("computerDAO create succeed");
+		EntityManager em = entityManagerFactory.createEntityManager();
+		EntityTransaction transaction = em.getTransaction();
+		
+		try {
+			transaction.begin();
+			em.persist(computer);
+			transaction.commit();
+			LOGGER.info("computerDAO create succeed");
+		} catch(Exception e) {
+			transaction.rollback();
+			LOGGER.info("computerDAO create failed");
+		}
+		em.close();
+
 		return 1;
 	}
 
 	@Override
+	@Transactional
 	public void update(ComputerModel computer) {
-		String query = "SELECT * FROM computer as computer left outer join company as company on company.id=computer.company_id where computer.id=" + computer.getId();
+		EntityManager em = entityManagerFactory.createEntityManager();
+		QComputerModel computerm = QComputerModel.computerModel;
 
-		ComputerModel comp = jdbcTemplate.queryForObject(query, new ComputerMapper());
+		EntityTransaction transaction = em.getTransaction();
+		try {
+			transaction.begin();
 
-		String actualName = comp.getName();
-		LocalDateTime actualIntroduced = ((comp.getIntroduced() == null) ? null : comp.getIntroduced());
-		LocalDateTime actualDiscontinued = ((comp.getDiscontinued() == null) ? null : comp.getDiscontinued());
-		long actualCompany = comp.getCompany().getId();
-
-		query = "UPDATE computer " +
-				"SET name = '" + (((computer.getName() == null) || (computer.getName().equals(""))) ? actualName : computer.getName()) +
-				"', introduced = '" + ((computer.getIntroduced() == null) ? actualIntroduced : computer.getIntroduced()) + 
-				"', discontinued = '" + ((computer.getDiscontinued() == null) ? actualDiscontinued : computer.getDiscontinued()) +
-				"', company_id = '" + ((computer.getCompany().getId() == -1) ? actualCompany : computer.getCompany().getId()) + "' " +
-				"WHERE id = " + computer.getId() + ";";
-
-		jdbcTemplate.update(query);
-		LOGGER.info("computerDAO update succeed");
+			JPAUpdateClause jpa = new JPAUpdateClause(em, computerm)
+			.where(computerm.id.eq(computer.getId()))
+			.set(computerm.name, computer.getName())
+			.set(computerm.introduced, computer.getIntroduced())
+			.set(computerm.discontinued, computer.getDiscontinued())
+			.set(computerm.company, computer.getCompany());
+			jpa.execute();
+			
+			transaction.commit();
+			LOGGER.info("computerDAO update succeed");
+		} catch (Exception e) {
+			transaction.rollback();
+			LOGGER.info("computerDAO update failed");
+		}
+		em.close();
 	}
 
 	@Override
+	@Transactional
 	public void delete(long id) {
-		jdbcTemplate.update("DELETE FROM computer WHERE id = ?", new Object[] {id});
-		LOGGER.info("computerDAO delete succeed");
-	}
-	
-	public void deleteByCompanyId(long id) {
-		jdbcTemplate.update("DELETE FROM computer WHERE computer.company_id=?", new Object[] {id});
-		LOGGER.info("computerDAO deleteByCompanyId succeed");
+		EntityManager em = entityManagerFactory.createEntityManager();
+		QComputerModel computer = QComputerModel.computerModel;
+
+		EntityTransaction transaction = em.getTransaction();
+		try {
+			transaction.begin();
+
+			JPADeleteClause jpa = new JPADeleteClause(em, computer).where(computer.id.eq(id));
+			jpa.execute();
+			
+			transaction.commit();
+			LOGGER.info("computerDAO delete succeed");
+		} catch (Exception e) {
+			transaction.rollback();
+			LOGGER.info("computerDAO delete failed");
+		}
+		em.close();
 	}
 
+	@Transactional
+	public void deleteByCompanyId(long id) {
+		EntityManager em = entityManagerFactory.createEntityManager();
+		QComputerModel computer = QComputerModel.computerModel;
+
+		EntityTransaction transaction = em.getTransaction();
+		try {
+			transaction.begin();
+
+			JPADeleteClause jpa = new JPADeleteClause(em, computer).where(computer.company.id.eq(id));
+			jpa.execute();
+			
+			transaction.commit();
+			LOGGER.info("computerDAO deleteByCompanyId succeed");
+		} catch (Exception e) {
+			transaction.rollback();
+			LOGGER.info("computerDAO deleteByCompanyId failed");
+		}
+		em.close();
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public List<ComputerModel> getComputersByPage(int offset, int limit, String searchBy, String orderBy, String option) {
 		if (offset < 0) {
 			offset = 0;
 		}
-		List<Object> list = new ArrayList<Object>();
-		String query = "SELECT * FROM computer as computer left outer join company as company on company.id=computer.company_id";
-		if (!searchBy.isEmpty()) {
-			query += " WHERE computer.name LIKE ? OR company.name LIKE ?";
-			list.add("%" + searchBy + "%");
-			list.add("%" + searchBy + "%");
-		}
+
+		EntityManager em = entityManagerFactory.createEntityManager();
+		JPAQuery query = new JPAQuery(em);
+		QComputerModel computer = QComputerModel.computerModel;
+		QCompanyModel company = QCompanyModel.companyModel;
+		
+		query = query.from(computer).leftJoin(computer.company, company)
+				.where(computer.name.contains(searchBy).or(company.name.contains(searchBy)))
+				.limit(limit)
+				.offset(offset);
+
 		if (!orderBy.isEmpty()) {
-			query += " ORDER BY computer." + orderBy;
-		}
-		if (!option.isEmpty()) {
-			query += " " + option;
-		}
-		query += " limit ? offset ?";
+			PathBuilder orderByExpression = null;
+			if (!orderBy.contains("_")) {
+				orderByExpression = new PathBuilder(ComputerModel.class, "computerModel");
+			} else {
+				orderByExpression = new PathBuilder(CompanyModel.class, "companyModel");
+				orderBy = orderBy.split("_")[1];
+			}
 
-		list.add(limit);
-		list.add(offset);
+			query = query.orderBy(new OrderSpecifier(option.equals("DESC") ? com.mysema.query.types.Order.DESC
+					: com.mysema.query.types.Order.ASC, orderByExpression.get(orderBy)));
+		}
 
+		List<ComputerModel> computers = query.list(computer);
+		em.close();
 		LOGGER.info("computerDAO getComputersByPage succeed");
-		return jdbcTemplate.query(query, list.toArray(), new ComputerMapper());
+
+		return computers;
 	}
 
 	@Override
 	public int totalRow(String searchBy) {
-		String query = "SELECT count(*) FROM computer as computer left outer join company as company on company.id=computer.company_id";
+		EntityManager em = entityManagerFactory.createEntityManager();
+		JPAQuery query = new JPAQuery(em);
+		QComputerModel computer = QComputerModel.computerModel;
+		QCompanyModel company = QCompanyModel.companyModel;
+		
+		long nbRow = query.from(computer).leftJoin(computer.company, company)
+				.where(computer.name.contains(searchBy).or(company.name.contains(searchBy))).count();
 
-		if (!searchBy.isEmpty()) {
-			query += " WHERE computer.name LIKE '%" + searchBy + "%' OR company.name LIKE '%" + searchBy + "%'";
-		}
-
-		LOGGER.info("computerDAO totalRow succeed");
-		return jdbcTemplate.queryForObject(query, Integer.class);
+		em.close();
+		return (int) nbRow;
 	}
 
 }

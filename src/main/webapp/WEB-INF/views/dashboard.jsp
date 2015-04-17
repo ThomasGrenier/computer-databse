@@ -142,7 +142,7 @@
 							<c:param name="offset" value="${page.currentPage}" />
 							<c:param name="limit" value="${page.nbResult}" />
 						<c:param name="search" value="${page.searchBy }" />
-							<c:param name="order" value="company_id" />
+							<c:param name="order" value="company_name" />
 							<c:choose>
 								<c:when test="${page.option == 'DESC' }">
 									<c:param name="option" value="" />
@@ -154,7 +154,7 @@
 							</c:url>"
 							aria-label="LastPage"> <span aria-hidden="true">
 									<spring:message code="label.company"></spring:message></span>
-						</a> <c:if test="${page.orderBy == 'company_id' }">
+						</a> <c:if test="${page.orderBy == 'company_name' }">
 								<div class="right">
 									<c:choose>
 										<c:when test="${page.option == 'DESC'}">

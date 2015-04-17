@@ -9,7 +9,7 @@ import com.excilys.model.ComputerDTO;
 import com.excilys.model.ComputerModel;
 
 public class DTOMapper implements GenericDTOMapper {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerMapper.class);
 
 	@Override
@@ -31,8 +31,10 @@ public class DTOMapper implements GenericDTOMapper {
 	@Override
 	public CompanyDTO companyModelToDTO(CompanyModel company) {
 		CompanyDTO companyDTO = new CompanyDTO();
-		companyDTO.setId(company.getId());
-		companyDTO.setName(company.getName());
+		if (company != null) {
+			companyDTO.setId(company.getId());
+			companyDTO.setName(company.getName());
+		}
 		LOGGER.info("companyDTO mapper succeed");
 		return companyDTO;
 	}
