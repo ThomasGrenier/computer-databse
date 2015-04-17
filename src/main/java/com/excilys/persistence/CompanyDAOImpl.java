@@ -9,7 +9,6 @@ import javax.persistence.EntityTransaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,9 +21,6 @@ import com.mysema.query.types.path.PathBuilder;
 
 @Repository("companyDAO")
 public class CompanyDAOImpl implements CompanyDAO {
-
-	@Autowired
-	JdbcTemplate jdbcTemplate;
 	
 	@Autowired
 	private EntityManagerFactory entityManagerFactory;
