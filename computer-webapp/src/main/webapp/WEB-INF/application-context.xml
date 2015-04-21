@@ -39,7 +39,7 @@
 				authentication-failure-url="/loginError" login-processing-url="/perform_login"
 				authentication-success-handler-ref="simpleUrlAuthenticationSuccessHandler"
 				username-parameter="username" password-parameter="password" />
-			<security:logout logout-success-url="/logout" />
+			<security:logout logout-success-url="/loginUser?state=out" />
 		</security:http>
 		<security:authentication-manager>
 			<security:authentication-provider

@@ -16,6 +16,11 @@
 					Login ou mot de passe invalide ! <br />
 				</div>
 			</c:if>
+			<c:if test="${logout == 'out'}">
+				<div class="alert alert-success">
+					logout success ! <br />
+				</div>
+			</c:if>
 			<form name="loginForm" action="<c:url value='/perform_login' />"
 				method="POST" id="login">
 				<fieldset>
