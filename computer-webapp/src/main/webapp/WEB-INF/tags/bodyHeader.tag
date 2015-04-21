@@ -10,6 +10,14 @@
 <header class="navbar navbar-inverse navbar-fixed-top">
 	<div class="container">
 
+		<div style="float: left">
+			<form name="logoutForm" action="<c:url value='/logout' />"
+				method="POST" id="logout">
+				<input type="hidden" name="${_csrf.parameterName}"
+					value="${_csrf.token}" /> <input value="logout" name="submit"
+					type="submit" class="btn btn-primary" />
+			</form>
+		</div>
 		<c:if test="${method == 1}">
 			<span style="float: right"><a
 				href="<c:url value="dashboard">
