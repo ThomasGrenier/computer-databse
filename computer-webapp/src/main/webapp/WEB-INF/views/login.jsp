@@ -7,36 +7,36 @@
 <html>
 <mylib:header />
 <body>
-	<mylib:bodyHeader method="4" />
+	<mylib:bodyHeader method="5" />
 
 	<section id="main">
 		<div class="container">
 			<c:if test="${error == 'err'}">
 				<div class="alert alert-danger">
-					Login ou mot de passe invalide ! <br />
+					<spring:message code="label.errorlog"></spring:message> <br />
 				</div>
 			</c:if>
 			<c:if test="${logout == 'out'}">
 				<div class="alert alert-success">
-					logout success ! <br />
+					<spring:message code="label.successdeco"></spring:message> <br />
 				</div>
 			</c:if>
 			<form name="loginForm" action="<c:url value='/perform_login' />"
 				method="POST" id="login">
 				<fieldset>
 					<div class="form-group">
-						<label for="UserName">Login</label> <input type="text"
+						<label for="UserName"><spring:message code="label.login"></spring:message></label> <input type="text"
 							class="form-control" id="username" name="username">
 					</div>
 					<div class="form-group">
-						<label for="UserPassword">password</label> <input type="password"
+						<label for="UserPassword"><spring:message code="label.pwd"></spring:message></label> <input type="password"
 							class="form-control" id="password" name="password">
 					</div>
 					<input type="hidden" name="${_csrf.parameterName}"
 						value="${_csrf.token}" />
 				</fieldset>
 				<div class="actions pull-right">
-					<input value="Login" name="submit" type="submit"
+					<input value="<spring:message code="label.con"></spring:message>" name="submit" type="submit"
 						class="btn btn-primary" />
 				</div>
 			</form>

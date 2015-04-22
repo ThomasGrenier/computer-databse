@@ -3,36 +3,47 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="mylib"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 <mylib:header />
 <body>
-	<mylib:bodyHeader method="1"/>
+	<mylib:bodyHeader method="1" />
 
 	<section id="main">
 		<div class="container">
-			<h1 id="homeTitle">${page.totalResult} <spring:message code="label.computerFound"></spring:message></h1>
+			<h1 id="homeTitle">${page.totalResult}
+				<spring:message code="label.computerFound"></spring:message>
+			</h1>
 			<div id="actions" class="form-horizontal">
 				<div class="pull-left">
 					<form id="searchForm" action="#" method="GET" class="form-inline">
 
 						<input type="search" id="searchbox" name="search"
-							class="form-control" placeholder="<spring:message code="label.search"></spring:message>" /> <input
-							type="submit" id="searchsubmit" value="<spring:message code="label.filter"></spring:message>"
+							class="form-control"
+							placeholder="<spring:message code="label.search"></spring:message>" />
+						<input type="submit" id="searchsubmit"
+							value="<spring:message code="label.filter"></spring:message>"
 							class="btn btn-primary" />
 					</form>
 				</div>
+				<sec:authorize access="hasRole('ROLE_ADMIN')">
 				<div class="pull-right">
-					<a class="btn btn-success" id="addComputer" href="addComputer"><spring:message code="label.addComputer">
-					</spring:message></a> <a class="btn btn-default" id="editComputer" href="#"
-						onclick="$.fn.toggleEditMode();"><spring:message code="label.edit"></spring:message></a>
+					<a class="btn btn-success" id="addComputer" href="addComputer"><spring:message
+							code="label.addComputer">
+						</spring:message></a> <a class="btn btn-default" id="editComputer" href="#"
+						onclick="$.fn.toggleEditMode();"><spring:message
+							code="label.edit"></spring:message></a>
 				</div>
+				</sec:authorize>
 			</div>
 		</div>
-
-		<form id="deleteForm" action="#" method="POST">
-			<input type="hidden" name="selection" value="">
-		</form>
+		<sec:authorize access="hasRole('ROLE_ADMIN')">
+			<form id="deleteForm" action="#" method="POST">
+				<input type="hidden" name="selection" value="">
+			</form>
+		</sec:authorize>
 
 		<div class="container" style="margin-top: 10px;">
 			<table class="table table-striped table-bordered">
@@ -40,7 +51,7 @@
 					<tr>
 						<!-- Variable declarations for passing labels as parameters -->
 						<!-- Table header for Computer Name -->
-
+<sec:authorize access="hasRole('ROLE_ADMIN')">
 						<th class="editMode" style="width: 60px; height: 22px;"><input
 							type="checkbox" id="selectall" /> <span
 							style="vertical-align: top;"> - <a href="#"
@@ -48,6 +59,7 @@
 									class="fa fa-trash-o fa-lg"></i>
 							</a>
 						</span></th>
+						</sec:authorize>
 						<th><a
 							href="<c:url value="dashboard">
 							<c:param name="offset" value="${page.currentPage}" />
@@ -63,8 +75,8 @@
 								</c:otherwise>
 							</c:choose>
 							</c:url>"
-							aria-label="LastPage"> <span aria-hidden="true">
-									<spring:message code="label.computerName"></spring:message></span>
+							aria-label="LastPage"> <span aria-hidden="true"> <spring:message
+										code="label.computerName"></spring:message></span>
 						</a> <c:if test="${page.orderBy == 'name' }">
 								<div class="right">
 									<c:choose>
@@ -92,8 +104,8 @@
 								</c:otherwise>
 							</c:choose>
 							</c:url>"
-							aria-label="LastPage"> <span aria-hidden="true">
-									<spring:message code="label.introduced"></spring:message></span>
+							aria-label="LastPage"> <span aria-hidden="true"> <spring:message
+										code="label.introduced"></spring:message></span>
 						</a> <c:if test="${page.orderBy == 'introduced' }">
 								<div class="right">
 									<c:choose>
@@ -122,8 +134,8 @@
 								</c:otherwise>
 							</c:choose>
 							</c:url>"
-							aria-label="LastPage"> <span aria-hidden="true">
-									<spring:message code="label.discontinued"></spring:message></span>
+							aria-label="LastPage"> <span aria-hidden="true"> <spring:message
+										code="label.discontinued"></spring:message></span>
 						</a> <c:if test="${page.orderBy == 'discontinued' }">
 								<div class="right">
 									<c:choose>
@@ -152,8 +164,8 @@
 								</c:otherwise>
 							</c:choose>
 							</c:url>"
-							aria-label="LastPage"> <span aria-hidden="true">
-									<spring:message code="label.company"></spring:message></span>
+							aria-label="LastPage"> <span aria-hidden="true"> <spring:message
+										code="label.company"></spring:message></span>
 						</a> <c:if test="${page.orderBy == 'company_name' }">
 								<div class="right">
 									<c:choose>
@@ -174,13 +186,16 @@
 
 					<c:forEach items="${page.list}" var="computer">
 						<tr>
+						<sec:authorize access="hasRole('ROLE_ADMIN')">
 							<td class="editMode"><input type="checkbox" name="cb"
-								class="cb" value="${computer.id }" id="editCheck"/></td>
+								class="cb" value="${computer.id }" id="editCheck" /></td>
+								</sec:authorize>
 							<td id="computerName"><a id="computerLink"
 								href="<c:url value="/editComputer?id=${computer.id}" />">${computer.name}</a>
 								<%-- <a href="editComputer.html" onclick="">${computer.name}</a> --%>
 							</td>
-							<td hidden="true" ><input id="companyId" value="${computer.company.id }" /></td>
+							<td hidden="true"><input id="companyId"
+								value="${computer.company.id }" /></td>
 							<td id="computerIntro">${computer.introduced}</td>
 							<td id="computerDisco">${computer.discontinued}</td>
 							<td id="computerCompId"><c:choose>

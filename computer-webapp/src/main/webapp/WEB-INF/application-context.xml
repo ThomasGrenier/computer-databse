@@ -33,10 +33,22 @@
 		<security:http>
 			<security:intercept-url pattern="/login*"
 				access="isAnonymous()" />
+			<security:intercept-url pattern="/**/*.css"
+				access="permitAll()" />
+			<security:intercept-url pattern="/**/*.js"
+				access="permitAll()" />
+			<security:intercept-url pattern="/**/img/*"
+				access="permitAll()" />
+			<security:intercept-url pattern="/**/addComputer"
+				access="hasRole('ROLE_ADMIN')" />
+			<security:intercept-url pattern="/**/editComputer"
+				access="hasRole('ROLE_ADMIN')" />
+			<security:intercept-url pattern="/**/delete"
+				access="hasRole('ROLE_ADMIN')" />
 			<security:intercept-url pattern="/**"
 				access="hasAnyRole('ROLE_USER', 'ROLE_ADMIN')" />
 			<security:form-login login-page="/loginUser"
-				authentication-failure-url="/loginError" login-processing-url="/perform_login"
+				authentication-failure-url="/loginUser?error=err" login-processing-url="/perform_login"
 				authentication-success-handler-ref="simpleUrlAuthenticationSuccessHandler"
 				username-parameter="username" password-parameter="password" />
 			<security:logout logout-success-url="/loginUser?state=out" />

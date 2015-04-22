@@ -21,7 +21,6 @@ $(function() {
 			$("#deleteSelected").disable();
 		}
 	});
-
 });
 
 
@@ -69,7 +68,6 @@ $(function() {
 }( jQuery ));
 
 
-
 //Event handling
 //Onkeydown
 $(document).keydown(function(e) {
@@ -87,6 +85,15 @@ $(document).keydown(function(e) {
 			$.fn.toggleEditMode();
 		}
 		break;
+	}
+});
+
+$(function () {
+	$('.flag').removeClass("selected");
+	if (strings['choosenLang'] == 'fr') {
+		$("#dfr").addClass("selected");
+	} else if (strings['choosenLang'] == 'en') {
+		$("#den").addClass("selected");
 	}
 });
 

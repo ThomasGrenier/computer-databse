@@ -42,3 +42,21 @@ label.error,div.error{
 	font-weight:normal;
 	color:#FF0000 !important;
 }
+
+img.flag {
+	width: 30px;
+	height: 20px;
+	margin-top: 15px;
+}
+
+img.selected {
+	border:2px solid yellow !important;
+}
+
+#deco {
+    height: 18px;
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    cursor: pointer;
+}
