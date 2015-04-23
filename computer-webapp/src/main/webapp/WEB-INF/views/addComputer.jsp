@@ -57,7 +57,7 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
-							<input type="submit" value="<spring:message code="label.add"></spring:message>" class="btn btn-primary">
+							<input id="buttonadd" type="submit" value="<spring:message code="label.add"></spring:message>" class="btn btn-primary">
 							<spring:message code="label.or"></spring:message> <a href="dashboard" class="btn btn-default" id="cancelAdd"><spring:message code="label.cancel"></spring:message></a>
 						</div>
 					</form>

@@ -21,7 +21,7 @@
 				method="POST" id="logout">
 				<input type="hidden" name="${_csrf.parameterName}"
 					value="${_csrf.token}" />
-				<button type="submit" class="btn btn-primary"
+				<button id="buttondeco" type="submit" class="btn btn-primary"
 					aria-label="Left Align">
 					<span
 						class="glyphicon glyphicon glyphicon-log-out glyphicon-align-left"
