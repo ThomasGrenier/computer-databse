@@ -71,6 +71,12 @@ public class ComputerServiceImpl implements ComputerService {
 	}
 
 	@Override
+	public void deleteByCompanyId(long id) {
+		LOGGER.info("ComputerService deleteByCompanyId");
+		computerDao.deleteByCompanyId(id);
+	}
+
+	@Override
 	public void update(long id, String name, LocalDateTime introduced,
 			LocalDateTime discontinued, long idCompany) {
 		CompanyModel companyModel = new CompanyModel(idCompany, "");

@@ -16,6 +16,8 @@ public interface ComputerService {
 	
 	void delete(long id);
 	
+	void deleteByCompanyId(long id);
+	
 	void update(long id, String name, LocalDateTime introduced, LocalDateTime discontinued, long idCompany);
 
 	List<ComputerDTO> getComputersByPage(int offset, int limit, String searchBy, String orderBy, String option);
