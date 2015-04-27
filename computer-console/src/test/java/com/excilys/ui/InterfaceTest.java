@@ -67,7 +67,7 @@ public class InterfaceTest {
 			}
 		}
 
-		webDriver.findElement(By.tagName("form")).submit();
+		webDriver.findElement(By.id("buttonadd")).click();
 
 		result = webDriver.findElement(By.id("homeTitle")).getText().split(" ");
 		int newNumber = Integer.parseInt(result[0]);
@@ -101,7 +101,7 @@ public class InterfaceTest {
 
 		//WHEN
 		webDriver.findElement(By.id("addComputer")).click();
-		webDriver.findElement(By.id("buttonadd")).submit();
+		webDriver.findElement(By.id("buttonadd")).click();
 
 		String errorMessage = webDriver.findElement(By.id("errorName")).getText();
 
@@ -123,7 +123,7 @@ public class InterfaceTest {
 		webDriver.findElement(By.id("introduced"))
 		.sendKeys("bad format");
 
-		webDriver.findElement(By.tagName("form")).submit();
+		webDriver.findElement(By.id("buttonadd")).click();
 
 		String errorMessage = webDriver.findElement(By.id("errorIntro")).getText();
 
@@ -148,7 +148,7 @@ public class InterfaceTest {
 		webDriver.findElement(By.id("discontinued"))
 		.sendKeys("bad format");
 
-		webDriver.findElement(By.tagName("form")).submit();
+		webDriver.findElement(By.id("buttonadd")).click();
 
 		String errorMessage = webDriver.findElement(By.id("errorDisco")).getText();
 
