@@ -16,4 +16,6 @@ public interface CompanyService {
 	Page<CompanyDTO> getPage(int currentPage, int limit, String searchBy, String orderBy, String option);
 	
 	void delete(long id);
+	
+	int totalRow(String searchBy);
 }

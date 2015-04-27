@@ -20,7 +20,7 @@
 			</dependency>
 			<dependency>
 				<groupId>${project.groupId}</groupId>
-				<artifactId>computer-service</artifactId>
+				<artifactId>computer-webservice</artifactId>
 			</dependency>
 	</dependencies>
 </project>

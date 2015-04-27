@@ -117,4 +117,9 @@ public class ComputerServiceImpl implements ComputerService {
 		return page;
 	}
 
+	@Override
+	public int totalRow(String searchBy) {
+		return computerDao.totalRow(searchBy);
+	}
+
 }

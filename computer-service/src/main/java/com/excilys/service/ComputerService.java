@@ -23,4 +23,6 @@ public interface ComputerService {
 	List<ComputerDTO> getComputersByPage(int offset, int limit, String searchBy, String orderBy, String option);
 	
 	Page<ComputerDTO> getPage(int currentPage, int limit, String searchBy, String orderBy, String option);
+	
+	int totalRow(String searchBy);
 }

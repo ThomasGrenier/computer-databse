@@ -57,6 +57,8 @@
 							</div>
 						</fieldset>
 						<div class="actions pull-right">
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
 							<input id="buttonadd" type="submit" value="<spring:message code="label.add"></spring:message>" class="btn btn-primary">
 							<spring:message code="label.or"></spring:message> <a href="dashboard" class="btn btn-default" id="cancelAdd"><spring:message code="label.cancel"></spring:message></a>
 						</div>

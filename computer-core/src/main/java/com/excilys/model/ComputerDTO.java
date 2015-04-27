@@ -122,7 +122,7 @@ public class ComputerDTO {
 		.append(" | " + name)
 		.append(" | " + introduced)
 		.append(" | " + discontinued)
-		.append(" | " + ((company == null) ? "null" : company.toString()) + "\n");
+		.append(" | " + ((company == null) ? "null" : company.toString()));
 		return result.toString();
 	}
 }

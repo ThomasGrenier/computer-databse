@@ -93,11 +93,19 @@ public class ComputerDAOImpl implements ComputerDAO {
 			transaction.begin();
 
 			JPAUpdateClause jpa = new JPAUpdateClause(em, computerm)
-			.where(computerm.id.eq(computer.getId()))
-			.set(computerm.name, computer.getName())
-			.set(computerm.introduced, computer.getIntroduced())
-			.set(computerm.discontinued, computer.getDiscontinued())
-			.set(computerm.company, computer.getCompany());
+			.where(computerm.id.eq(computer.getId()));
+			if ((computer.getName() != null) && (!computer.getName().equals(""))) {
+				jpa.set(computerm.name, computer.getName());
+			}
+			if (computer.getIntroduced() != null) {
+				jpa.set(computerm.introduced, computer.getIntroduced());
+			}
+			if (computer.getDiscontinued() != null) {
+				jpa.set(computerm.discontinued, computer.getDiscontinued());
+			}
+			if (computer.getCompany().getId() > 0) {
+				jpa.set(computerm.company, computer.getCompany());
+			}
 			jpa.execute();
 			
 			transaction.commit();

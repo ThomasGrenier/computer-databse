@@ -24,9 +24,9 @@
 				access="permitAll()" />
 			<security:intercept-url pattern="/**/img/*"
 				access="permitAll()" />
-			<security:intercept-url pattern="/**/addComputer"
+			<security:intercept-url pattern="/computer-webapp/addComputer"
 				access="hasRole('ROLE_ADMIN')" />
-			<security:intercept-url pattern="/**/editComputer"
+			<security:intercept-url pattern="/computer-webapp/editComputer"
 				access="hasRole('ROLE_ADMIN')" />
 			<security:intercept-url pattern="/**/delete"
 				access="hasRole('ROLE_ADMIN')" />

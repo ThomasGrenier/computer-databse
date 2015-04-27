@@ -36,11 +36,17 @@ public interface ComputerWebService {
 	void deleteComputer(long id);
 
 	@WebMethod
-	void updateComputer(long id, String name, LocalDateTime introduced, LocalDateTime discontinued, long idCompany);
+	void updateComputer(long id, String name, String introduced, String discontinued, long idCompany);
 
 	@WebMethod
 	String getComputersByPage(int offset, int limit, String searchBy, String orderBy, String option);
 
 	@WebMethod
 	String getComputerPage(int currentPage, int limit, String searchBy, String orderBy, String option);
+	
+	@WebMethod
+	int getNbComputer();
+	
+	@WebMethod
+	int getNbCompany();
 }

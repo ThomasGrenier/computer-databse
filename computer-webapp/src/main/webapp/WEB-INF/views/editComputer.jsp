@@ -3,6 +3,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <%@ taglib tagdir="/WEB-INF/tags" prefix="mylib"%>
 <%@taglib uri="http://www.springframework.org/tags" prefix="spring"%>
+<%@ taglib prefix="sec"
+	uri="http://www.springframework.org/security/tags"%>
 <!DOCTYPE html>
 <html>
 	<mylib:header />
@@ -47,7 +49,10 @@
                             </div>      
                             <div><c:if test="${errorComp != null}"><spring:message code="${errorComp }"></spring:message></c:if></div>      
                         </fieldset>
+                        
                         <div class="actions pull-right">
+					<input type="hidden" name="${_csrf.parameterName}"
+						value="${_csrf.token}" />
                             <input type="submit" value="<spring:message code="label.edit"></spring:message>" class="btn btn-primary" id="submitEdit">
                             <spring:message code="label.or"></spring:message>
                             <a href="dashboard" class="btn btn-default" id="cancelEdit"><spring:message code="label.cancel"></spring:message></a>

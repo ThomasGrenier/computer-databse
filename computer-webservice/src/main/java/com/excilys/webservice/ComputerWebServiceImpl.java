@@ -89,10 +89,25 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 	}
 
 	@Override
-	public void updateComputer(long id, String name, LocalDateTime introduced,
-			LocalDateTime discontinued, long idCompany) {
+	public void updateComputer(long id, String name, String introduced,
+			String discontinued, long idCompany) {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		
+		LocalDateTime intro = null;
+		if (!introduced.equals("")) {
+			if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), introduced.trim())) {
+				intro = LocalDateTime.parse(introduced, formatter);
+			}
+		}
+		LocalDateTime disco = null;
+		if (!discontinued.equals("")) {
+			if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), discontinued.trim())) {
+				disco = LocalDateTime.parse(discontinued, formatter);
+			}
+		}
 		LOGGER.info("ComputerWebService updateComputer");
-		computerService.update(id, name, introduced, discontinued, idCompany);
+		System.out.println("--------------------------------\n\ntest\n\n-----------------------------");
+		computerService.update(id, name, intro, disco, idCompany);
 	}
 
 	@Override
@@ -107,6 +122,16 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 			String orderBy, String option) {
 		LOGGER.info("ComputerWebService getComputerPage");
 		return computerService.getPage(currentPage, limit, searchBy, orderBy, option).toString();
+	}
+
+	@Override
+	public int getNbComputer() {
+		return computerService.totalRow("");
+	}
+
+	@Override
+	public int getNbCompany() {
+		return companyService.totalRow("");
 	}
 
 }

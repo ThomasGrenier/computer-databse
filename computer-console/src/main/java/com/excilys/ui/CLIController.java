@@ -1,26 +1,43 @@
 package com.excilys.ui;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.LinkedList;
-import java.util.List;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
-import com.excilys.model.CompanyDTO;
-import com.excilys.model.ComputerDTO;
-import com.excilys.model.Page;
-import com.excilys.service.CompanyService;
-import com.excilys.service.CompanyServiceImpl;
-import com.excilys.service.ComputerService;
-import com.excilys.service.ComputerServiceImpl;
+import javax.xml.namespace.QName;
+import javax.xml.ws.Service;
+
 import com.excilys.utils.Regex;
+import com.excilys.webservice.ComputerWebService;
 
 public class CLIController {
 
+	private final URL url;
+    private final QName qname;
+    private final Service service;
+    private final ComputerWebService ws;
+	
+	public CLIController() throws MalformedURLException {
+		url = new URL("http://localhost:9898/computer-database-ws/computers?wsdl");
+		qname = new QName("http://webservice.excilys.com/", "ComputerWebServiceImplService");
+        service = Service.create(url, qname);
+        ws = service.getPort(ComputerWebService.class);
+	}
+	
+	public ComputerWebService getWs() {
+		return ws;
+	}
+
 	public static void main(String[] args) {
-		ComputerService computerService = new ComputerServiceImpl();
-		CompanyService companyService = new CompanyServiceImpl();
+		CLIController cli = null;
+		try {
+			cli = new CLIController();
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		}
+		ComputerWebService webService = cli.getWs();
+		
 		Scanner sc = new Scanner(System.in);
 		System.out.println("Bienvenue, tapez help pour la liste des commandes");
 		String str = sc.nextLine().trim();
@@ -42,23 +59,16 @@ public class CLIController {
 				System.out.println(result.toString());
 				break;
 			case "computerList":
-				List<ComputerDTO> computerList = new LinkedList<ComputerDTO>();
-				computerList = computerService.listAll();
-				computerList.stream().forEach(System.out::println);
+				System.out.println(webService.getComputers());
 				break;
 			case "companyList":
-				List<CompanyDTO> companyList = new LinkedList<CompanyDTO>();
-				companyList = companyService.listAll();
-				for (int i = 0; i < companyList.size(); i++) {
-					System.out.println(companyList.get(i).toString());
-				}
+				System.out.println(webService.getCompanies());
 				break;
 			case "getById":
 				System.out.println("quel est l'id de l'ordinateur : ");
 				str = sc.nextLine().trim();
 				if (Pattern.matches(Regex.DIGIT.getRegex(), str)) {
-					ComputerDTO c = computerService.getById(Long.parseLong(str));
-					System.out.println(c.toString());
+					System.out.println(webService.getComputerById(Long.parseLong(str)));
 				} else {
 					System.err.println("id invalid");
 				}
@@ -67,8 +77,7 @@ public class CLIController {
 				System.out.println("quel est l'id de la compagnie ? : ");
 				str = sc.nextLine().trim();
 				if (Pattern.matches(Regex.DIGIT.getRegex(), str)) {
-					CompanyDTO comp = companyService.getById(Long.parseLong(str));
-					System.out.println(comp.toString());
+					System.out.println(webService.getCompanyById(Long.parseLong(str)));
 				} else {
 					System.err.println("is not a number");
 				}
@@ -88,8 +97,19 @@ public class CLIController {
 					str = sc.nextLine().trim();
 				}
 				int nbResult = Integer.parseInt(str);
-				Page<ComputerDTO> p = computerService.getPage(currentPage, nbResult, "", "id", "");
-				System.out.println(p.toString());
+				int total = webService.getNbComputer() / nbResult;
+				if ((webService.getNbComputer() % nbResult) > 0) {
+					total += 1;
+				}
+				if (currentPage > total) {
+					System.out.println("redirection dernière page");
+					currentPage = total;
+				}
+				if (currentPage < 1) {
+					System.out.println("redirection page 1");
+					currentPage = 1;
+				}
+				System.out.println(webService.getComputerPage(currentPage, nbResult, "", "id", ""));
 				System.out.println(" - next pour avancer d'une page");
 				System.out.println(" - previous pour reculer d'une page");
 				System.out.println(" - stop pour sortir");
@@ -97,18 +117,16 @@ public class CLIController {
 				while (!str.equals("stop")) {
 					switch (str) {
 					case "next":
-						if (currentPage < p.getTotalPage()) {
+						if (currentPage < total) {
 							currentPage += 1;
 						}
-						p = computerService.getPage(currentPage, nbResult, "", "id", "");
-						System.out.println(p.toString());
+						System.out.println(webService.getComputerPage(currentPage, nbResult, "", "id", ""));
 						break;
 					case "previous":
 						if (currentPage > 1) {
 							currentPage -= 1;
 						}
-						p = computerService.getPage(currentPage, nbResult, "", "id", "");
-						System.out.println(p.toString());
+						System.out.println(webService.getComputerPage(currentPage, nbResult, "", "id", ""));
 						break;
 					default:
 						System.out.println(" - next pour avancer d'une page");
@@ -135,8 +153,20 @@ public class CLIController {
 					str = sc.nextLine().trim();
 				}
 				int nbResultComp = Integer.parseInt(str);
-				Page<CompanyDTO> pa = companyService.getPage(currentPageComp, nbResultComp, "", "id", "");
-				System.out.println(pa.toString());
+				
+				int totalComp = webService.getNbCompany() / nbResultComp;
+				if ((webService.getNbCompany() % nbResultComp) > 0) {
+					totalComp += 1;
+				}
+				if (currentPageComp > totalComp) {
+					System.out.println("redirection dernière page");
+					currentPageComp = totalComp;
+				}
+				if (currentPageComp < 1) {
+					System.out.println("redirection page 1");
+					currentPageComp = 1;
+				}
+				System.out.println(webService.getCompaniesByPage(currentPageComp, nbResultComp, "", "id", ""));
 				System.out.println(" - next pour avancer d'une page");
 				System.out.println(" - previous pour reculer d'une page");
 				System.out.println(" - stop pour sortir");
@@ -144,18 +174,16 @@ public class CLIController {
 				while (!str.equals("stop")) {
 					switch (str) {
 					case "next":
-						if (currentPageComp < pa.getTotalPage()) {
+						if (currentPageComp < totalComp) {
 							currentPageComp += 1;
 						}
-						pa = companyService.getPage(currentPageComp, nbResultComp, "", "id", "");
-						System.out.println(pa.toString());
+						System.out.println(webService.getCompaniesByPage(currentPageComp, nbResultComp, "", "id", ""));
 						break;
 					case "previous":
 						if (currentPageComp > 1) {
 							currentPageComp -= 1;
 						}
-						pa = companyService.getPage(currentPageComp, nbResultComp, "", "id", "");
-						System.out.println(pa.toString());
+						System.out.println(webService.getCompaniesByPage(currentPageComp, nbResultComp, "", "id", ""));
 						break;
 					default:
 						System.out.println(" - next pour avancer d'une page");
@@ -171,7 +199,7 @@ public class CLIController {
 				System.out.println("quel est l'id de l'ordinateur à supprimer : ");
 				str = sc.nextLine().trim();
 				if (Pattern.matches(Regex.DIGIT.getRegex(), str)) {
-					computerService.delete(Long.parseLong(str));
+					webService.deleteComputer(Long.parseLong(str));
 					System.out.println("ordinateur " + Long.parseLong(str) + " supprimé");
 				} else {
 					System.err.println("id invalid");
@@ -180,8 +208,9 @@ public class CLIController {
 			case "create":
 				System.out.println("quel est le nom de votre ordinateur : ");
 				str = sc.nextLine().trim();
-				long id = computerService.create(str, null, null, -1);
-				System.out.println("ordinateur enregistré, id = " + id);
+				//long id = computerService.create(str, null, null, -1);
+				webService.createComputer(str, null, null, -1);
+				System.out.println("ordinateur enregistré");
 				break;
 			case "update":
 				System.out.println("quel est l'id de l'ordinateur à mettre à jour ?");
@@ -189,8 +218,7 @@ public class CLIController {
 
 				System.out.println("vous avez choisi l'odinateur : ");
 				if (Pattern.matches(Regex.DIGIT.getRegex(), str)) {
-					ComputerDTO computer = computerService.getById(Long.parseLong(str));
-					System.out.println(computer.toString());
+					System.out.println(webService.getComputerById(Long.parseLong(str)));
 				} else {
 					System.err.println("id invalid");
 					break;
@@ -201,16 +229,15 @@ public class CLIController {
 
 				boolean isOk = false;
 				String introduced = null;
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 				System.out.println("date d'introduction (format = yyyy-MM-dd HH:mm:ss) : ");
 				
-				LocalDateTime intro = null;
+				//LocalDateTime intro = null;
 				while (!isOk) {
 					introduced = sc.nextLine().trim();
 
 					if (!introduced.equals("")) {
 						if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), introduced.trim())) {
-							intro = LocalDateTime.parse(introduced, formatter);
+							//intro = LocalDateTime.parse(introduced, formatter);
 							isOk = true;
 						} else {
 							System.err.println("mauvais format ! (format = yyyy-MM-dd HH:mm:ss) : ");
@@ -223,12 +250,12 @@ public class CLIController {
 				isOk = false;
 				String discontinued = null;
 				System.out.println("date de suppression (format = yyyy-MM-dd HH:mm:ss) : ");
-				LocalDateTime discon = null;
+				//LocalDateTime discon = null;
 				while (!isOk) {
 					discontinued = sc.nextLine().trim();
 					if (!discontinued.equals("")) {
 						if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), discontinued.trim())) {
-							discon = LocalDateTime.parse(discontinued, formatter);
+							//discon = LocalDateTime.parse(discontinued, formatter);
 							isOk = true;
 						} else {
 							System.out.println("mauvais format ! (format = yyyy-MM-dd HH:mm:ss) : ");
@@ -242,24 +269,24 @@ public class CLIController {
 				String idComp = sc.nextLine().trim();
 				long idCompany;
 				if ((idComp == null) || (idComp.equals(""))) {
-					idCompany = -1;
+					idCompany = 0;
 				} else {
 
 					if (Pattern.matches(Regex.DIGIT.getRegex(), idComp)) {
 						idCompany = Long.parseLong(idComp);
 					} else {
-						idCompany = -1;
+						idCompany = 0;
 						System.err.println("invalid company id");
 					}
 				}
-				computerService.update(Long.parseLong(str), name, intro, discon, idCompany);
+				webService.updateComputer(Long.parseLong(str), name, introduced.trim(), discontinued.trim(), idCompany);
 				System.out.println("ordinateur mi à jour");
 				break;
 			case "deleteComp":
 				System.out.println("quel est l'id de la compagnie à supprimer : ");
 				str = sc.nextLine().trim();
 				if (Pattern.matches(Regex.DIGIT.getRegex(), str)) {
-					companyService.delete(Long.parseLong(str));
+					webService.deleteCompany(Long.parseLong(str));
 					System.out.println("company " + Long.parseLong(str) + " supprimé");
 				} else {
 					System.err.println("id invalid");

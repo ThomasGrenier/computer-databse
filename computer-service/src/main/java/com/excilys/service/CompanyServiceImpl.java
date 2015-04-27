@@ -93,4 +93,9 @@ public class CompanyServiceImpl implements CompanyService {
 		LOGGER.info("CompanyService delete succeed");
 	}
 
+	@Override
+	public int totalRow(String searchBy) {
+		return companyDao.totalRow(searchBy);
+	}
+
 }
