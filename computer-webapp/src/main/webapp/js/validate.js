@@ -92,4 +92,13 @@ $(document).ready(function () {
 			}
 		}
 	});
+	
+	$(function () {
+		$('.flag').removeClass("selected");
+		if (strings['choosenLang'] == 'fr') {
+			$("#dfr").addClass("selected");
+		} else if (strings['choosenLang'] == 'en') {
+			$("#den").addClass("selected");
+		}
+	});
 })

@@ -88,6 +88,8 @@ $(document).keydown(function(e) {
 	}
 });
 
+
+
 $(function () {
 	$('.flag').removeClass("selected");
 	if (strings['choosenLang'] == 'fr') {
@@ -96,4 +98,3 @@ $(function () {
 		$("#den").addClass("selected");
 	}
 });
-
