@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
-import com.excilys.mapper.DTOMapper;
+import com.excilys.mapper.DTOMapperImp;
 import com.excilys.model.CompanyModel;
 import com.excilys.model.ComputerDTO;
 import com.excilys.model.ComputerModel;
@@ -39,7 +39,7 @@ public class ComputerServiceImpl implements ComputerService {
 		LOGGER.info("ComputerService listAll");
 		List<ComputerModel> list = computerDao.listAll();
 		List<ComputerDTO> dtos = new LinkedList<ComputerDTO>();
-		DTOMapper mapper = new DTOMapper();
+		DTOMapperImp mapper = new DTOMapperImp();
 		for (ComputerModel c : list) {
 			dtos.add(mapper.computerModelToDTO(c));
 		}
@@ -49,7 +49,7 @@ public class ComputerServiceImpl implements ComputerService {
 	@Override
 	public ComputerDTO getById(long id) {
 		LOGGER.info("ComputerService getById");
-		return (new DTOMapper()).computerModelToDTO(computerDao.getById(id));
+		return (new DTOMapperImp()).computerModelToDTO(computerDao.getById(id));
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class ComputerServiceImpl implements ComputerService {
 		LOGGER.info("ComputerService getComputersByPage");
 		List<ComputerModel> list = computerDao.getComputersByPage(offset, limit, searchBy, orderBy, option);
 		List<ComputerDTO> dtos = new LinkedList<ComputerDTO>();
-		DTOMapper mapper = new DTOMapper();
+		DTOMapperImp mapper = new DTOMapperImp();
 		for (ComputerModel c : list) {
 			dtos.add(mapper.computerModelToDTO(c));
 		}

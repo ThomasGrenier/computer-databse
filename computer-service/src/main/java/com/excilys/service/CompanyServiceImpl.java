@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.excilys.mapper.DTOMapper;
+import com.excilys.mapper.DTOMapperImp;
 import com.excilys.model.CompanyDTO;
 import com.excilys.model.CompanyModel;
 import com.excilys.model.Page;
@@ -39,7 +39,7 @@ public class CompanyServiceImpl implements CompanyService {
 		LOGGER.info("CompanyService listAll");
 		List<CompanyModel> list = companyDao.listAll();
 		List<CompanyDTO> dtos = new LinkedList<CompanyDTO>();
-		DTOMapper mapper = new DTOMapper();
+		DTOMapperImp mapper = new DTOMapperImp();
 		for (CompanyModel c : list) {
 			dtos.add(mapper.companyModelToDTO(c));
 		}
@@ -49,7 +49,7 @@ public class CompanyServiceImpl implements CompanyService {
 	@Override
 	public CompanyDTO getById(long id) {
 		LOGGER.info("CompanyService getById");
-		return (new DTOMapper()).companyModelToDTO(companyDao.getById(id));
+		return (new DTOMapperImp()).companyModelToDTO(companyDao.getById(id));
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class CompanyServiceImpl implements CompanyService {
 		LOGGER.info("CompanyService getCompaniesByPage");
 		List<CompanyModel> list = companyDao.getCompaniesByPage(offset, limit, searchBy, orderBy, option);
 		List<CompanyDTO> dtos = new LinkedList<CompanyDTO>();
-		DTOMapper mapper = new DTOMapper();
+		DTOMapperImp mapper = new DTOMapperImp();
 		for (CompanyModel c : list) {
 			dtos.add(mapper.companyModelToDTO(c));
 		}
