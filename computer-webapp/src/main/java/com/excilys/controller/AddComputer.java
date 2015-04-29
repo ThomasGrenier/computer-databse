@@ -19,18 +19,30 @@ import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 import com.excilys.utils.Regex;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class AddComputer.
+ */
 @Controller
 @RequestMapping(value="/addComputer")
 public class AddComputer {
 
+	/** The computer service. */
 	@Autowired
 	@Qualifier("computerService")
 	ComputerService computerService;
 
+	/** The company service. */
 	@Autowired
 	@Qualifier("companyService")
 	CompanyService companyService;
 	
+	/**
+	 * Index.
+	 *
+	 * @param model the model
+	 * @return the model and view
+	 */
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ModelAndView index(ModelAndView model) {
 		
@@ -40,6 +52,16 @@ public class AddComputer {
 	}
 	
 
+	/**
+	 * Adds a computer.
+	 *
+	 * @param nameParam the name of the computer
+	 * @param introParam the introduced date of the computer
+	 * @param discoParam the discontinued date of the computer
+	 * @param compParam the company id of the computer
+	 * @param model the model
+	 * @return the model and view
+	 */
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public ModelAndView addComputer(@RequestParam("name") String nameParam,
 			@RequestParam("intro") Optional<String> introParam,

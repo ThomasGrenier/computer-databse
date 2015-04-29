@@ -22,14 +22,23 @@ import com.mysema.query.jpa.impl.JPAUpdateClause;
 import com.mysema.query.types.OrderSpecifier;
 import com.mysema.query.types.path.PathBuilder;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ComputerDAOImpl.
+ */
 @Repository("computerDAO")
 public class ComputerDAOImpl implements ComputerDAO {
 
+	/** The entity manager factory. */
 	@Autowired
 	private EntityManagerFactory entityManagerFactory;
 
+	/** The Constant LOGGER. */
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAOImpl.class);
 
+	/* (non-Javadoc)
+	 * @see com.excilys.persistence.ComputerDAO#listAll()
+	 */
 	@Override
 	public List<ComputerModel> listAll() {
 		LOGGER.info("computerDAO listAll");
@@ -45,6 +54,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 		return computers;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.persistence.ComputerDAO#getById(long)
+	 */
 	@Override
 	public ComputerModel getById(long id) {
 		
@@ -62,6 +74,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 		return computers;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.persistence.ComputerDAO#create(com.excilys.model.ComputerModel)
+	 */
 	@Override
 	public long create(ComputerModel computer) {
 
@@ -82,6 +97,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 		return 1;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.persistence.ComputerDAO#update(com.excilys.model.ComputerModel)
+	 */
 	@Override
 	@Transactional
 	public void update(ComputerModel computer) {
@@ -117,6 +135,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 		em.close();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.persistence.ComputerDAO#delete(long)
+	 */
 	@Override
 	@Transactional
 	public void delete(long id) {
@@ -139,7 +160,11 @@ public class ComputerDAOImpl implements ComputerDAO {
 		em.close();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.persistence.ComputerDAO#deleteByCompanyId(long)
+	 */
 	@Transactional
+	@Override
 	public void deleteByCompanyId(long id) {
 		EntityManager em = entityManagerFactory.createEntityManager();
 		QComputerModel computer = QComputerModel.computerModel;
@@ -160,7 +185,11 @@ public class ComputerDAOImpl implements ComputerDAO {
 		em.close();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.persistence.ComputerDAO#getComputersByPage(int, int, java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
 	public List<ComputerModel> getComputersByPage(int offset, int limit, String searchBy, String orderBy, String option) {
 		if (offset < 0) {
 			offset = 0;
@@ -196,6 +225,9 @@ public class ComputerDAOImpl implements ComputerDAO {
 		return computers;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.persistence.ComputerDAO#totalRow(java.lang.String)
+	 */
 	@Override
 	public int totalRow(String searchBy) {
 		EntityManager em = entityManagerFactory.createEntityManager();

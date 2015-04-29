@@ -22,11 +22,15 @@ import com.mysema.query.types.path.PathBuilder;
 @Repository("companyDAO")
 public class CompanyDAOImpl implements CompanyDAO {
 	
+	/** The entity manager factory. */
 	@Autowired
 	private EntityManagerFactory entityManagerFactory;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CompanyDAOImpl.class);
 
+	/* (non-Javadoc)
+	 * @see com.excilys.persistence.CompanyDAO#listAll()
+	 */
 	@Override
 	public List<CompanyModel> listAll() {
 		LOGGER.info("companyDao listAll");
@@ -53,6 +57,7 @@ public class CompanyDAOImpl implements CompanyDAO {
 
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
 	public List<CompanyModel> getCompaniesByPage(int offset, int limit, String searchBy, String orderBy, String option) {
 		
 		LOGGER.info("companyDao getCompaniesByPage");

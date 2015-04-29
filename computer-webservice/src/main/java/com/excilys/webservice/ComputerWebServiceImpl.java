@@ -15,30 +15,46 @@ import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 import com.excilys.utils.Regex;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class ComputerWebServiceImpl.
+ */
 @Component
 @WebService(endpointInterface = "com.excilys.webservice.ComputerWebService")
 public class ComputerWebServiceImpl implements ComputerWebService {
 
+	/** The Constant LOGGER. */
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComputerWebServiceImpl.class);
 
+	/** The company service. */
 	@Autowired
 	private CompanyService companyService;
 
+	/** The computer service. */
 	@Autowired
 	private ComputerService computerService;
 
+	/* (non-Javadoc)
+	 * @see com.excilys.webservice.ComputerWebService#getCompanies()
+	 */
 	@Override
 	public String getCompanies() {
 		LOGGER.info("ComputerWebService getCompanies");
 		return companyService.listAll().toString();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.webservice.ComputerWebService#getCompanyById(long)
+	 */
 	@Override
 	public String getCompanyById(long id) {
 		LOGGER.info("ComputerWebService getCompanyById " + id);
 		return companyService.getById(id).toString();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.webservice.ComputerWebService#getCompaniesByPage(int, int, java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public String getCompaniesByPage(int offset, int limit, String searchBy,
 			String orderBy, String option) {
@@ -46,6 +62,9 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 		return companyService.getCompaniesByPage(offset, limit, searchBy, orderBy, option).toString();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.webservice.ComputerWebService#getCompanyPage(int, int, java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public String getCompanyPage(int currentPage, int limit, String searchBy,
 			String orderBy, String option) {
@@ -53,6 +72,9 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 		return companyService.getPage(currentPage, limit, searchBy, orderBy, option).toString();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.webservice.ComputerWebService#deleteCompany(long)
+	 */
 	@Override
 	public void deleteCompany(long id) {
 		LOGGER.info("ComputerWebService deleteCompany proceed");
@@ -62,18 +84,27 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 		LOGGER.info("ComputerWebService deleteCompany succeed");
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.webservice.ComputerWebService#getComputers()
+	 */
 	@Override
 	public String getComputers() {
 		LOGGER.info("ComputerWebService getComputers");
 		return computerService.listAll().toString();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.webservice.ComputerWebService#getComputerById(long)
+	 */
 	@Override
 	public String getComputerById(long id) {
 		LOGGER.info("ComputerWebService getComputerById " + id);
 		return computerService.getById(id).toString();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.webservice.ComputerWebService#createComputer(java.lang.String, java.time.LocalDateTime, java.time.LocalDateTime, long)
+	 */
 	@Override
 	public long createComputer(String name, LocalDateTime introduced,
 			LocalDateTime discontinued, long idCompany) {
@@ -82,12 +113,18 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 		return computerService.create(name, introduced, discontinued, idCompany);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.webservice.ComputerWebService#deleteComputer(long)
+	 */
 	@Override
 	public void deleteComputer(long id) {
 		LOGGER.info("ComputerWebService deleteComputer");
 		computerService.delete(id);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.webservice.ComputerWebService#updateComputer(long, java.lang.String, java.lang.String, java.lang.String, long)
+	 */
 	@Override
 	public void updateComputer(long id, String name, String introduced,
 			String discontinued, long idCompany) {
@@ -106,10 +143,12 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 			}
 		}
 		LOGGER.info("ComputerWebService updateComputer");
-		System.out.println("--------------------------------\n\ntest\n\n-----------------------------");
 		computerService.update(id, name, intro, disco, idCompany);
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.webservice.ComputerWebService#getComputersByPage(int, int, java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public String getComputersByPage(int offset, int limit, String searchBy,
 			String orderBy, String option) {
@@ -117,6 +156,9 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 		return computerService.getComputersByPage(offset, limit, searchBy, orderBy, option).toString();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.webservice.ComputerWebService#getComputerPage(int, int, java.lang.String, java.lang.String, java.lang.String)
+	 */
 	@Override
 	public String getComputerPage(int currentPage, int limit, String searchBy,
 			String orderBy, String option) {
@@ -124,11 +166,17 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 		return computerService.getPage(currentPage, limit, searchBy, orderBy, option).toString();
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.webservice.ComputerWebService#getNbComputer()
+	 */
 	@Override
 	public int getNbComputer() {
 		return computerService.totalRow("");
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.webservice.ComputerWebService#getNbCompany()
+	 */
 	@Override
 	public int getNbCompany() {
 		return companyService.totalRow("");

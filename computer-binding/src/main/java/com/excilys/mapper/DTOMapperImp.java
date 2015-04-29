@@ -8,10 +8,18 @@ import com.excilys.model.CompanyModel;
 import com.excilys.model.ComputerDTO;
 import com.excilys.model.ComputerModel;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class DTOMapperImp.
+ */
 public class DTOMapperImp implements DTOMapper {
 
+	/** The Constant LOGGER. */
 	private static final Logger LOGGER = LoggerFactory.getLogger(DTOMapperImp.class);
 
+	/* (non-Javadoc)
+	 * @see com.excilys.mapper.DTOMapper#computerModelToDTO(com.excilys.model.ComputerModel)
+	 */
 	@Override
 	public ComputerDTO computerModelToDTO(ComputerModel computer) {
 		ComputerDTO computerDTO = new ComputerDTO();
@@ -28,6 +36,9 @@ public class DTOMapperImp implements DTOMapper {
 		return computerDTO;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.excilys.mapper.DTOMapper#companyModelToDTO(com.excilys.model.CompanyModel)
+	 */
 	@Override
 	public CompanyDTO companyModelToDTO(CompanyModel company) {
 		CompanyDTO companyDTO = new CompanyDTO();

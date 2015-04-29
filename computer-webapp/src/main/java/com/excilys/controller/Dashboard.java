@@ -14,14 +14,30 @@ import org.springframework.web.servlet.ModelAndView;
 import com.excilys.service.ComputerService;
 import com.excilys.utils.Regex;
 
+// TODO: Auto-generated Javadoc
+/**
+ * The Class Dashboard.
+ */
 @Controller
 @RequestMapping(value="/dashboard")
 public class Dashboard {
 
+	/** The computer service. */
 	@Autowired
 	@Qualifier("computerService")
 	ComputerService computerService;
 
+	/**
+	 * Index.
+	 *
+	 * @param offsetParam the current page
+	 * @param limitParam the number of element by page
+	 * @param searchParam the search term
+	 * @param orderParam the order attribute
+	 * @param optionParam the direction of the order (ASC or DESC)
+	 * @param model the model
+	 * @return the model and view
+	 */
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ModelAndView index(@RequestParam("offset") Optional<Integer> offsetParam,
 			@RequestParam("limit") Optional<Integer> limitParam,
@@ -65,6 +81,13 @@ public class Dashboard {
 		return model;
 	}
 
+	/**
+	 * Delete computer.
+	 *
+	 * @param selectionParam the selected computers
+	 * @param model the model
+	 * @return the model and view
+	 */
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public ModelAndView deleteComputer(@RequestParam("selection") Optional<String> selectionParam,
 			ModelAndView model) {
