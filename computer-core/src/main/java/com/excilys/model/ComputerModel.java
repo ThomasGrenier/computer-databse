@@ -50,13 +50,13 @@ public class ComputerModel {
 	 * @param discontinued the discontinued
 	 * @param company the company
 	 */
-	public ComputerModel(long id, String name, LocalDateTime introduced, LocalDateTime discontinued, CompanyModel company) {
+	/*public ComputerModel(long id, String name, LocalDateTime introduced, LocalDateTime discontinued, CompanyModel company) {
 		this.id = id;
 		this.name = name;
 		this.introduced = introduced;
 		this.discontinued = discontinued;
 		this.company = company;
-	}
+	}*/
 	
 	/**
 	 * Instantiates a new computer model.
@@ -225,5 +225,46 @@ public class ComputerModel {
 		.append(" | " + discontinued)
 		.append(" | " + ((company == null) ? "null" : company.toString()) + "\n");
 		return result.toString();
+	}
+	
+	public static Builder builder() {
+		return new Builder();
+	}
+	
+	public static class Builder {
+		ComputerModel c;
+		
+		private Builder() {
+			c = new ComputerModel();
+		}
+		
+		public Builder id(long id) {
+			c.id = id;
+			return this;
+		}
+		
+		public Builder name(String name) {
+			c.name = name;
+			return this;
+		}
+		
+		public Builder introduced(LocalDateTime intro) {
+			c.introduced = intro;
+			return this;
+		}
+		
+		public Builder discontinued(LocalDateTime disco) {
+			c.discontinued = disco;
+			return this;
+		}
+		
+		public Builder company(CompanyModel company) {
+			c.company = company;
+			return this;
+		}
+		
+		public ComputerModel build() {
+			return c;
+		}
 	}
 }

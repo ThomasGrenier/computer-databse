@@ -75,12 +75,10 @@ public class ComputerServiceImpl implements ComputerService {
 	public long create(String name, LocalDateTime introduced, LocalDateTime discontinued, long idCompany) {
 		LOGGER.info("ComputerService create");
 		CompanyModel company = companyDao.getById(idCompany);
-		ComputerModel computer = new ComputerModel();
-		computer.setName(name);
-		computer.setIntroduced(introduced);
-		computer.setDiscontinued(discontinued);
-		computer.setCompany(company);
-		return computerDao.create(computer);
+		ComputerModel computerModel = ComputerModel.builder()
+				.name(name).introduced(introduced).discontinued(discontinued)
+				.company(company).build();
+		return computerDao.create(computerModel);
 	}
 
 	/* (non-Javadoc)
@@ -108,7 +106,9 @@ public class ComputerServiceImpl implements ComputerService {
 	public void update(long id, String name, LocalDateTime introduced,
 			LocalDateTime discontinued, long idCompany) {
 		CompanyModel companyModel = new CompanyModel(idCompany, "");
-		ComputerModel computerModel = new ComputerModel(id, name, introduced, discontinued, companyModel);
+		ComputerModel computerModel = ComputerModel.builder().id(id)
+				.name(name).introduced(introduced).discontinued(discontinued)
+				.company(companyModel).build();
 		LOGGER.info("ComputerService delete");
 		computerDao.update(computerModel);
 	}
