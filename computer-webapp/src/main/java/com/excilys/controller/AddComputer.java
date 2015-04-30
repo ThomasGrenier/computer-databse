@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +19,7 @@ import com.excilys.model.CompanyDTO;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 import com.excilys.utils.Regex;
+import com.excilys.utils.Validator;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -83,11 +85,17 @@ public class AddComputer {
 			model.addObject("name", name);
 		}
 
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		DateTimeFormatter formatter = null;
+
+		if (LocaleContextHolder.getLocale().toString().equals("fr")) {
+			formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+		} else {
+			formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		}
 
 		if (introParam.isPresent()) {
 			if (!introParam.get().isEmpty()) {
-				if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), introParam.get().trim())) {
+				if (Validator.isValidDate(introParam.get().trim())) {
 					introduced = LocalDateTime.parse(introParam.get(), formatter);
 					model.addObject("intro", introParam.get());
 				} else {
@@ -99,7 +107,7 @@ public class AddComputer {
 
 		if (discoParam.isPresent()) {
 			if (!discoParam.get().isEmpty()) {
-				if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), discoParam.get().trim())) {
+				if (Validator.isValidDate(discoParam.get().trim())) {
 					discontinued = LocalDateTime.parse(discoParam.get(), formatter);
 					model.addObject("disco", discoParam.get());
 				} else {

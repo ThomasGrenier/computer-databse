@@ -236,7 +236,7 @@ public class CLIController {
 					introduced = sc.nextLine().trim();
 
 					if (!introduced.equals("")) {
-						if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), introduced.trim())) {
+						if (Pattern.matches(Regex.DATE_FORMAT_EN.getRegex(), introduced.trim())) {
 							//intro = LocalDateTime.parse(introduced, formatter);
 							isOk = true;
 						} else {
@@ -254,7 +254,7 @@ public class CLIController {
 				while (!isOk) {
 					discontinued = sc.nextLine().trim();
 					if (!discontinued.equals("")) {
-						if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), discontinued.trim())) {
+						if (Pattern.matches(Regex.DATE_FORMAT_EN.getRegex(), discontinued.trim())) {
 							//discon = LocalDateTime.parse(discontinued, formatter);
 							isOk = true;
 						} else {

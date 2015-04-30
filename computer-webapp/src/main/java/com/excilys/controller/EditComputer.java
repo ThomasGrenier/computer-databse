@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +20,7 @@ import com.excilys.model.ComputerDTO;
 import com.excilys.service.CompanyService;
 import com.excilys.service.ComputerService;
 import com.excilys.utils.Regex;
+import com.excilys.utils.Validator;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -56,7 +58,8 @@ public class EditComputer {
 		}
 		
 		if (id == -1) {
-			//grosse erreur --> redirection page d'erreur
+			model.setViewName("redirect:404");
+			return model;
 		}
 		
 		List<CompanyDTO> comp = companyService.listAll();
@@ -100,21 +103,29 @@ public class EditComputer {
 				id = idParam.get();
 			}
 		}
-		
+
 		if (id == -1) {
-			//grosse erreur --> redirection page d'erreur
-		}		
+			model.setViewName("redirect:404");
+			return model;
+		}	
 
 		name = nameParam;
 
 		boolean error = false;
 
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		DateTimeFormatter formatter = null;
+
+		if (LocaleContextHolder.getLocale().toString().equals("fr")) {
+			formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+		} else {
+			formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		}
 
 		if (introParam.isPresent()) {
 			if (!introParam.get().isEmpty()) {
-				if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), introParam.get().trim())) {
-					introduced = LocalDateTime.parse(introParam.get().trim(), formatter);
+				if (Validator.isValidDate(introParam.get().trim())) {
+					introduced = LocalDateTime.parse(introParam.get(), formatter);
+					model.addObject("intro", introParam.get());
 				} else {
 					model.addObject("errorIntro", "label.badFormat");
 					error = true;
@@ -124,8 +135,9 @@ public class EditComputer {
 
 		if (discoParam.isPresent()) {
 			if (!discoParam.get().isEmpty()) {
-				if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), discoParam.get().trim())) {
-					discontinued = LocalDateTime.parse(discoParam.get().trim(), formatter);
+				if (Validator.isValidDate(discoParam.get().trim())) {
+					discontinued = LocalDateTime.parse(discoParam.get(), formatter);
+					model.addObject("disco", discoParam.get());
 				} else {
 					model.addObject("errorDisco", "label.badFormat");
 					error = true;

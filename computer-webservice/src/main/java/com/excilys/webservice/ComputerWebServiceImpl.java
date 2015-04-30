@@ -132,13 +132,13 @@ public class ComputerWebServiceImpl implements ComputerWebService {
 		
 		LocalDateTime intro = null;
 		if (!introduced.equals("")) {
-			if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), introduced.trim())) {
+			if (Pattern.matches(Regex.DATE_FORMAT_EN.getRegex(), introduced.trim())) {
 				intro = LocalDateTime.parse(introduced, formatter);
 			}
 		}
 		LocalDateTime disco = null;
 		if (!discontinued.equals("")) {
-			if (Pattern.matches(Regex.DATE_FORMAT.getRegex(), discontinued.trim())) {
+			if (Pattern.matches(Regex.DATE_FORMAT_EN.getRegex(), discontinued.trim())) {
 				disco = LocalDateTime.parse(discontinued, formatter);
 			}
 		}

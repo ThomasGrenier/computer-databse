@@ -1,7 +1,10 @@
 package com.excilys.mapper;
 
+import java.time.format.DateTimeFormatter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import com.excilys.model.CompanyDTO;
 import com.excilys.model.CompanyModel;
@@ -26,11 +29,20 @@ public class DTOMapperImp implements DTOMapper {
 		computerDTO.setId(computer.getId());
 		computerDTO.setName(computer.getName());
 		computerDTO.setCompany(companyModelToDTO(computer.getCompany()));
+		
+		DateTimeFormatter formatter = null;
+
+		if (LocaleContextHolder.getLocale().toString().equals("fr")) {
+			formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+		} else {
+			formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		}
+		
 		if (computer.getIntroduced() != null) {
-			computerDTO.setIntroduced(computer.getIntroduced().toString().replaceAll("T", " "));
+			computerDTO.setIntroduced(computer.getIntroduced().format(formatter));
 		}
 		if (computer.getDiscontinued() != null) {
-			computerDTO.setDiscontinued(computer.getDiscontinued().toString().replaceAll("T", " "));
+			computerDTO.setDiscontinued(computer.getDiscontinued().format(formatter));
 		}
 		LOGGER.info("computerDTO mapper succeed");
 		return computerDTO;
