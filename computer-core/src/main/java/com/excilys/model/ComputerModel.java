@@ -43,12 +43,6 @@ public class ComputerModel {
 	
 	/**
 	 * Instantiates a new computer model.
-	 *
-	 * @param id the id
-	 * @param name the name
-	 * @param introduced the introduced
-	 * @param discontinued the discontinued
-	 * @param company the company
 	 */
 	/*public ComputerModel(long id, String name, LocalDateTime introduced, LocalDateTime discontinued, CompanyModel company) {
 		this.id = id;
@@ -227,42 +221,90 @@ public class ComputerModel {
 		return result.toString();
 	}
 	
+	/**
+	 * Builder.
+	 *
+	 * @return the builder
+	 */
 	public static Builder builder() {
 		return new Builder();
 	}
 	
+	/**
+	 * The Class Builder.
+	 */
 	public static class Builder {
+		
+		/** The ccomputer. */
 		ComputerModel c;
 		
+		/**
+		 * Instantiates a new builder.
+		 */
 		private Builder() {
 			c = new ComputerModel();
 		}
 		
+		/**
+		 * Id.
+		 *
+		 * @param id the id of the computer
+		 * @return the builder
+		 */
 		public Builder id(long id) {
 			c.id = id;
 			return this;
 		}
 		
+		/**
+		 * Name.
+		 *
+		 * @param name the name of the computer
+		 * @return the builder
+		 */
 		public Builder name(String name) {
 			c.name = name;
 			return this;
 		}
 		
+		/**
+		 * Introduced.
+		 *
+		 * @param intro the introduced date of the computer
+		 * @return the builder
+		 */
 		public Builder introduced(LocalDateTime intro) {
 			c.introduced = intro;
 			return this;
 		}
 		
+		/**
+		 * Discontinued.
+		 *
+		 * @param disco the discontinued date of the computer
+		 * @return the builder
+		 */
 		public Builder discontinued(LocalDateTime disco) {
 			c.discontinued = disco;
 			return this;
 		}
 		
+		/**
+		 * Company.
+		 *
+		 * @param company the company of the computer
+		 * @return the builder
+		 */
 		public Builder company(CompanyModel company) {
 			c.company = company;
 			return this;
 		}
 		
+		/**
+		 * Builds the computerModel.
+		 *
+		 * @return the computer model
+		 */
 		public ComputerModel build() {
 			return c;
 		}
